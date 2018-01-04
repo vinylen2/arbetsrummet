@@ -23,12 +23,12 @@ app.use(cors({
 }));
 
 // Require the Router defined in words.js
-// const assignment = require('./routes/assignment.js');
+const assignments = require('./routes/assignments.js');
 
 app.listen(config.port);
 
 models.connection.sync().then(() => {
   console.log(`Server listening on port: ${config.port}`);
   console.log('Sequelize synchronized');
-//   app.use(assignment.routes());
+  app.use(assignments.routes());
 });
