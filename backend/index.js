@@ -4,7 +4,6 @@ const bodyParser = require('koa-bodyparser');
 const config = require('./config.json');
 const cors = require('koa2-cors');
 const models = require('./models');
-const session = require('koa-session2');
 
 const app = new Koa();
 require('koa-qs')(app, 'strict');
@@ -14,8 +13,6 @@ app.proxy = true;
 
 // Set up body parsing middleware
 app.use(bodyParser());
-app.use(session());
-
 
 // Enable CORS
 app.use(cors({
@@ -30,7 +27,7 @@ app.use(cors({
 
 app.listen(config.port);
 
-models.connection.sync({alter: true}).then(() => {
+models.connection.sync().then(() => {
   console.log(`Server listening on port: ${config.port}`);
   console.log('Sequelize synchronized');
 //   app.use(assignment.routes());

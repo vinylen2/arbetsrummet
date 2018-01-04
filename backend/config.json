@@ -3,9 +3,9 @@
         "sequelize": {
         "username": "root",
         "password": "aq17sd3z9",
-        "database": "ellabib",
+        "database": "Arbetsklubben",
         "extra": {
         "dialect": "mysql"
         }
-    },
+    }
 }

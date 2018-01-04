@@ -6,7 +6,6 @@ module.exports = function modelExport(db, DataTypes) {
   const Model = db.define(tableName, {
       value: DataTypes.BOOLEAN,
     });
-  };
 
   Model.associate = function (models) {
     this.hasOne(models.Author, { through: 'commentAuthor' });

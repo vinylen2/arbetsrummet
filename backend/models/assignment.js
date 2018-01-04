@@ -1,4 +1,4 @@
-const path = requier('path');
+const path = require('path');
 
 const tableName = path.basename(__filename, '.js');
 
