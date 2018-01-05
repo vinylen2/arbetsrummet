@@ -1,15 +1,76 @@
 const router = require('koa-router')({ prefix: '/assignments' });
+const _ = require('lodash');
+const Promise = require('bluebird');
 
-const { Assignment } = require('../models');
+const { Assignment, Material, Author, Subject } = require('../models');
 
 async function getAllAssignments(ctx) {
-    const assignments = await Assignment.findAll();
+  const assignments = await Assignment.findAll({
+    include: [
+      {
+        model: Material,
+        as: 'materials',
+        attributes: ['id', 'value'],
+      },
+      {
+        model: Author,
+      },
+      {
+        model: Subject,
+        as: 'subjects',
+      },
+    ],
+  });
 
-    ctx.body = {
-        data: assignments,
-    };
+  ctx.body = {
+    data: assignments,
+  };
+}
+
+async function postAssignment(ctx) {
+  const { title, description, courseWorkType, grades, author, materials, subjects } = ctx.request.body;
+
+  const assignment = await Assignment.create({
+    title,
+    description,
+    courseWorkType,
+  });
+
+  if (grades) {
+    const gradeArray = JSON.parse(grades);
+    const associatedGrades = await Promise.all(gradeArray.map(async (grade) => assignment.setGrades(grade)));
+    assignment.dataValues.grades = _.flattenDeep(associatedGrades);
+  }
+
+  if (subjects) {
+    const subjectArray = JSON.parse(subjects);
+    const associatedSubjects = await Promise.all(subjectArray.map(async (subject) => assignment.setSubjects(subject)));
+    assignment.dataValues.subjects = _.flattenDeep(associatedSubjects);
+  }
+
+  if (materials) {
+    const materialArray = JSON.parse(materials);
+    const associatedMaterials = await Promise.all(materialArray.map(async (material) => {
+      const newMaterial = Material.create({
+        unionField: material.unionField,
+        title: material.title,
+        alternateLink: material.alternateLink,
+        thumbnailUrl: material.thumbnailUrl,
+        formUrl: material.formUrl,
+        shareMode: material.shareMode,
+      });
+      return newMaterial;
+    }));
+    assignment.dataValues.materials = _.flattenDeep(associatedMaterials);
+  }
+
+  ctx.body = {
+    data: assignment,
+  };
+
 }
 
 router.get('/', getAllAssignments);
+router.post('/', postAssignment);
 
 module.exports = router;

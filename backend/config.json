@@ -5,7 +5,7 @@
         "password": "aq17sd3z9",
         "database": "Arbetsklubben",
         "extra": {
-        "dialect": "mysql"
+          "dialect": "mysql"
         }
     }
 }
