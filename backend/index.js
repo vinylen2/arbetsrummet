@@ -24,6 +24,8 @@ app.use(cors({
 
 // Require the Router defined in words.js
 const assignments = require('./routes/assignments.js');
+const grades = require('./routes/grades.js');
+const subjects = require('./routes/subjects.js');
 
 app.listen(config.port);
 
@@ -31,4 +33,6 @@ models.connection.sync().then(() => {
   console.log(`Server listening on port: ${config.port}`);
   console.log('Sequelize synchronized');
   app.use(assignments.routes());
+  app.use(grades.routes());
+  app.use(subjects.routes());
 });
