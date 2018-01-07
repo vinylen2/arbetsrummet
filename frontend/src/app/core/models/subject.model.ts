@@ -1,4 +1,4 @@
-class Subject {
+export class Subject {
     id: number;
     subject: string;
     slug: string;
