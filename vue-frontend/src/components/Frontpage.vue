@@ -14,7 +14,18 @@ export default {
   name: 'frontpage',
   data() {
     return {
-      assignments: [],
+      assignments: [
+        {
+          id: 0,
+          title: "Uppgift",
+          description: "Här är beskrivningen för en uppgift",
+          courseWorkType: "ASSIGNMENT",
+          createdAt: "2017-12-19",
+          authors: [],
+          materials: [],
+          subjects: [],
+        },
+      ],
     };
   },
   created() {
