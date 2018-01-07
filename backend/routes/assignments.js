@@ -6,11 +6,37 @@ const { Assignment, Material, Author, Subject } = require('../models');
 
 async function getAllAssignments(ctx) {
   const assignments = await Assignment.findAll({
+    // attributes: {
+    //   exclude: ['updatedAt'],
+    // },
     include: [
       {
         model: Material,
         as: 'materials',
-        attributes: ['id', 'value'],
+      },
+      {
+        model: Author,
+      },
+      {
+        model: Subject,
+        as: 'subjects',
+      },
+    ],
+  });
+
+  ctx.body = {
+    data: assignments,
+  };
+}
+
+async function getAssignment(ctx) {
+  const id = ctx.params.id;
+  const assignments = await Assignment.findAll({
+    where: { id },
+    include: [
+      {
+        model: Material,
+        as: 'materials',
       },
       {
         model: Author,
@@ -71,6 +97,7 @@ async function postAssignment(ctx) {
 }
 
 router.get('/', getAllAssignments);
+router.get('/:id', getAssignment);
 router.post('/', postAssignment);
 
 module.exports = router;
