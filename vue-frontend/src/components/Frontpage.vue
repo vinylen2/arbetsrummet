@@ -1,7 +1,6 @@
 <template>
   <div class="frontpage">
     <div v-for="assignment in assignments">
-      <span>{{assignment.title}}</span>
     </div>
 
   </div>

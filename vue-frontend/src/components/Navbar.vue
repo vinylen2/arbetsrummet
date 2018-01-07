@@ -20,15 +20,36 @@
 </template>
 
 <script>
-
 export default {
   name: 'navbar',
+  data() {
+    return {
+    };
+  },
+  // created() {
+  //   let apiScript = document.createElement('script');
+  //   apiScript.setAttribute('src', 'https://apis.google.com/js/api.js');
+  //   document.head.appendChild(apiScript);
+  // },
+  mounted() {
+    window.gapi.load('client:auth2');
+  },
   methods: {
     logIn() {
-
+      this.initClient();
     },
-  },
-}
+    initClient() {
+      gapi.client.init({
+        clientId: '60973883963-b9ofcjs3n6s8qf22d52fd7k67ecc0bap.apps.googleusercontent.com',
+        apiKey: 'AIzaSyBa1UqnbaH8vmoDEaxprYTt0njc0S2C7aM',
+        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/classroom/v1/rest'],
+        scope: 'https://www.googleapis.com/auth/classroom.courses.readonly',
+      }).then(() => {
+          gapi.auth2.getAuthInstance().signIn();
+        });
+      },
+    },
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
