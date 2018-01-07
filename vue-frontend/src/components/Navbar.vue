@@ -9,11 +9,9 @@
           <h3 class="md-title">Arbetsrummet</h3>
         </div>
         <div class="md-toolbar-section-end">
-          <md-button class="md-icon-button">
-            <md-icon>refresh</md-icon>
-          </md-button>
-          <md-button class="md-icon-button">
-            <md-icon>more_vert</md-icon>
+          <md-button class="md-raised"
+            @click="logIn">
+            Logga in
           </md-button>
         </div>
       </div>
@@ -22,8 +20,14 @@
 </template>
 
 <script>
+
 export default {
   name: 'navbar',
+  methods: {
+    logIn() {
+
+    },
+  },
 }
 </script>
 
