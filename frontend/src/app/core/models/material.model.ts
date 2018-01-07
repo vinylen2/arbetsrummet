@@ -1,4 +1,4 @@
-class Material {
+export class Material {
     id: number;
     title: string;
     unionField: string;
