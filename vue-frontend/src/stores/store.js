@@ -17,7 +17,6 @@ export default new Vuex.Store({
   },
   mutations: {
     toggleLogin: (state, data) => {
-      console.log('login', data);
       state.isSignedIn = data;
     },
     setProfile: (state, data) => {

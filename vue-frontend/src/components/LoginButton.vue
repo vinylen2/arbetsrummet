@@ -23,6 +23,14 @@ export default {
         this.$store.commit('setProfile', result.w3);
       });
     },
+    updateSigninStatus(state) {
+      this.$store.commit('toggleLogin', state);
+      if (state) {
+        gapi.auth2.getAuthInstance().then((result) => {
+          this.$store.commit('setProfile', result.currentUser.Ab.w3);
+        });
+      }
+    },
     initClient() {
       gapi.client.init({
         clientId: '60973883963-b9ofcjs3n6s8qf22d52fd7k67ecc0bap.apps.googleusercontent.com',
@@ -30,13 +38,8 @@ export default {
         discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/classroom/v1/rest'],
         scope: 'https://www.googleapis.com/auth/classroom.courses.readonly',
       }).then(() => {
-          const state = gapi.auth2.getAuthInstance().isSignedIn.get();
-          if (state) {
-            gapi.auth2.getAuthInstance().then((result) => {
-              this.$store.commit('setProfile', result.currentUser.Ab.w3);
-            });
-          }
-          this.$store.commit('toggleLogin', state);
+          gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);
+          this.updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
         });
       },
     },
