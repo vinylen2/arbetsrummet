@@ -16,6 +16,8 @@ export default new Vuex.Store({
       picture: '',
     },
     courses: [],
+    grades: [],
+    subjects: [],
   },
   getters: {
     isSignedIn: state => state.isSignedIn,
@@ -33,6 +35,12 @@ export default new Vuex.Store({
     },
     addCourses: (state, data) => {
       state.courses = JSON.parse(data).courses;
+    },
+    addGrades: (state, data) => {
+      state.grades = data;
+    },
+    addSubjects: (state, data) => {
+      state.subjects = data;
     },
   },
 });

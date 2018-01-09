@@ -27,6 +27,7 @@ export default {
   },
   data() {
     return {
+      subject: '',
       showDialog: false,
       assignments: [
         {
@@ -88,5 +89,17 @@ a {
 
 .md-dialog-content {
   padding: 0;
+}
+
+.md-dialog {
+  width: 700px;
+}
+
+</style>
+
+<style>
+.md-select-menu {
+  z-index: 100;
+  background-color: white;
 }
 </style>
