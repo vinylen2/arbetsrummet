@@ -1,18 +1,33 @@
 <template>
   <div class="frontpage">
-    <div v-for="assignment in assignments">
+    <md-dialog :md-active.sync="showDialog">
+      <md-dialog-content>
+        <add-assignment></add-assignment>
+      </md-dialog-content>
+    </md-dialog>
+    <div class="button"
+      v-if="$store.state.isSignedIn">
+      <md-button class="md-fab md-primary"
+        @click="showDialog = true">
+        <md-icon>add</md-icon>
+      </md-button>
     </div>
-
   </div>
 </template>
 
 <script>
 import Assignments from '@/api/services/assignments';
+import AddAssignment from '@/components/AddAssignment';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'frontpage',
+  components: {
+    AddAssignment,
+  },
   data() {
     return {
+      showDialog: false,
       assignments: [
         {
           id: 0,
@@ -29,6 +44,21 @@ export default {
   },
   created() {
     this.getAllAssignments();
+  },
+  computed: {
+    ...mapGetters([
+      'isSignedIn',
+    ]),
+  },
+  watch: {
+    isSignedIn() {
+      if(this.isSignedIn) {
+        gapi.client.classroom.courses.list()
+          .then((result) => {
+            this.$store.commit('addCourses', result.body);
+          });
+      }
+    },
   },
   methods: {
     getAllAssignments() {
@@ -54,5 +84,9 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.md-dialog-content {
+  padding: 0;
 }
 </style>

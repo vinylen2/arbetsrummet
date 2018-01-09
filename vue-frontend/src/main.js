@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store from '@/stores/store';
+import store from '@/stores/google-profile';
 
 Vue.config.productionTip = false
 

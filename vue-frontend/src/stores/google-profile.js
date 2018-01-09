@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 Vue.use(Vuex);
+// split this into two stores
 
 /* eslint no-param-reassign: ["error", { "props": false }]*/
 export default new Vuex.Store({
@@ -14,6 +15,10 @@ export default new Vuex.Store({
       email: '',
       picture: '',
     },
+    courses: [],
+  },
+  getters: {
+    isSignedIn: state => state.isSignedIn,
   },
   mutations: {
     toggleLogin: (state, data) => {
@@ -25,6 +30,9 @@ export default new Vuex.Store({
       state.profile.fullName = data.ig;
       state.profile.email = data.U3;
       state.profile.picture = data.Paa;
+    },
+    addCourses: (state, data) => {
+      state.courses = JSON.parse(data).courses;
     },
   },
 });
