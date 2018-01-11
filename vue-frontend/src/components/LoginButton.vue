@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import gapiData from '@/stores/gapi';
+
 export default {
   name: 'login-button',
   data() {
@@ -33,10 +35,10 @@ export default {
     },
     initClient() {
       gapi.client.init({
-        clientId: '60973883963-b9ofcjs3n6s8qf22d52fd7k67ecc0bap.apps.googleusercontent.com',
-        apiKey: 'AIzaSyBa1UqnbaH8vmoDEaxprYTt0njc0S2C7aM',
-        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/classroom/v1/rest'],
-        scope: 'https://www.googleapis.com/auth/classroom.courses.readonly',
+        clientId: gapiData.clientId,
+        apiKey: gapiData.apiKey,
+        discoveryDocs: gapiData.classroom,
+        scope: gapiData.scopes.classroom,
       }).then(() => {
           gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);
           this.updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());

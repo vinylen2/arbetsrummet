@@ -12,6 +12,16 @@
         <md-icon>add</md-icon>
       </md-button>
     </div>
+    <md-button class="attach-button"
+      @click="showDrivePickerDialog = true">
+      <md-icon>folder_shared</md-icon>
+    </md-button>
+    <md-dialog class="drive-picker"
+      :md-active.sync="showDrivePickerDialog">
+      <md-dialog-content>
+        <picker :ViewId="'DOCS'"></picker>
+      </md-dialog-content>
+    </md-dialog>
   </div>
 </template>
 
@@ -20,15 +30,19 @@ import Assignments from '@/api/services/assignments';
 import AddAssignment from '@/components/AddAssignment';
 import { mapGetters } from 'vuex';
 
+import Picker from '@/components/picker';
+
 export default {
   name: 'frontpage',
   components: {
     AddAssignment,
+    Picker,
   },
   data() {
     return {
       subject: '',
       showDialog: false,
+      showDrivePickerDialog: false,
       assignments: [
         {
           id: 0,

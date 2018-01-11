@@ -58,19 +58,25 @@
         </md-field>
       </div>
       <div class="md-layout attachments">
-        <md-button class="attach-button"
-          @click="attachDrive">
+        <!-- <md-button class="attach-button"
+          @click="showDrivePickerDialog = true">
           <md-icon>folder_shared</md-icon>
         </md-button>
+        <md-dialog class="drive-picker"
+          :md-active.sync="showDrivePickerDialog">
+          <md-dialog-content>
+            <picker :ViewId="'DOCS'"></picker>
+          </md-dialog-content>
+        </md-dialog> -->
         <md-button class="attach-button"
           @click="attachYoutube">
           <md-icon>subscriptions</md-icon>
         </md-button>
         <md-button class="attach-button"
-          @click="showDialog = true">
+          @click="showLinkDialog = true">
           <md-icon>link</md-icon>
         </md-button>
-        <md-dialog :md-active.sync="showDialog">
+        <md-dialog :md-active.sync="showLinkDialog">
           <add-link
             @closeLinkDialog="closeLinkDialog"
             @attachLink="attachLink"></add-link>
@@ -86,16 +92,20 @@
 import Assignments from '@/api/services/assignments';
 import Grades from '@/api/services/grades';
 import Subjects from '@/api/services/subjects';
+
 import AddLink from '@/components/AddLink';
+import Picker from '@/components/Picker';
 
 export default {
   name: 'add-assignment',
   components: {
     AddLink,
+    Picker,
   },
   data() {
     return {
-      showDialog: false,
+      showLinkDialog: false,
+      showDrivePickerDialog: false,
       publishData: {
         title: '',
         description: '',
@@ -119,7 +129,7 @@ export default {
 
     },
     closeLinkDialog() {
-      this.showDialog = false;
+      this.showLinkDialog = false;
     },
     attachLink(linkUrl) {
       this.publishData.attachments.push({
@@ -127,7 +137,7 @@ export default {
         title: 'Coming soon',
         alternateLink: linkUrl,
       });
-      this.showDialog = false;
+      this.showLinkDialog = false;
     },
     postAssignment() {
       Assignments.post(this.publishData).then((result) => {
