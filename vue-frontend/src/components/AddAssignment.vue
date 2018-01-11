@@ -57,7 +57,9 @@
           </md-select>
         </md-field>
       </div>
-      <div class="md-layout attachments">
+      <div class="md-layout-row materials">
+      </div>
+      <div class="md-layout attachment-buttons">
         <!-- <md-button class="attach-button"
           @click="showDrivePickerDialog = true">
           <md-icon>folder_shared</md-icon>
@@ -95,6 +97,7 @@ import Subjects from '@/api/services/subjects';
 
 import AddLink from '@/components/AddLink';
 import Picker from '@/components/Picker';
+import Material from '@/components/Material';
 
 export default {
   name: 'add-assignment',
@@ -111,7 +114,7 @@ export default {
         description: '',
         subjects: [],
         grades: [],
-        attachments: [],
+        materials: [],
       },
     };
   },
@@ -183,7 +186,7 @@ export default {
   height: 148px;
 }
 
-.attachments {
+.attachment-buttons {
   height: 88px;
 }
 .white-icon {
