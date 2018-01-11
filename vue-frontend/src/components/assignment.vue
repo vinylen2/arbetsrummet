@@ -1,44 +1,17 @@
 <template>
-<div class="assignment">
-    <div class="md-layout">
-        <md-card v-for="assignment in assignments" :key="assignment.id">
-            <md-toolbar class="md-accent" md-elevation="0">
-                <h3 v-if="assignment.authors.length == 0">Author name here </h3>
-                <h3 v-for="author in assignment.authors" :key="author.id" class="md-title">{{author.fullName}}</h3>
-                <div class="md-toolbar-row">
-                    <div class="md-subhead">{{assignment.updatedAt}}</div>
-                </div>
-            </md-toolbar>
-        <md-card-header>
-            <md-card-header>
-                <div class="md-title">{{assignment.title}}</div>
-                <div class="md-subhead">{{assignment.description}}</div>
-            </md-card-header>
-        </md-card-header>
-
-        <md-card v-for="material in assignment.materials" :key="material.id">
-            <md-card-header>
-                <md-card-media>
-                    <img :src="material.thumbnailUrl" alt="material thumbnail">
-                </md-card-media>
-
-                <md-card-header-text>
-                    <div class="md-title">{{material.title}}</div>
-                    <md-button :href="material.alternateLink" class="md-raised">Öppna dokument</md-button>
-                </md-card-header-text>
-            </md-card-header>
-        </md-card>
-
-        <md-card-content>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea nostrum.
-        </md-card-content>
-
-        <md-card-actions>
-            <md-button>Action</md-button>
-            <md-button>Action</md-button>
-        </md-card-actions>
-        </md-card>
-    </div>
+<div class="w-75 mx-auto">
+  <b-card-group deck>
+  	<b-card :title=assignment.title
+            header-tag="header">
+      <h6 slot="header" class="mb-0">{{assignment.authors[0].firstname}} {{assignment.authors[0].lastname}}
+        <br>{{assignment.createdAt}}
+      </h6>
+      <p class="card-text">
+        {{assignment.description}}
+      </p>
+      foreach gabbes materialcomponent
+    </b-card>
+  </b-card-group>
 </div>
 </template>
 
@@ -49,7 +22,23 @@ export default {
   name: "assignment",
   data() {
     return {
-      assignments: []
+      assignment: {
+          id: 0,
+          title: "Uppgift",
+          description: "Här är beskrivningen för en uppgift",
+          courseWorkType: "ASSIGNMENT",
+          createdAt: "2017-12-19",
+          authors: [{
+              id: 0,
+              firstname: "John",
+              lastname: "Doe",
+              email: "john.doe@domain.com",
+              createdAt: "2017-12-19T07:25:11Z",
+              updatedAt: "2017-12-19T07:25:11Z"
+          }],
+          materials: [],
+          subjects: [],
+        },
     };
   },
   created() {
