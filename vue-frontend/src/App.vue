@@ -8,10 +8,11 @@
 <script>
 import Vue from 'vue';
 import Navbar from '@/components/Navbar';
-import VueMaterial from 'vue-material';
-import 'vue-material/dist/vue-material.min.css'
 
-Vue.use(VueMaterial);
+import BootstrapVue from 'bootstrap-vue';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+Vue.use(BootstrapVue);
 
 export default {
   components: {
@@ -26,7 +27,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+
   color: #2c3e50;
 }
 </style>

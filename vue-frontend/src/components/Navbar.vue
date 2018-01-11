@@ -1,20 +1,18 @@
 <template>
-  <div class="navbar">
-    <md-toolbar class="md-accent" color="#4b4b4b">
-      <div class="md-toolbar-row">
-        <div class="md-toolbar-section-start">
-          <md-button class="md-icon-button">
-            <md-icon>menu</md-icon>
-          </md-button>
-          <h3 class="md-title">Arbetsrummet</h3>
-        </div>
-        <div class="md-toolbar-section-end">
-          <login-button v-if="!$store.state.isSignedIn"></login-button>
-          <profile-button v-else></profile-button>
-        </div>
-      </div>
-    </md-toolbar>
-  </div>
+<b-navbar toggleable="md" type="light" variant="info">
+  <b-navbar-brand href="#">Arbetsrummet</b-navbar-brand>
+  <b-navbar-nav class="ml-auto">
+    <b-nav-form>
+      <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search"/>
+      <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+    </b-nav-form>
+    <b-nav-item>
+      <login-button v-if="!$store.state.isSignedIn"></login-button>
+      <profile-button v-else></profile-button>
+    </b-nav-item>
+  </b-navbar-nav>
+
+</b-navbar>
 </template>
 
 <script>

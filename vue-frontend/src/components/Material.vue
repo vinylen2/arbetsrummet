@@ -2,36 +2,45 @@
   <div>
     <a class="container-link"
       :src="alternateLink">
-      <div class="thumbnail">
-        <img class="thumbnail-google"
-          :src="thumbnailUrl"
-          v-if="thumbnailUrl"/>
-        <div class="thumbnail-icon"
-          v-else>
-          <md-icon v-if="unionField = 'driveFile'">description</md-icon>
-          <md-icon v-if="unionField = 'youtubeVideo'">subscriptions</md-icon>
-          <md-icon v-if="unionField = 'link'">link</md-icon>
-          <md-icon v-if="unionField = 'form'">list</md-icon>
+      <div class="md-layout material">
+        <div class="md-layout-item thumbnail">
+          <img class="thumbnail-google"
+            :src="thumbnailUrl"
+            v-if="thumbnailUrl"/>
+          <div class="thumbnail-icon"
+            v-else>
+            <md-icon v-if="unionField === 'driveFile'">description</md-icon>
+            <md-icon v-if="unionField === 'youtubeVideo'">subscriptions</md-icon>
+            <md-icon v-if="unionField === 'link'">link</md-icon>
+            <md-icon v-if="unionField === 'form'">list</md-icon>
+          </div>
         </div>
-      </div>
-      <div class="title-type">
-        <p class="title" v-if="link">Länk</p>
-        <p class="title" v-else>{{ title }}</p>
-      </div>
-      <div class="shareMode" v-if="unionField = 'driveFile'">
-        <md-select v-model="shareMode"
-          name="shareMode"
-          id="shareMode"
-          placeholder="Eleverna kan visa filen">
-          <md-option v-for="shareMode in shareModes"
-            :key="shareMode.enum"
-            :value="shareMode.name">{{ shareMode.name }}</md-option>
-        </md-select>
-      </div>
-      <div class="close">
-        <md-icon>
-          clear
-        </md-icon>
+        <div class="md-layout-item title-link"
+          v-if="unionField === 'link'">
+          <div class="title">Länk</div>
+          <div class="title">{{ title }}</div>
+        </div>
+        <div class="md-layout-item title-type"
+          v-else>
+          <p class="title">{{ title }}</p>
+          <p class="title"> typ av dokument </p>
+        </div>
+        <div class="md-layout-item shareMode" v-if="unionField === 'driveFile'">
+          <md-select v-model="shareMode"
+            name="shareMode"
+            id="shareMode"
+            placeholder="Eleverna kan visa filen">
+            <md-option v-for="shareMode in shareModes"
+              :key="shareMode.enum"
+              :value="shareMode.name">{{ shareMode.name }}</md-option>
+          </md-select>
+        </div>
+        <div class="md-layout-item icon-button"
+          @click="removeMaterial">
+          <md-icon>
+            clear
+          </md-icon>
+        </div>
       </div>
     </a>
   </div>
@@ -79,5 +88,22 @@ export default {
 </script>
 
 <style scoped>
+
+.material {
+  background: #f6f6f6;
+  border: .05rem solid rgba(0,0,0,0.12);
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.icon-button {
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  color: darkgrey;
+}
 
 </style>

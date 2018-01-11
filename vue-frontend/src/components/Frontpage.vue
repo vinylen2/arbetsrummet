@@ -2,7 +2,9 @@
   <div class="frontpage">
     <md-dialog :md-active.sync="showDialog">
       <md-dialog-content>
-        <add-assignment></add-assignment>
+        <add-assignment
+          @closeAddAssignmentDialog="showDialog = false">
+        </add-assignment>
       </md-dialog-content>
     </md-dialog>
     <div class="button"
@@ -30,7 +32,7 @@ import Assignments from '@/api/services/assignments';
 import AddAssignment from '@/components/AddAssignment';
 import { mapGetters } from 'vuex';
 
-import Picker from '@/components/picker';
+import Picker from '@/components/Picker';
 
 export default {
   name: 'frontpage',
@@ -115,5 +117,9 @@ a {
 .md-select-menu {
   z-index: 100;
   background-color: white;
+}
+
+html * {
+  /* box-sizing: initial; */
 }
 </style>

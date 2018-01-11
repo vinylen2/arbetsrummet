@@ -8,12 +8,11 @@
         <p class="header-title">Uppgift</p>
       </div>
       <div class="md-layout-item">
-        <md-button class="md-icon-button close"
-          @click="close">
-          <md-icon>
+        <div @click="close">
+          <md-icon class="icon-button">
             clear
           </md-icon>
-        </md-button>
+        </div>
       </div>
     </div>
     <div class="wrapper">
@@ -58,6 +57,10 @@
         </md-field>
       </div>
       <div class="md-layout-row materials">
+        <material v-for="material in publishData.materials"
+          :key="material.id"
+          :value="material.id"
+          :materialData="material"></material>
       </div>
       <div class="md-layout attachment-buttons">
         <!-- <md-button class="attach-button"
@@ -70,14 +73,12 @@
             <picker :ViewId="'DOCS'"></picker>
           </md-dialog-content>
         </md-dialog> -->
-        <md-button class="attach-button"
-          @click="attachYoutube">
-          <md-icon>subscriptions</md-icon>
-        </md-button>
-        <md-button class="attach-button"
-          @click="showLinkDialog = true">
-          <md-icon>link</md-icon>
-        </md-button>
+        <div @click="attachYoutube">
+          <md-icon class="icon-button">subscriptions</md-icon>
+        </div>
+        <div @click="showLinkDialog = true">
+          <md-icon class="icon-button">link</md-icon>
+        </div>
         <md-dialog :md-active.sync="showLinkDialog">
           <add-link
             @closeLinkDialog="closeLinkDialog"
@@ -104,6 +105,7 @@ export default {
   components: {
     AddLink,
     Picker,
+    Material,
   },
   data() {
     return {
@@ -114,7 +116,13 @@ export default {
         description: '',
         subjects: [],
         grades: [],
-        materials: [],
+        materials: [
+          {
+            id: 1,
+            unionField: 'link',
+            title: 'Här är en länk',
+          },
+        ],
       },
     };
   },
@@ -124,6 +132,7 @@ export default {
   },
   methods: {
     close() {
+      this.$emit('closeAddAssignmentDialog');
     },
     attachDrive() {
 
@@ -192,4 +201,13 @@ export default {
 .white-icon {
   color: white;
 }
+
+.icon-button {
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  color: darkgrey;
+}
+
 </style>

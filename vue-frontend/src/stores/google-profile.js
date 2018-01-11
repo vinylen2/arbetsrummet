@@ -15,11 +15,6 @@ export default new Vuex.Store({
       email: '',
       picture: '',
     },
-    shareMode: [
-      'VIEW',
-      'EDIT',
-      'STUDENT_COPY',
-    ],
     courses: [],
     grades: [],
     subjects: [],
