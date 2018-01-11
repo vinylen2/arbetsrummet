@@ -1,23 +1,25 @@
 <template>
   <div>
-    <md-avatar>
-      <img :src="$store.state.profile.picture"
-        v-tippy="tippyOptions"/>
-    </md-avatar>
+    <b-img rounded="circle"
+      v-tippy="tippyOptions"
+      width="42"
+      :src="$store.state.profile.picture"></b-img>
     <div id="profile-menu2"
       v-tippy-html>
-      <div class="md-layout">
-        <div class="md-layout-item md-size-45">
-          <img :src="$store.state.profile.picture"
-            class="profile-picture-large"/>
-        </div>
-        <div class="md-layout-item md-size-55">
-          <p>{{ $store.state.profile.fullName }}</p>
-          <p>{{ $store.state.profile.email }}</p>
-          <md-button class="logout-button"
-            @click="logOut">Logga ut</md-button>
-        </div>
-      </div>
+      <b-container>
+          <b-row>
+            <b-col>
+              <b-img rounded="circle"
+                width="60"
+                :src="$store.state.profile.picture"></b-img>
+            </b-col>
+            <b-col>
+              <p>{{ $store.state.profile.fullName }}</p>
+              <p>{{ $store.state.profile.email }}</p>
+              <b-button @click="logOut">Logga ut</b-button>
+            </b-col>
+          </b-row>
+      </b-container>
     </div>
   </div>
 </template>
