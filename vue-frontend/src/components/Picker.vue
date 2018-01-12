@@ -48,6 +48,7 @@ export default {
         const picker = new google.picker.PickerBuilder().
           addView(google.picker.ViewId[this.ViewId]).
           setOAuthToken(this.oauthToken).
+          setLocale('sv').
           setDeveloperKey(gapiData.apiKey).
           setCallback(this.pickerCallback).
           build();
@@ -58,6 +59,9 @@ export default {
       if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
         const pickedItem = data[google.picker.Response.DOCUMENTS][0];
         this.$emit('itemPicked', pickedItem);
+      }
+      if (data[google.picker.Response.ACTION] == google.picker.Action.CANCEL) {
+      this.$emit('closeDrivePicker');
       }
     },
   },

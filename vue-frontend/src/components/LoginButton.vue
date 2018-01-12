@@ -1,9 +1,9 @@
 <template>
   <div>
-    <md-button class="md-raised"
+    <b-button class="md-raised"
       @click="logIn">
       Logga in
-    </md-button>
+    </b-button>
   </div>
 </template>
 

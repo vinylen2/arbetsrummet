@@ -19,6 +19,7 @@
       </b-button>
       <modal name="drivePicker">
           <picker :ViewId="'DOCS'"
+            @closeDrivePicker="$modal.hide('drivePicker')"
             @itemPicked="attachPickedItem"></picker>
       </modal>
       <!-- <div @click="attachYoutube">
