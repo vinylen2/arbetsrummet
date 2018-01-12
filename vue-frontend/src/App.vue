@@ -9,10 +9,14 @@
 import Vue from 'vue';
 import Navbar from '@/components/Navbar';
 
+
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 Vue.use(BootstrapVue);
+
+import VModal from 'vue-js-modal';
+Vue.use(VModal);
 
 export default {
   components: {

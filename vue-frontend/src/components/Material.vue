@@ -36,10 +36,7 @@
           </md-select>
         </div>
         <div class="md-layout-item icon-button"
-          @click="removeMaterial">
-          <md-icon>
-            clear
-          </md-icon>
+          @click="removeMaterial">X
         </div>
       </div>
     </a>

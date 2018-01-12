@@ -1,16 +1,16 @@
 <template>
   <div class="add-link wrapper">
     <h1>Lägg till länk</h1>
-    <md-field>
-      <label>Länk</label>
-      <md-input v-model="linkUrl"
-        placeholder="Länk"></md-input>
-    </md-field>
-    <div class="md-layout-item">
-      <md-button @click="close">Avbryt</md-button>
-      <md-button v-if="linkUrl.length > 0"
-        @click="addLink">Lägg till länk </md-button>
-      <md-button v-else disabled>Lägg till länk</md-button>
+    <label for="linkUrl">Länk</label>
+    <b-form-input id="linkUrl"
+      v-model.trim="linkUrl">
+    </b-form-input>
+    <div class="buttons">
+      <b-button
+        @click="close">Avbryt</b-button>
+      <b-button v-if="linkUrl.length > 0"
+        @click="addLink">Lägg till länk</b-button>
+      <b-button disabled v-else>Lägg till länk</b-button>
     </div>
   </div>
 </template>

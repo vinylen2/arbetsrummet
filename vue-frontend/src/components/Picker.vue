@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div v-for="pick in picked">
-      {{ pick }}
-    </div>
   </div>
 </template>
 
@@ -59,7 +56,8 @@ export default {
     },
     pickerCallback(data) {
       if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
-        this.picked = data[google.picker.Response.DOCUMENTS];
+        const pickedItem = data[google.picker.Response.DOCUMENTS][0];
+        this.$emit('itemPicked', pickedItem);
       }
     },
   },

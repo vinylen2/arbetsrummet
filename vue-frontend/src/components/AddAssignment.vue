@@ -1,92 +1,41 @@
 <template>
   <div class="add-assignment">
-    <div class="md-layout header">
-      <md-icon class="md-layout-item white-icon">
-        assignment
-      </md-icon>
-      <div class="md-layout-item">
-        <p class="header-title">Uppgift</p>
-      </div>
-      <div class="md-layout-item">
-        <div @click="close">
-          <md-icon class="icon-button">
-            clear
-          </md-icon>
-        </div>
-      </div>
+    <div class="header">
+      <h3>Uppgift</h3>
+      <b-button
+        @click="close">Stäng
+      </b-button>
     </div>
-    <div class="wrapper">
-      <div class="md-layout-row content">
-        <div class="md-flex">
-          <md-field>
-            <label>Titel</label>
-            <md-input v-model="publishData.title"
-              placeholder="Titel"
-              required></md-input>
-          </md-field>
-        </div>
-        <div class="md-flex">
-          <md-field>
-            <label>Beskrivning</label>
-            <md-input v-model="publishData.description"
-              placeholder="Beskrivning"
-              required></md-input>
-          </md-field>
-        </div>
-      </div>
-      <div class="md-layout md-gutter labels">
-        <md-field class="md-layout-item md-size-30">
-          <label>Ämne</label>
-          <md-select v-model="publishData.subjects"
-            multiple
-            name="subject"
-            id="subject"
-            placeholder="Ämne">
-            <md-option v-for="subject in $store.state.subjects" :key="subject.id" :value="subject.id">{{ subject.subject }}</md-option>
-          </md-select>
-        </md-field>
-        <md-field class="md-layout-item md-size-30">
-          <label>Årskurs</label>
-          <md-select v-model="publishData.grades"
-            multiple
-            name="grade"
-            id="grade"
-            placeholder="Årskurs">
-            <md-option v-for="grade in $store.state.grades" :key="grade.id" :value="grade.id">{{ grade.grade }}</md-option>
-          </md-select>
-        </md-field>
-      </div>
-      <div class="md-layout-row materials">
-        <material v-for="material in publishData.materials"
-          :key="material.id"
-          :value="material.id"
-          :materialData="material"></material>
-      </div>
-      <div class="md-layout attachment-buttons">
-        <!-- <md-button class="attach-button"
-          @click="showDrivePickerDialog = true">
-          <md-icon>folder_shared</md-icon>
-        </md-button>
-        <md-dialog class="drive-picker"
-          :md-active.sync="showDrivePickerDialog">
-          <md-dialog-content>
-            <picker :ViewId="'DOCS'"></picker>
-          </md-dialog-content>
-        </md-dialog> -->
-        <div @click="attachYoutube">
-          <md-icon class="icon-button">subscriptions</md-icon>
-        </div>
-        <div @click="showLinkDialog = true">
-          <md-icon class="icon-button">link</md-icon>
-        </div>
-        <md-dialog :md-active.sync="showLinkDialog">
+    <div class="materials">
+      <material v-for="material in publishData.materials"
+        :key="material.id"
+        :value="material.id"
+        :materialData="material"
+        @removeMaterial="removeMaterial"></material>
+    </div>
+    <div class="md-layout attachment-buttons">
+      <b-button class="attach-button"
+        @click="$modal.show('drivePicker')">Drive
+      </b-button>
+      <modal name="drivePicker">
+          <picker :ViewId="'DOCS'"
+            @itemPicked="attachPickedItem"></picker>
+      </modal>
+      <!-- <div @click="attachYoutube">
+        <md-icon class="icon-button">subscriptions</md-icon>
+      </div> -->
+      <b-button class="link-button"
+        @click="$modal.show('attachLink')">Länk
+      </b-button>
+      <modal name="attachLink">
           <add-link
-            @closeLinkDialog="closeLinkDialog"
-            @attachLink="attachLink"></add-link>
-        </md-dialog>
-        <md-button class="md-raised md-primary"
-          @click="postAssignment">Publicera</md-button>
-      </div>
+            @attachLink="attachLink"
+            @closeLinkDialog="$modal.hide('attachLink')">
+          </add-link>
+      </modal>
+      <b-button class="publish-button"
+        @click="postAssignment">Publicera
+      </b-button>
     </div>
   </div>
 </template>
@@ -100,6 +49,8 @@ import AddLink from '@/components/AddLink';
 import Picker from '@/components/Picker';
 import Material from '@/components/Material';
 
+import _ from 'lodash';
+
 export default {
   name: 'add-assignment',
   components: {
@@ -109,8 +60,8 @@ export default {
   },
   data() {
     return {
-      showLinkDialog: false,
-      showDrivePickerDialog: false,
+      showLinkModal: false,
+      showDrivePickerModal: false,
       publishData: {
         title: '',
         description: '',
@@ -120,7 +71,7 @@ export default {
           {
             id: 1,
             unionField: 'link',
-            title: 'Här är en länk',
+            title: 'Coming soon',
           },
         ],
       },
@@ -132,7 +83,10 @@ export default {
   },
   methods: {
     close() {
-      this.$emit('closeAddAssignmentDialog');
+      this.$emit('closeAddAssignmentModal');
+    },
+    removeMaterial(id) {
+      this.publishData.materials = _.filter(this.materials, { id });
     },
     attachDrive() {
 
@@ -140,20 +94,28 @@ export default {
     attachYoutube() {
 
     },
-    closeLinkDialog() {
-      this.showLinkDialog = false;
-    },
     attachLink(linkUrl) {
-      this.publishData.attachments.push({
+      this.publishData.materials.push({
         unionField: 'link',
         title: 'Coming soon',
         alternateLink: linkUrl,
       });
-      this.showLinkDialog = false;
+      this.$modal.hide('attachLink');
+    },
+    attachPickedItem(pickedItem) {
+      this.publishData.materials.push({
+        unionField: 'driveFile',
+        title: pickedItem.name,
+        alternateLink: pickedItem.url,
+        serviceId: pickedItem.serviceId,
+      });
+      this.$modal.hide('drivePicker');
     },
     postAssignment() {
       Assignments.post(this.publishData).then((result) => {
+        console.log('Assignment posted');
         console.log(result);
+        this.$emit('closeAddAssignmentModal');
       });
     },
     getGrades() {

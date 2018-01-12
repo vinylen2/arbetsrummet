@@ -1,29 +1,17 @@
 <template>
   <div class="frontpage">
-    <md-dialog :md-active.sync="showDialog">
-      <md-dialog-content>
+    <modal name="add-assignment"
+      :clickToClose="false">
         <add-assignment
-          @closeAddAssignmentDialog="showDialog = false">
+          @closeAddAssignmentModal="$modal.hide('add-assignment')">
         </add-assignment>
-      </md-dialog-content>
-    </md-dialog>
+    </modal>
     <div class="button"
       v-if="$store.state.isSignedIn">
-      <md-button class="md-fab md-primary"
-        @click="showDialog = true">
-        <md-icon>add</md-icon>
-      </md-button>
+      <b-button
+        @click="$modal.show('add-assignment')">+
+      </b-button>
     </div>
-    <md-button class="attach-button"
-      @click="showDrivePickerDialog = true">
-      <md-icon>folder_shared</md-icon>
-    </md-button>
-    <md-dialog class="drive-picker"
-      :md-active.sync="showDrivePickerDialog">
-      <md-dialog-content>
-        <picker :ViewId="'DOCS'"></picker>
-      </md-dialog-content>
-    </md-dialog>
   </div>
 </template>
 
@@ -32,19 +20,16 @@ import Assignments from '@/api/services/assignments';
 import AddAssignment from '@/components/AddAssignment';
 import { mapGetters } from 'vuex';
 
-import Picker from '@/components/Picker';
 
 export default {
   name: 'frontpage',
   components: {
     AddAssignment,
-    Picker,
   },
   data() {
     return {
       subject: '',
-      showDialog: false,
-      showDrivePickerDialog: false,
+      showModal: false,
       assignments: [
         {
           id: 0,
@@ -103,11 +88,11 @@ a {
   color: #42b983;
 }
 
-.md-dialog-content {
+.md-Modal-content {
   padding: 0;
 }
 
-.md-dialog {
+.md-Modal {
   width: 700px;
 }
 
