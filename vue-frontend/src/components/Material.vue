@@ -2,40 +2,38 @@
   <div>
     <a class="container-link"
       :src="alternateLink">
-      <div class="md-layout material">
-        <div class="md-layout-item thumbnail">
+      <div class="material">
+        <div class="thumbnail">
           <img class="thumbnail-google"
             :src="thumbnailUrl"
             v-if="thumbnailUrl"/>
           <div class="thumbnail-icon"
             v-else>
-            <md-icon v-if="unionField === 'driveFile'">description</md-icon>
-            <md-icon v-if="unionField === 'youtubeVideo'">subscriptions</md-icon>
-            <md-icon v-if="unionField === 'link'">link</md-icon>
-            <md-icon v-if="unionField === 'form'">list</md-icon>
+            <div v-if="unionField === 'driveFile'">doc</div>
+            <div v-if="unionField === 'youtubeVideo'">doc</div>
+            <div v-if="unionField === 'link'">doc</div>
+            <div v-if="unionField === 'form'">doc</div>
           </div>
         </div>
-        <div class="md-layout-item title-link"
+        <div class="title-link"
           v-if="unionField === 'link'">
           <div class="title">Länk</div>
           <div class="title">{{ title }}</div>
         </div>
-        <div class="md-layout-item title-type"
+        <div class="title-type"
           v-else>
           <p class="title">{{ title }}</p>
           <p class="title"> typ av dokument </p>
         </div>
-        <div class="md-layout-item shareMode" v-if="unionField === 'driveFile'">
-          <md-select v-model="shareMode"
-            name="shareMode"
-            id="shareMode"
-            placeholder="Eleverna kan visa filen">
-            <md-option v-for="shareMode in shareModes"
-              :key="shareMode.enum"
-              :value="shareMode.name">{{ shareMode.name }}</md-option>
-          </md-select>
+        <div class="shareMode" v-if="unionField === 'driveFile'">
+          <b-form-select class="mb-3"
+            v-model="shareMode"
+            :options="shareModes"
+            text-field="name"
+            value-field="enum">
+          </b-form-select>
         </div>
-        <div class="md-layout-item icon-button"
+        <div class="icon-button"
           @click="removeMaterial">X
         </div>
       </div>
@@ -44,6 +42,8 @@
 </template>
 
 <script>
+import gapiData from '@/stores/gapi';
+
 export default {
   name: 'material',
   props: [
@@ -60,20 +60,7 @@ export default {
       createdAt: this.materialData.createdAt,
       updatedAt: this.materialData.updatedAt,
       shareMode: '',
-      shareModes: [
-        {
-          enum: 'VIEW',
-          name: 'Eleverna kan visa filen',
-        },
-        {
-          enum: 'EDIT',
-          name: 'Eleverna kan redigera filen',
-        },
-        {
-          enum: 'STUDENT_COPY',
-          name: 'Gör en kopia för varje elev',
-        },
-      ],
+      shareModes: gapiData.shareModes,
     };
   },
   methods: {

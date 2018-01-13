@@ -1,9 +1,9 @@
 <template>
   <div>
-    <b-button class="md-raised"
+    <v-btn color="primary"
       @click="logIn">
       Logga in
-    </b-button>
+    </v-btn>
   </div>
 </template>
 

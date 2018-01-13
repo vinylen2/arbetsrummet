@@ -1,16 +1,19 @@
 <template>
   <div class="frontpage">
-    <modal name="add-assignment"
-      :clickToClose="false">
+    <v-dialog v-model="addAssignmentDialog"
+      max-width="600px">
         <add-assignment
-          @closeAddAssignmentModal="$modal.hide('add-assignment')">
+          @closeAddAssignmentModal="addAssignmentDialog = false">
         </add-assignment>
-    </modal>
+    </v-dialog>
     <div class="button"
       v-if="$store.state.isSignedIn">
-      <b-button
-        @click="$modal.show('add-assignment')">+
-      </b-button>
+      <v-btn color="primary"
+        dark
+        fab
+        @click.stop="addAssignmentDialog = true">
+        <v-icon dark>add</v-icon>
+      </v-btn>
     </div>
   </div>
 </template>
@@ -29,7 +32,7 @@ export default {
   data() {
     return {
       subject: '',
-      showModal: false,
+      addAssignmentDialog: false,
       assignments: [
         {
           id: 0,

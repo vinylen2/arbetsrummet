@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <navbar></navbar>
-    <router-view/>
+    <v-app>
+      <navbar></navbar>
+      <router-view/>
+    </v-app>
   </div>
 </template>
 
@@ -9,14 +11,9 @@
 import Vue from 'vue';
 import Navbar from '@/components/Navbar';
 
-
-import BootstrapVue from 'bootstrap-vue';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-Vue.use(BootstrapVue);
-
-import VModal from 'vue-js-modal';
-Vue.use(VModal);
+import Vuetify from 'vuetify';
+import('vuetify/dist/vuetify.min.css')
+Vue.use(Vuetify);
 
 export default {
   components: {
