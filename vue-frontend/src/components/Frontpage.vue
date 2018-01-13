@@ -1,5 +1,24 @@
 <template>
   <div class="frontpage">
+    <search></search>
+    <v-container grid-list-md text-xs-left>
+      <v-layout row wrap>
+        <v-flex xs4 class="assignment"
+          v-for="assignment in assignments">
+          <assignment :data="assignment"></assignment>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <div class="button"
+      v-if="$store.state.isSignedIn">
+      <v-btn color="primary" dark fab raised
+        bottom
+        right
+        fixed
+        @click.stop="addAssignmentDialog = true">
+        <v-icon dark>add</v-icon>
+      </v-btn>
+    </div>
     <v-dialog v-model="addAssignmentDialog"
       max-width="600px"
       height="auto"
@@ -8,32 +27,27 @@
           @closeAddAssignmentModal="addAssignmentDialog = false">
         </add-assignment>
     </v-dialog>
-    <div class="button"
-      v-if="$store.state.isSignedIn">
-      <v-btn color="primary"
-        dark
-        fab
-        raised
-        @click.stop="addAssignmentDialog = true">
-        <v-icon dark>add</v-icon>
-      </v-btn>
-    </div>
   </div>
 </template>
 
 <script>
 import Assignments from '@/api/services/assignments';
 import AddAssignment from '@/components/AddAssignment';
+import Search from '@/components/Search';
+import Assignment from '@/components/Assignment';
 import { mapGetters } from 'vuex';
 
 
 export default {
   name: 'frontpage',
   components: {
+    Assignment,
     AddAssignment,
+    Search,
   },
   data() {
     return {
+      showSearch: false,
       subject: '',
       addAssignmentDialog: false,
       assignments: [
@@ -43,7 +57,15 @@ export default {
           description: "Här är beskrivningen för en uppgift",
           courseWorkType: "ASSIGNMENT",
           createdAt: "2017-12-19",
-          authors: [],
+          authors: [{
+              id: 0,
+              firstname: "John",
+              lastname: "Doe",
+              fullName: "John Doe",
+              email: "john.doe@domain.com",
+              createdAt: "2017-12-19T07:25:11Z",
+              updatedAt: "2017-12-19T07:25:11Z"
+          }],
           materials: [],
           subjects: [],
         },
@@ -79,38 +101,4 @@ export default {
 </script>
 
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-
-.md-Modal-content {
-  padding: 0;
-}
-
-.md-Modal {
-  width: 700px;
-}
-
-</style>
-
-<style>
-.md-select-menu {
-  z-index: 100;
-  background-color: white;
-}
-
-html * {
-  /* box-sizing: initial; */
-}
 </style>

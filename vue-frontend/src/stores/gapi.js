@@ -22,18 +22,16 @@ export default {
       name: 'Gör en kopia för varje elev',
     },
   ],
-  services: [
-    {
-      enum: 'spread',
+  services: {
+    spread: {
       title: 'Kalkylark',
+      icon: 'description',
+      color: '',
     },
-    {
-      enum: 'doc',
-      title: 'Dokument',
+    doc: {
+      title: 'Kalkylark',
+      icon: 'description',
+      color: '',
     },
-    {
-      enum: 'doc',
-      title: 'Dokument',
-    },
-  ],
+  },
 }

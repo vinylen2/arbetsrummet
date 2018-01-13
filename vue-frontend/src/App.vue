@@ -1,15 +1,37 @@
 <template>
-  <div id="app">
-    <v-app>
-      <navbar></navbar>
-      <router-view/>
-    </v-app>
-  </div>
+  <v-app id="app">
+    <v-navigation-drawer
+      fixed
+      v-model="drawer"
+      app>
+      <v-list dense>
+        <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Hem</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>contact_mail</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Kontakta {{appTitle}}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <navbar @drawer="drawer = !drawer"></navbar>
+    <router-view/>
+  </v-app>
 </template>
 
 <script>
 import Vue from 'vue';
 import Navbar from '@/components/Navbar';
+import Info from '@/stores/info';
 
 import Vuetify from 'vuetify';
 import('vuetify/dist/vuetify.min.css')
@@ -19,7 +41,15 @@ export default {
   components: {
     Navbar,
   },
-  name: 'app'
+  name: 'app',
+  data() {
+    return {
+      drawer: false,
+      appTitle: Info.appTitle,
+    };
+  },
+  methods: {
+  },
 }
 </script>
 

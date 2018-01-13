@@ -1,56 +1,73 @@
 <template>
-<div class="w-75 mx-auto">
-  <b-card-group deck>
-  	<b-card :title=assignment.title
-            header-tag="header">
-      <h6 slot="header" class="mb-0">{{assignment.authors[0].firstname}} {{assignment.authors[0].lastname}}
-        <br>{{assignment.createdAt}}
-      </h6>
-      <p class="card-text">
-        {{assignment.description}}
+<v-card class="pa-1">
+  <v-layout row wrap class="header">
+    <v-flex xs2 text-xs-center class="icon-thumbnail" primary>
+      <v-icon :color="'white'">assignment</v-icon>
+    </v-flex>
+    <v-flex xs8>
+      <p class="author"
+        v-if="data.authors.length > 0">
+        {{ data.authors[0].fullName }}
       </p>
-      foreach gabbes materialcomponent
-    </b-card>
-  </b-card-group>
-</div>
+      <p class="author"
+        v-else>Okänd</p>
+      <p class="date"> {{date}}</p>
+    </v-flex>
+    <v-flex xs12 class="pa-3 content">
+      <h3 primary>{{ data.title }}</h3>
+      <p>{{ data.description }}</p>
+    </v-flex>
+    <v-flex xs4>
+      <v-btn light
+        to="/">
+      Öppna</v-btn>
+    </v-flex>
+    <v-flex xs4>
+      <v-btn>
+        <v-icon>share</v-icon>
+      </v-btn>
+    </v-flex>
+    <v-flex xs4 text-xs-center class="pa-3" @click="showAttachments = !showAttachments">
+      <v-icon class="show-button"
+        v-if="data.materials.length > 0">attachment keyboard_arrow_down
+      </v-icon>
+    </v-flex>
+    <v-flex xs12 class="pa-3" v-if="showAttachments && data.materials.length > 0">
+      <div v-if="data.materials.length > 0"
+        v-for="material in data.materials">
+        <a class="material-link"
+          :href="material.alternateLink"
+          target="_blank">
+          <v-icon v-if="material.unionField === 'driveFile'">description</v-icon>
+          <v-icon v-if="material.unionField === 'link'">link</v-icon>
+          <v-icon v-if="material.unionField === 'form'">list</v-icon>
+          <v-icon v-if="material.unionField === 'youtubeVideo'">subscriptions</v-icon>
+          {{material.title}}
+        </a>
+      </div>
+    </v-flex>
+  </v-layout>
+</v-card>
 </template>
 
 <script>
 import Assignments from "@/api/services/assignments";
+import moment from 'moment';
+moment.locale('sv');
 
 export default {
   name: "assignment",
+  props: ['data'],
+  computed: {
+    date() {
+      return moment(this.data.createdAt).format('D MMM YYYY');
+    },
+  },
   data() {
     return {
-      assignment: {
-          id: 0,
-          title: "Uppgift",
-          description: "Här är beskrivningen för en uppgift",
-          courseWorkType: "ASSIGNMENT",
-          createdAt: "2017-12-19",
-          authors: [{
-              id: 0,
-              firstname: "John",
-              lastname: "Doe",
-              email: "john.doe@domain.com",
-              createdAt: "2017-12-19T07:25:11Z",
-              updatedAt: "2017-12-19T07:25:11Z"
-          }],
-          materials: [],
-          subjects: [],
-        },
+      showAttachments: false,
     };
   },
-  created() {
-    this.getAllAssignments();
-  },
-  methods: {
-    getAllAssignments() {
-      Assignments.getAll().then(result => {
-        this.assignments = result.data;
-      });
-    }
-  }
 };
 </script>
 
@@ -70,20 +87,41 @@ li {
 a {
   color: #42b983;
 }
-.md-card {
-    
-  background-color: white;
-  min-height: 100px;
-  border-color: black;
-  align-items: center;
+
+.icon-thumbnail {
+  display: flex;
   justify-content: center;
-  /*border-style: dotted;*/
-  border-width: 5px;
-  padding: 20px;
 }
-.md-toolbar {
-    background-color: rgba(26, 230, 94, 0.13);
+.author {
+  margin: 0 2px 0 4px;
+  font-weight: bold;
 }
 
+.date {
+  margin: 0 2px 0 4px;
+}
 
+.panel {
+  margin: -4px;
+  padding: -4px;
+  width: 100%;
+  border: none;
+}
+
+.show-button {
+  cursor: pointer;
+}
+
+.show-button:hover {
+  color: lightgrey;
+}
+
+.content {
+  height: 120px;
+}
+
+.material-link {
+  text-decoration: none;
+  cursor: pointer;
+}
 </style>

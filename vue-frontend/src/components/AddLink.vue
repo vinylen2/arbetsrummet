@@ -32,9 +32,10 @@ export default {
   methods: {
     addLink() {
       this.$emit('attachLink', this.linkUrl);
+      this.linkUrl = '';
     },
     close() {
-      this.$emit('closeLinkDialog');
+      this.$emit('close');
     },
   },
 }

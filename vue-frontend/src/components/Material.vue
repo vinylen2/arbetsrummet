@@ -1,19 +1,34 @@
 <template>
   <div class="material">
     <v-container grid-list-md text-xs-left>
-      <v-layout row wrap>
-        <v-flex xs2>
-
-        </v-flex>
-        <v-flex xs9>
-
-        </v-flex>
-        <v-flex xs1 class="text-xs-right">
-          <v-icon class="attach-button"
-            @click="removeMaterial">clear</v-icon>
-
-        </v-flex>
-      </v-layout>
+        <v-layout row wrap>
+          <v-flex xs2 class="thumbnail">
+              <v-icon v-if="driveFile">description</v-icon>
+              <v-icon v-else>language</v-icon>
+          </v-flex>
+          <v-flex xs6>
+            <a :href="alternateLink"
+              target="_blank">
+              <div>
+                <p class="title">{{ title }}</p>
+                <p> typ av dokument </p>
+              </div>
+            </a>
+          </v-flex>
+          <v-flex xs3>
+            <v-select v-model="shareMode"
+              v-if="driveFile"
+              :items="shareModes"
+              item-text="name"
+              :auto="true"
+              item-value="enum">
+            </v-select>
+          </v-flex>
+          <v-flex xs1 class="text-xs-right">
+            <v-icon class="attach-button"
+              @click="removeMaterial">clear</v-icon>
+          </v-flex>
+        </v-layout>
     </v-container>
 
   </div>
@@ -26,8 +41,15 @@ export default {
   name: 'material',
   props: [
       'materialData',
-      'type'
   ],
+  computed: {
+    driveFile() {
+      if (this.unionField === 'link') {
+        return false;
+      }
+      return true;
+    },
+  },
   data() {
     return {
       id: this.materialData.id,
@@ -63,6 +85,21 @@ export default {
 
 .attach-button:hover {
   color: darkgrey;
+}
+
+.thumbnail {
+  background: lightgrey;
+  height: 60px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+
+.title:hover {
+  text-decoration: underline;
 }
 
 </style>

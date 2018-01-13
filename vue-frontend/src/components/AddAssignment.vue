@@ -49,6 +49,7 @@
       </v-flex>
       <v-flex xs12 class="materials">
         <material v-for="material in publishData.materials"
+          :key="material.id"
           :materialData="material"
           @removeMaterial="removeMaterial"
           :type="'edit'">
@@ -59,7 +60,14 @@
           <v-flex xs4 @click="showDrivePickerModal = true">
             <v-icon class="attach-button">folder</v-icon>
           </v-flex>
-          <v-flex xs4 @click="showDrivePickerModal = true">
+          <v-dialog v-model="showDrivePickerModal"
+            :lazy="true">
+            <picker :ViewId="'DOCS'"
+              @itemPicked="attachPickedItem"
+              @close="showDrivePickerModal = false">
+            </picker>
+          </v-dialog>
+          <v-flex xs4 @click="showYoutubePickerModal = true">
             <v-icon class="attach-button">subscriptions</v-icon>
           </v-flex>
           <v-flex xs4 @click="showLinkModal = true">
@@ -67,7 +75,8 @@
           </v-flex>
           <v-dialog v-model="showLinkModal"
             width="250px">
-            <add-link @attachLink="attachLink"></add-link>
+            <add-link @attachLink="attachLink"
+              @close="showLinkModal = false"></add-link>
           </v-dialog>
         </v-layout>
       </v-flex>
@@ -102,6 +111,7 @@
       return {
         showLinkModal: false,
         showDrivePickerModal: false,
+        showYoutubePickerModal: false,
         publishData: {
           title: '',
           description: '',
@@ -111,12 +121,14 @@
             {
               id: 1,
               unionField: 'link',
-              title: 'Coming soon',
+              alternateLink: 'https://google.se',
+              title: 'Länk',
             },
             {
               id: 2,
-              unionField: 'link',
-              title: 'Coming soon',
+              unionField: 'driveFile',
+              alternateLink: 'https://google.se',
+              title: 'Wireframe',
             },
           ],
         },
@@ -131,7 +143,11 @@
       this.$emit('closeAddAssignmentModal');
     },
     removeMaterial(id) {
-      this.publishData.materials = _.filter(this.publishData.materials, { id });
+      this.publishData.materials = _.filter(this.publishData.materials, (item) => {
+        if (item.id != id) {
+          return item;
+        }
+      });
     },
     attachYoutube() {
 
@@ -139,7 +155,7 @@
     attachLink(linkUrl) {
       this.publishData.materials.push({
         unionField: 'link',
-        title: 'Coming soon',
+        title: 'Länk',
         alternateLink: linkUrl,
       });
       this.showLinkModal = false;
@@ -151,7 +167,7 @@
         alternateLink: pickedItem.url,
         serviceId: pickedItem.serviceId,
       });
-      this.$modal.hide('drivePicker');
+      this.showDrivePickerModal = false;
     },
     attachPickedClip(pickedClip) {
       console.log(pickedClip);

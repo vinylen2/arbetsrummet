@@ -13,10 +13,5 @@ export default new Router({
       name: 'frontpage',
       component: Frontpage
     },
-    {
-      path: '/assignment',
-      name: 'assignment',
-      component: Assignment
-    }
   ]
 })
