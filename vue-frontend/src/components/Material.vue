@@ -1,43 +1,21 @@
 <template>
-  <div>
-    <a class="container-link"
-      :src="alternateLink">
-      <div class="material">
-        <div class="thumbnail">
-          <img class="thumbnail-google"
-            :src="thumbnailUrl"
-            v-if="thumbnailUrl"/>
-          <div class="thumbnail-icon"
-            v-else>
-            <div v-if="unionField === 'driveFile'">doc</div>
-            <div v-if="unionField === 'youtubeVideo'">doc</div>
-            <div v-if="unionField === 'link'">doc</div>
-            <div v-if="unionField === 'form'">doc</div>
-          </div>
-        </div>
-        <div class="title-link"
-          v-if="unionField === 'link'">
-          <div class="title">Länk</div>
-          <div class="title">{{ title }}</div>
-        </div>
-        <div class="title-type"
-          v-else>
-          <p class="title">{{ title }}</p>
-          <p class="title"> typ av dokument </p>
-        </div>
-        <div class="shareMode" v-if="unionField === 'driveFile'">
-          <b-form-select class="mb-3"
-            v-model="shareMode"
-            :options="shareModes"
-            text-field="name"
-            value-field="enum">
-          </b-form-select>
-        </div>
-        <div class="icon-button"
-          @click="removeMaterial">X
-        </div>
-      </div>
-    </a>
+  <div class="material">
+    <v-container grid-list-md text-xs-left>
+      <v-layout row wrap>
+        <v-flex xs2>
+
+        </v-flex>
+        <v-flex xs9>
+
+        </v-flex>
+        <v-flex xs1 class="text-xs-right">
+          <v-icon class="attach-button"
+            @click="removeMaterial">clear</v-icon>
+
+        </v-flex>
+      </v-layout>
+    </v-container>
+
   </div>
 </template>
 
@@ -47,7 +25,8 @@ import gapiData from '@/stores/gapi';
 export default {
   name: 'material',
   props: [
-      'materialData'
+      'materialData',
+      'type'
   ],
   data() {
     return {
@@ -72,21 +51,17 @@ export default {
 </script>
 
 <style scoped>
-
 .material {
-  background: #f6f6f6;
-  border: .05rem solid rgba(0,0,0,0.12);
+  background-color: #f6f6f6;
+  height: 70px;
+  border: .1rem solid rgba(0,0,0,0.12);
 }
 
-a:hover {
-  text-decoration: none;
-}
-
-.icon-button {
+.attach-button {
   cursor: pointer;
 }
 
-.icon-button:hover {
+.attach-button:hover {
   color: darkgrey;
 }
 

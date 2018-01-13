@@ -1,18 +1,23 @@
 <template>
-  <div class="add-link wrapper">
-    <h1>Lägg till länk</h1>
-    <label for="linkUrl">Länk</label>
-    <b-form-input id="linkUrl"
-      v-model.trim="linkUrl">
-    </b-form-input>
-    <div class="buttons">
-      <b-button
-        @click="close">Avbryt</b-button>
-      <b-button v-if="linkUrl.length > 0"
-        @click="addLink">Lägg till länk</b-button>
-      <b-button disabled v-else>Lägg till länk</b-button>
-    </div>
-  </div>
+  <v-card>
+    <v-card-title class="headline">Lägg till länk</v-card-title>
+    <v-card-text>
+      <v-text-field
+        name="linkUrl"
+        label="Länk"
+        id="linkUrl"
+        v-model="linkUrl">
+      </v-text-field>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn flat
+        @click="close">Avbryt</v-btn>
+      <v-btn flat
+        v-if="linkUrl.length > 0"
+        @click="addLink">Lägg till länk</v-btn>
+      <v-btn flat disabled v-else>Lägg till länk</v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
@@ -36,8 +41,4 @@ export default {
 </script>
 
 <style scoped>
-.wrapper {
-  margin: 20px;
-  background-color: white;
-}
 </style>

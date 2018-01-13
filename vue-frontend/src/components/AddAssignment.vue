@@ -1,10 +1,83 @@
 <template>
-  <v-layout>
-    <v-flex>
-      <v-card>
-      </v-card>
-    </v-flex>
-  </v-layout>
+<v-card>
+  <div class="header">
+    <v-container grid-list-md>
+      <v-layout row wrap>
+        <v-flex xs1>
+          <v-icon :style="{color: 'white'}">assignment</v-icon>
+        </v-flex>
+        <v-flex xs1>
+          <h3 class="header-title">Uppgift</h3>
+        </v-flex>
+        <v-flex xs10 class="text-xs-right">
+          <v-icon :style="{color: 'white'}"
+            class="attach-button"
+            @click="close">clear</v-icon>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
+  <v-container grid-list-md text-xs-center>
+    <v-layout row wrap>
+      <v-flex xs12 class="form">
+        <form>
+          <v-text-field v-model="publishData.title"
+            label="Titel">
+          </v-text-field>
+          <v-text-field v-model="publishData.description"
+            label="Beskrivning">
+          </v-text-field>
+        </form>
+      </v-flex>
+      <v-flex xs6 class="subjects">
+        <v-select label="Ämnen"
+          v-model="publishData.subjects"
+          v-bind:items="$store.state.subjects"
+          item-text="subject"
+          multiple
+          hint="Välj ämnen">
+        </v-select>
+      </v-flex>
+      <v-flex xs6 class="grades">
+        <v-select label="Årskurs"
+          v-model="publishData.grades"
+          v-bind:items="$store.state.grades"
+          item-text="grade"
+          multiple
+          hint="Välj årskurs">
+        </v-select>
+      </v-flex>
+      <v-flex xs12 class="materials">
+        <material v-for="material in publishData.materials"
+          :materialData="material"
+          @removeMaterial="removeMaterial"
+          :type="'edit'">
+        </material>
+      </v-flex>
+      <v-flex xs3 class="buttons">
+        <v-layout row wrap class="buttons">
+          <v-flex xs4 @click="showDrivePickerModal = true">
+            <v-icon class="attach-button">folder</v-icon>
+          </v-flex>
+          <v-flex xs4 @click="showDrivePickerModal = true">
+            <v-icon class="attach-button">subscriptions</v-icon>
+          </v-flex>
+          <v-flex xs4 @click="showLinkModal = true">
+            <v-icon class="attach-button">link</v-icon>
+          </v-flex>
+          <v-dialog v-model="showLinkModal"
+            width="250px">
+            <add-link @attachLink="attachLink"></add-link>
+          </v-dialog>
+        </v-layout>
+      </v-flex>
+      <v-flex xs9 class="text-xs-right buttons-2">
+        <v-btn color="primary"
+          @click="postAssignment">Publicera</v-btn>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</v-card>
 </template>
 
   <script>
@@ -40,6 +113,11 @@
               unionField: 'link',
               title: 'Coming soon',
             },
+            {
+              id: 2,
+              unionField: 'link',
+              title: 'Coming soon',
+            },
           ],
         },
       };
@@ -49,47 +127,44 @@
       this.getSubjects();
     },
     methods: {
-      close() {
-        this.$emit('closeAddAssignmentModal');
-      },
-      removeMaterial(id) {
-        this.publishData.materials = _.filter(this.materials, { id });
-      },
-      attachDrive() {
+    close() {
+      this.$emit('closeAddAssignmentModal');
+    },
+    removeMaterial(id) {
+      this.publishData.materials = _.filter(this.publishData.materials, { id });
+    },
+    attachYoutube() {
 
-      },
-      attachYoutube() {
-
-      },
-      attachLink(linkUrl) {
-        this.publishData.materials.push({
-          unionField: 'link',
-          title: 'Coming soon',
-          alternateLink: linkUrl,
-        });
-        this.$modal.hide('attachLink');
-      },
-      attachPickedItem(pickedItem) {
-        this.publishData.materials.push({
-          unionField: 'driveFile',
-          title: pickedItem.name,
-          alternateLink: pickedItem.url,
-          serviceId: pickedItem.serviceId,
-        });
-        this.$modal.hide('drivePicker');
-      },
-      attachPickedClip(pickedClip) {
-        console.log(pickedClip);
-        // this.publishData.materials.push({
-        //   unionField: 'driveFile',
-        //   title: pickedItem.name,
-        //   alternateLink: pickedItem.url,
-        //   serviceId: pickedItem.serviceId,
-        // });
-        this.$modal.hide('drivePicker');
-      },
-      postAssignment() {
-        Assignments.post(this.publishData).then((result) => {
+    },
+    attachLink(linkUrl) {
+      this.publishData.materials.push({
+        unionField: 'link',
+        title: 'Coming soon',
+        alternateLink: linkUrl,
+      });
+      this.showLinkModal = false;
+    },
+    attachPickedItem(pickedItem) {
+      this.publishData.materials.push({
+        unionField: 'driveFile',
+        title: pickedItem.name,
+        alternateLink: pickedItem.url,
+        serviceId: pickedItem.serviceId,
+      });
+      this.$modal.hide('drivePicker');
+    },
+    attachPickedClip(pickedClip) {
+      console.log(pickedClip);
+      // this.publishData.materials.push({
+      //   unionField: 'driveFile',
+      //   title: pickedItem.name,
+      //   alternateLink: pickedItem.url,
+      //   serviceId: pickedItem.serviceId,
+      // });
+      this.$modal.hide('drivePicker');
+    },
+    postAssignment() {
+      Assignments.post(this.publishData).then((result) => {
         console.log('Assignment posted');
         console.log(result);
         this.$emit('closeAddAssignmentModal');
@@ -110,22 +185,34 @@
 </script>
 
 <style scoped>
+.attach-button {
+  cursor: pointer;
+}
+.attach-button:hover {
+  color: darkgrey;
+}
+
+.buttons {
+  align-items: center;
+}
+
+.headericon {
+  color: white;
+}
+
 .header-title {
   color: white;
   font-weight: 500;
 }
 
+
 .add-assignment {
   background-color: white;
 }
 
-.wrapper {
-  margin: 0 20px;
-}
-
 .header {
-  height: 56px;
-  margin-bottom: 20px;
+  height: 50px;
+  padding: 5px;
   background-color: grey;
 }
 
@@ -136,9 +223,6 @@
 .attachment-buttons {
   height: 88px;
 }
-.white-icon {
-  color: white;
-}
 
 .icon-button {
   cursor: pointer;
@@ -148,4 +232,7 @@
   color: darkgrey;
 }
 
+.white-icon {
+  color: white;
+}
 </style>

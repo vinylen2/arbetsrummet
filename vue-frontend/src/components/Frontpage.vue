@@ -1,7 +1,9 @@
 <template>
   <div class="frontpage">
     <v-dialog v-model="addAssignmentDialog"
-      max-width="600px">
+      max-width="600px"
+      height="auto"
+      persistent>
         <add-assignment
           @closeAddAssignmentModal="addAssignmentDialog = false">
         </add-assignment>
@@ -11,6 +13,7 @@
       <v-btn color="primary"
         dark
         fab
+        raised
         @click.stop="addAssignmentDialog = true">
         <v-icon dark>add</v-icon>
       </v-btn>

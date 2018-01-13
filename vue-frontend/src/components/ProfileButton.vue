@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-img rounded="circle"
+    <!-- <b-img rounded="circle"
       v-tippy="tippyOptions"
       width="42"
       :src="$store.state.profile.picture"></b-img>
@@ -20,7 +20,7 @@
             </b-col>
           </b-row>
       </b-container>
-    </div>
+    </div> -->
   </div>
 </template>
 
