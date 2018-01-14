@@ -1,12 +1,11 @@
 <template>
-<v-toolbar dark color="primary">
+<v-toolbar dark color="light-green">
   <v-toolbar-side-icon @click="drawer"></v-toolbar-side-icon>
   <v-toolbar-title class="white--text">{{ appTitle }}</v-toolbar-title>
-  <div v-if="showSearch">
-    <v-toolbar-title slot="extension">
-      <search></search>
-    </v-toolbar-title>
-  </div>
+  <v-btn icon v-if="!$store.state.showSearch"
+    @click="$store.commit('toggleSearch')">
+    <v-icon>search</v-icon>
+  </v-btn>
   <v-spacer></v-spacer>
   <v-btn icon>
     <v-icon>refresh</v-icon>
@@ -30,7 +29,6 @@ export default {
   data() {
     return {
       appTitle: Info.appTitle,
-      showSearch: false,
     };
   },
   methods: {

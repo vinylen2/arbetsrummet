@@ -1,11 +1,20 @@
 <template>
   <div class="frontpage">
-    <search></search>
-    <v-container grid-list-md text-xs-left>
+    <v-slide-y-transition>
+      <div class="light-green lighten-2 search-bar"
+        v-show="$store.state.showSearch">
+
+          <search></search>
+        <div class="show-hide"
+          @click="$store.commit('toggleSearch')">
+          <v-icon color="white" large>keyboard_arrow_up</v-icon>
+        </div>
+      </div>
+    </v-slide-y-transition>
+    <v-container grid-list-md text-xs-center>
       <v-layout row wrap>
-        <v-flex xs4 class="assignment"
-          v-for="assignment in assignments">
-          <assignment :data="assignment"></assignment>
+        <v-flex xs3 v-for="assignment in assignments">
+          <assignment-card :data="assignment"></assignment-card>
         </v-flex>
       </v-layout>
     </v-container>
@@ -34,20 +43,19 @@
 import Assignments from '@/api/services/assignments';
 import AddAssignment from '@/components/AddAssignment';
 import Search from '@/components/Search';
-import Assignment from '@/components/Assignment';
+import AssignmentCard from '@/components/AssignmentCard';
 import { mapGetters } from 'vuex';
 
 
 export default {
   name: 'frontpage',
   components: {
-    Assignment,
+    AssignmentCard,
     AddAssignment,
     Search,
   },
   data() {
     return {
-      showSearch: false,
       subject: '',
       addAssignmentDialog: false,
       assignments: [
@@ -61,7 +69,6 @@ export default {
               id: 0,
               firstname: "John",
               lastname: "Doe",
-              fullName: "John Doe",
               email: "john.doe@domain.com",
               createdAt: "2017-12-19T07:25:11Z",
               updatedAt: "2017-12-19T07:25:11Z"
@@ -101,4 +108,23 @@ export default {
 </script>
 
 <style scoped>
+h1, h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+
+.content {
+  min-height: 800px;
+  color: grey;
+}
 </style>

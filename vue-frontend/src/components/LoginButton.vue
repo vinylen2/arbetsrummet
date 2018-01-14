@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn color="primary"
+    <v-btn color="error"
       @click="logIn">
       Logga in
     </v-btn>

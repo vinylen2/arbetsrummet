@@ -24,7 +24,7 @@
       </v-list>
     </v-navigation-drawer>
     <navbar @drawer="drawer = !drawer"></navbar>
-    <router-view/>
+    <router-view></router-view>
   </v-app>
 </template>
 
@@ -49,6 +49,9 @@ export default {
     };
   },
   methods: {
+    hideSearch() {
+      console.log('hej');
+    },
   },
 }
 </script>

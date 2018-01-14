@@ -7,4 +7,7 @@ export default {
   post(data) {
     return api.post('assignments', data).then(response => response.data);
   },
+  get(id) {
+    return api.get(`assignments/${id}`).then(response => response.data);
+  },
 };

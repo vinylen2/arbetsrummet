@@ -7,6 +7,7 @@ Vue.use(Vuex);
 /* eslint no-param-reassign: ["error", { "props": false }]*/
 export default new Vuex.Store({
   state: {
+    showSearch: true,
     isSignedIn: false,
     profile: {
       firstName: '',
@@ -23,6 +24,9 @@ export default new Vuex.Store({
     isSignedIn: state => state.isSignedIn,
   },
   mutations: {
+    toggleSearch: (state) => {
+      state.showSearch = !state.showSearch;
+    },
     toggleLogin: (state, data) => {
       state.isSignedIn = data;
     },

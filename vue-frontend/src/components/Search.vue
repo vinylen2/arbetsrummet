@@ -1,11 +1,15 @@
 <template>
 <v-container grid-list-md text-xs-left>
-  <v-text-field
-    light
-    solo
-    placeholder="Search"
-    style="max-width: 500px; min-width: 128px border-radius: 25%">
-  </v-text-field>
+  <v-layout row wrap>
+    <v-flex xs6>
+      <v-text-field
+        light
+        solo
+        placeholder="Search"
+        style="max-width: 500px; min-width: 128px border-radius: 25%">
+      </v-text-field>
+    </v-flex>
+  </v-layout>
 </v-container>
 </template>
 
