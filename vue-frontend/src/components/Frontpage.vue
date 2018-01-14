@@ -13,7 +13,7 @@
     </v-slide-y-transition>
     <v-container grid-list-md text-xs-center>
       <v-layout row wrap>
-        <v-flex xs3 v-for="assignment in assignments">
+        <v-flex xs4 v-for="assignment in assignments">
           <assignment-card :data="assignment"></assignment-card>
         </v-flex>
       </v-layout>

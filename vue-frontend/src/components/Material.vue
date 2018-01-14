@@ -1,12 +1,12 @@
 <template>
   <div class="material">
-    <v-container grid-list-md text-xs-left>
+    <v-container grid-list-md text-xs-left class="pa-0">
         <v-layout row wrap>
-          <v-flex xs2 class="thumbnail">
+          <v-flex xs2 class="thumbnail pa-0">
               <v-icon v-if="driveFile">description</v-icon>
               <v-icon v-else>language</v-icon>
           </v-flex>
-          <v-flex xs6>
+          <v-flex xs6 class="pa-1">
             <a :href="alternateLink"
               target="_blank">
               <div>
@@ -30,7 +30,6 @@
           </v-flex>
         </v-layout>
     </v-container>
-
   </div>
 </template>
 
@@ -66,7 +65,7 @@ export default {
   },
   methods: {
     removeMaterial() {
-      this.$emit('removeMaterial', this.id);
+      this.$emit('removeMaterial', this.alternateLink);
     },
   },
 }
@@ -88,8 +87,12 @@ export default {
 }
 
 .thumbnail {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 4px 0;
+  margin-bottom: 0;
   background: lightgrey;
-  height: 60px;
+  height: 68px;
 }
 
 a {

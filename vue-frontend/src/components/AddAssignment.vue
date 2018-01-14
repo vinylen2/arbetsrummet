@@ -127,7 +127,7 @@
             {
               id: 2,
               unionField: 'driveFile',
-              alternateLink: 'https://google.se',
+              alternateLink: 'https://docs.google.com/presentation/d/1VawnfH9h8dY1TT1IvmyKF0LJt9h6MvFOB-xntpJbuNU/edit#slide=id.g2d371250ea_1_1',
               title: 'Wireframe',
             },
           ],
@@ -142,9 +142,9 @@
     close() {
       this.$emit('closeAddAssignmentModal');
     },
-    removeMaterial(id) {
+    removeMaterial(link) {
       this.publishData.materials = _.filter(this.publishData.materials, (item) => {
-        if (item.id != id) {
+        if (item.alternateLink != link) {
           return item;
         }
       });

@@ -5,12 +5,12 @@
       v-model="drawer"
       app>
       <v-list dense>
-        <v-list-tile @click="">
+        <v-list-tile to="/">
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Hem</v-list-tile-title>
+            <v-list-tile-title>Startsida</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-list-tile @click="">
