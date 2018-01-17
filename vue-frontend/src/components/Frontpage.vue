@@ -1,5 +1,5 @@
 <template>
-  <div>
+<div>
     <v-progress-linear class="ma-0" :color="'light-green lighten-2'"
       :indeterminate="true"
       v-if="$store.state.isLoading">
@@ -10,15 +10,11 @@
         <div class="light-green lighten-2 search-bar"
           v-show="$store.state.showSearch">
             <search></search>
-          <div class="show-hide"
-            @click="$store.commit('toggleSearch')">
-            <v-icon color="white" large>keyboard_arrow_up</v-icon>
-          </div>
         </div>
       </v-slide-y-transition>
       <v-container grid-list-md text-xs-center class="wrapper">
         <v-layout row wrap>
-          <v-flex xs6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
+          <v-flex xs12 sm6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
             <assignment-card :data="assignment"></assignment-card>
           </v-flex>
         </v-layout>
@@ -42,7 +38,7 @@
           </add-assignment>
       </v-dialog>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -137,5 +133,8 @@ a {
 
 .wrapper {
   margin-top: 20px;
+}
+.button-bar {
+  width: 100%;
 }
 </style>

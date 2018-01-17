@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-avatar class="avatar-button">
+    <v-avatar class="avatar-button"
+      :size="'36px'">
       <img :src="$store.state.profile.picture"
         :alt="$store.state.profile.firstName"
         @click="showProfile = !showProfile">
