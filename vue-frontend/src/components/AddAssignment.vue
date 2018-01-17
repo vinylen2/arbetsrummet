@@ -34,8 +34,7 @@
           v-model="publishData.subjects"
           v-bind:items="$store.state.subjects"
           item-text="subject"
-          multiple
-          hint="Välj ämnen">
+          hint="Välj ämne">
         </v-select>
       </v-flex>
       <v-flex xs6 class="grades">
@@ -57,12 +56,14 @@
       </v-flex>
       <v-flex xs3 class="buttons">
         <v-layout row wrap class="buttons">
-          <v-flex xs4 @click="showDrivePickerModal = true">
+          <!-- <v-flex xs4 @click="showDrivePickerModal = true"> -->
+          <v-flex xs4 @click="attachDrive">
             <v-icon class="attach-button">folder</v-icon>
           </v-flex>
           <v-dialog v-model="showDrivePickerModal"
-            :lazy="true">
-            <picker :ViewId="'DOCS'"
+            :lazy="false">
+            <picker ref="drivepicker"
+              :ViewId="'DOCS'"
               @itemPicked="attachPickedItem"
               @close="showDrivePickerModal = false">
             </picker>
@@ -117,20 +118,7 @@
           description: '',
           subjects: [],
           grades: [],
-          materials: [
-            {
-              id: 1,
-              unionField: 'link',
-              alternateLink: 'https://google.se',
-              title: 'Länk',
-            },
-            {
-              id: 2,
-              unionField: 'driveFile',
-              alternateLink: 'https://docs.google.com/presentation/d/1VawnfH9h8dY1TT1IvmyKF0LJt9h6MvFOB-xntpJbuNU/edit#slide=id.g2d371250ea_1_1',
-              title: 'Wireframe',
-            },
-          ],
+          materials: [],
         },
       };
     },
@@ -140,13 +128,19 @@
     },
     methods: {
     close() {
-      this.$emit('closeAddAssignmentModal');
+      this.$emit('close');
     },
     removeMaterial(link) {
       this.publishData.materials = _.filter(this.publishData.materials, (item) => {
         if (item.alternateLink != link) {
           return item;
         }
+      });
+    },
+    attachDrive() {
+      this.showDrivePickerModal = true;
+      this.$nextTick(() => {
+        this.$refs.drivepicker.onApiLoad();
       });
     },
     attachYoutube() {
@@ -181,9 +175,7 @@
     },
     postAssignment() {
       Assignments.post(this.publishData).then((result) => {
-        console.log('Assignment posted');
-        console.log(result);
-        this.$emit('closeAddAssignmentModal');
+        this.$emit('close');
       });
     },
     getGrades() {

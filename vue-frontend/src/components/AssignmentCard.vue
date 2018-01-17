@@ -1,7 +1,7 @@
 <template>
 <v-card class="pa-1">
   <v-layout row wrap text-xs-left class="header">
-    <v-flex xs2 text-xs-center class="icon-thumbnail" primary>
+    <v-flex xs2 text-xs-center class="icon-thumbnail" :class="color">
       <v-icon :color="'white'">assignment</v-icon>
     </v-flex>
     <v-flex xs8>
@@ -27,7 +27,7 @@
         <v-icon>share</v-icon>
       </v-btn>
     </v-flex>
-    <v-flex xs4 text-xs-center class="pa-3" @click="showAttachments = !showAttachments">
+    <v-flex xs4 text-xs-right class="pa-3" @click="showAttachments = !showAttachments">
       <v-icon class="show-button"
         v-if="data.materials.length > 0">attachment keyboard_arrow_down
       </v-icon>
@@ -63,6 +63,13 @@ export default {
   computed: {
     date() {
       return moment(this.data.createdAt).format('D MMM YYYY');
+    },
+    color() {
+      const subject = this.data.subjects[0];
+      if (this.data.subjects.length > 0) {
+        return subject.color;
+      }
+      return 'grey';
     },
   },
   data() {

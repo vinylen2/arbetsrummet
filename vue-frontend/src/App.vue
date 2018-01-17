@@ -18,13 +18,25 @@
             <v-icon>contact_mail</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Kontakta {{appTitle}}</v-list-tile-title>
+            <v-list-tile-title>Kontakt</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>info</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Om</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <navbar @drawer="drawer = !drawer"></navbar>
-    <router-view></router-view>
+    <v-toolbar fixed app color="light-green">
+      <navbar @drawer="drawer = !drawer"></navbar>
+    </v-toolbar>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
   </v-app>
 </template>
 
@@ -63,5 +75,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 
   color: #2c3e50;
+}
+
+.margin-top {
+  margin-top: 70px;
 }
 </style>

@@ -1,8 +1,10 @@
 <template>
-<v-toolbar dark color="light-green">
+<v-toolbar flat dark color="light-green">
   <v-toolbar-side-icon @click="drawer"></v-toolbar-side-icon>
-  <v-toolbar-title class="white--text">{{ appTitle }}</v-toolbar-title>
-  <v-btn icon v-if="!$store.state.showSearch"
+  <v-toolbar-title class="white--text hover"
+    @click="$router.push('/')">{{ appTitle }}
+  </v-toolbar-title>
+  <v-btn icon v-if="!$store.state.showSearch && isFrontpage"
     @click="$store.commit('toggleSearch')">
     <v-icon>search</v-icon>
   </v-btn>
@@ -26,6 +28,14 @@ export default {
     LoginButton,
     ProfileButton,
   },
+  computed: {
+    isFrontpage() {
+      if (this.$route.name === 'frontpage') {
+        return true;
+      }
+      return false;
+    },
+  },
   data() {
     return {
       appTitle: Info.appTitle,
@@ -41,4 +51,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.hover {
+  cursor: pointer;
+}
 </style>

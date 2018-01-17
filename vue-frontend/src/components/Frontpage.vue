@@ -1,41 +1,47 @@
 <template>
-  <div class="frontpage">
-    <v-slide-y-transition>
-      <div class="light-green lighten-2 search-bar"
-        v-show="$store.state.showSearch">
-
-          <search></search>
-        <div class="show-hide"
-          @click="$store.commit('toggleSearch')">
-          <v-icon color="white" large>keyboard_arrow_up</v-icon>
+  <div>
+    <v-progress-linear class="ma-0" :color="'light-green lighten-2'"
+      :indeterminate="true"
+      v-if="$store.state.isLoading">
+    </v-progress-linear>
+    <div class="frontpage"
+      v-else>
+      <v-slide-y-transition>
+        <div class="light-green lighten-2 search-bar"
+          v-show="$store.state.showSearch">
+            <search></search>
+          <div class="show-hide"
+            @click="$store.commit('toggleSearch')">
+            <v-icon color="white" large>keyboard_arrow_up</v-icon>
+          </div>
         </div>
+      </v-slide-y-transition>
+      <v-container grid-list-md text-xs-center class="wrapper">
+        <v-layout row wrap>
+          <v-flex xs6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
+            <assignment-card :data="assignment"></assignment-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+      <div class="button"
+        v-if="$store.state.isSignedIn">
+        <v-btn color="primary" dark fab raised
+          bottom
+          right
+          fixed
+          @click.stop="addAssignmentDialog = true">
+          <v-icon dark>add</v-icon>
+        </v-btn>
       </div>
-    </v-slide-y-transition>
-    <v-container grid-list-md text-xs-center>
-      <v-layout row wrap>
-        <v-flex xs4 v-for="assignment in assignments">
-          <assignment-card :data="assignment"></assignment-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
-    <div class="button"
-      v-if="$store.state.isSignedIn">
-      <v-btn color="primary" dark fab raised
-        bottom
-        right
-        fixed
-        @click.stop="addAssignmentDialog = true">
-        <v-icon dark>add</v-icon>
-      </v-btn>
+      <v-dialog v-model="addAssignmentDialog"
+        max-width="600px"
+        height="auto"
+        persistent>
+          <add-assignment
+            @close="addAssignmentDialog = false">
+          </add-assignment>
+      </v-dialog>
     </div>
-    <v-dialog v-model="addAssignmentDialog"
-      max-width="600px"
-      height="auto"
-      persistent>
-        <add-assignment
-          @closeAddAssignmentModal="addAssignmentDialog = false">
-        </add-assignment>
-    </v-dialog>
   </div>
 </template>
 
@@ -101,6 +107,7 @@ export default {
     getAllAssignments() {
       Assignments.getAll().then((result) => {
         this.assignments = result.data;
+        this.$store.commit('loading');
       });
     },
   },
@@ -126,5 +133,9 @@ a {
 .content {
   min-height: 800px;
   color: grey;
+}
+
+.wrapper {
+  margin-top: 20px;
 }
 </style>

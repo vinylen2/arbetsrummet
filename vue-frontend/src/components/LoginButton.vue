@@ -18,8 +18,22 @@ export default {
   },
   mounted() {
     window.gapi.load('client:auth2', this.initClient);
+    window.gapi.load('auth', {'callback': this.onAuthApiLoad});
   },
   methods: {
+    handleAuthResult(authResult) {
+      if (authResult && !authResult.error) {
+        this.$store.commit('setOauthToken', authResult.access_token);
+      }
+    },
+    onAuthApiLoad() {
+      window.gapi.auth.authorize({
+        client_id: gapiData.clientId,
+        scope: gapiData.scopes.drive,
+        immediate: false,
+      },
+      this.handleAuthResult);
+    },
     logIn() {
       gapi.auth2.getAuthInstance().signIn().then((result) => {
         this.$store.commit('setProfile', result.w3);

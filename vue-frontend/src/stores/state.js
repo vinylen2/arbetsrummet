@@ -7,9 +7,11 @@ Vue.use(Vuex);
 /* eslint no-param-reassign: ["error", { "props": false }]*/
 export default new Vuex.Store({
   state: {
-    showSearch: true,
+    isLoading: true,
+    showSearch: false,
     isSignedIn: false,
     profile: {
+      oauthToken: '',
       firstName: '',
       lastName: '',
       fullName: '',
@@ -24,6 +26,12 @@ export default new Vuex.Store({
     isSignedIn: state => state.isSignedIn,
   },
   mutations: {
+    setOauthToken: (state, data) => {
+      state.profile.oauthToken = data;
+    },
+    loading: (state) => {
+      state.isLoading = false;
+    },
     toggleSearch: (state) => {
       state.showSearch = !state.showSearch;
     },
