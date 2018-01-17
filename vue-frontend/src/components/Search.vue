@@ -104,7 +104,6 @@ export default {
   methods: {
     remove(item) {
       this.selectedSubjects = _.without(this.selectedSubjects, item);
-      this.selectedSubjects.splice(this.selectedSubjects.indexOf(item), 1);
     },
     searchAssignments() {
         if (this.searchQuery.grades || this.searchQuery.subjects || this.searchString.length > 0) {
