@@ -9,13 +9,16 @@
       <v-slide-y-transition>
         <div class="light-green lighten-2 search-bar"
           v-show="$store.state.showSearch">
-            <search></search>
+            <search @dataFromSearch="dataFromSearch"></search>
         </div>
       </v-slide-y-transition>
       <v-container grid-list-md text-xs-center class="wrapper">
         <v-layout row wrap>
           <v-flex xs12 sm6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
             <assignment-card :data="assignment"></assignment-card>
+          </v-flex>
+          <v-flex xs12 v-if="this.assignments.length === 0">
+            <h2>Inga uppgifter...</h2>
           </v-flex>
         </v-layout>
       </v-container>
@@ -100,10 +103,14 @@ export default {
     },
   },
   methods: {
+    dataFromSearch(data) {
+      this.assignments = data;
+      this.$store.commit('finishedLoading');
+    },
     getAllAssignments() {
       Assignments.getAll().then((result) => {
         this.assignments = result.data;
-        this.$store.commit('loading');
+        this.$store.commit('finishedLoading');
       });
     },
   },

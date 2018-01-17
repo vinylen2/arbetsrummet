@@ -10,4 +10,7 @@ export default {
   get(id) {
     return api.get(`assignments/${id}`).then(response => response.data);
   },
+  search(queryObject) {
+    return api.get('assignments/search').then(response => response.data);
+  },
 };

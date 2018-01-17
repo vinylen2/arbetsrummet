@@ -5,6 +5,7 @@
       <v-text-field
         light
         solo
+        v-model="searchString"
         placeholder="Search"
         style="max-width: 500px; min-width: 128px border-radius: 25%">
       </v-text-field>
@@ -45,15 +46,13 @@
         persistent-hint>
       </v-select>
     </v-flex>
-                <v-btn icon fab right fixed class="show-hide"
-                @click="$store.commit('toggleSearch')">
-                  <v-icon color="white" large>keyboard_arrow_up</v-icon>
-                </v-btn>
   </v-layout>
 </v-container>
 </template>
 
 <script>
+import Assignments from '@/api/services/assignments';
+import _ from 'lodash';
 
 export default {
   name: 'search',
@@ -61,14 +60,51 @@ export default {
     return {
       selectedGrades: [],
       selectedSubjects: [],
+      searchString: '',
     };
   },
+  watch: {
+    searchString: _.debounce(function () {
+      this.searchAssignments();
+    }, 500),
+    selectedGrades() {
+      this.searchAssignments();
+    },
+    selectedSubjects() {
+      this.searchAssignments();
+    },
+  },
   computed: {
-
+    gradesQuery() {
+      if (this.selectedGrades.length > 0) {
+        return _.map(this.selectedGrades, 'id');
+      }
+      return null;
+    },
+    subjectsQuery() {
+      if (this.selectedSubjects.length > 0) {
+        return _.map(this.selectedSubjects, 'id');
+      }
+      return null;
+    },
+    searchQuery() {
+      return {
+        string: this.searchString,
+        grades: this.gradesQuery,
+        subjects: this.subjectsQuery,
+      };
+    },
   },
   methods: {
     remove(item) {
+      this.selectedSubjects = _.without(this.selectedSubjects, item);
       this.selectedSubjects.splice(this.selectedSubjects.indexOf(item), 1);
+    },
+    searchAssignments() {
+      Assignments.search(this.searchQuery).then((result) => {
+        this.$store.commit('initiatedLoading');
+        this.$emit('dataFromSearch', result.data);
+      });
     },
   },
 }

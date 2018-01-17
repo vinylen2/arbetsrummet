@@ -29,7 +29,10 @@ export default new Vuex.Store({
     setOauthToken: (state, data) => {
       state.profile.oauthToken = data;
     },
-    loading: (state) => {
+    initiatedLoading: (state) => {
+      state.isLoading = true;
+    },
+    finishedLoading: (state) => {
       state.isLoading = false;
     },
     toggleSearch: (state) => {
