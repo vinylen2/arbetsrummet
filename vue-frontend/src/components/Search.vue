@@ -87,6 +87,12 @@ export default {
       }
       return null;
     },
+    doSearch() {
+      if (this.subjectsQuery) {
+        return true;
+      }
+      return false;
+    },
     searchQuery() {
       return {
         string: this.searchString,
@@ -101,10 +107,17 @@ export default {
       this.selectedSubjects.splice(this.selectedSubjects.indexOf(item), 1);
     },
     searchAssignments() {
-      Assignments.search(this.searchQuery).then((result) => {
-        this.$store.commit('initiatedLoading');
-        this.$emit('dataFromSearch', result.data);
-      });
+        if (this.searchQuery.grades || this.searchQuery.subjects || this.searchString.length > 0) {
+        Assignments.search(this.searchQuery).then((result) => {
+          this.$store.commit('initiatedLoading');
+          this.$emit('dataFromSearch', result.data);
+        });
+      } else {
+        Assignments.getAll().then((result) => {
+          this.$store.commit('initiatedLoading');
+          this.$emit('dataFromSearch', result.data);
+        });
+      }
     },
   },
 }
