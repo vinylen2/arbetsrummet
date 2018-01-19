@@ -31,7 +31,7 @@
       </v-flex>
       <v-flex xs6 class="subjects">
         <v-select label="Ämnen"
-          v-model="publishData.subjects"
+          v-model="publishData.subject"
           v-bind:items="$store.state.subjects"
           item-text="subject"
           hint="Välj ämne">
@@ -87,6 +87,20 @@
       </v-flex>
     </v-layout>
   </v-container>
+  <v-alert class="alert"
+    color="success"
+    icon="check_circle"
+    v-model="successAlert"
+    transition="slide-y-reverse-transition"
+    value="true">Uppgift publicerad!
+  </v-alert>
+  <v-alert class="alert"
+    color="success"
+    icon="check_circle"
+    v-model="errorAlert"
+    transition="slide-y-reverse-transition"
+    value="true">Hoppsan, det gick inte att publicera uppgiften!
+  </v-alert>
 </v-card>
 </template>
 
@@ -110,13 +124,16 @@
     },
     data() {
       return {
+        successAlert: false,
+        errorAlert: false,
         showLinkModal: false,
         showDrivePickerModal: false,
         showYoutubePickerModal: false,
+        testArray: [],
         publishData: {
           title: '',
           description: '',
-          subjects: [],
+          subject: '',
           grades: [],
           materials: [],
         },
@@ -164,7 +181,6 @@
       this.showDrivePickerModal = false;
     },
     attachPickedClip(pickedClip) {
-      console.log(pickedClip);
       // this.publishData.materials.push({
       //   unionField: 'driveFile',
       //   title: pickedItem.name,
@@ -175,7 +191,12 @@
     },
     postAssignment() {
       Assignments.post(this.publishData).then((result) => {
-        this.$emit('close');
+        // graphic for successful post or failed post
+        this.successAlert = true;
+        setTimeout(() => {
+          this.successAlert = false
+          this.$emit('assignmentPosted', result.data);
+        }, 1000);
       });
     },
     getGrades() {
@@ -242,5 +263,9 @@
 
 .white-icon {
   color: white;
+}
+
+.alert {
+  margin-bottom: 0px;
 }
 </style>

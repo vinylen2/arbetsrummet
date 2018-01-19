@@ -5,13 +5,8 @@
       <v-icon :color="'white'">assignment</v-icon>
     </v-flex>
     <v-flex xs8>
-      <p class="author"
-        v-if="data.authors.length > 0">
-        {{ data.authors[0].fullName }}
-      </p>
-      <p class="author"
-        v-else>Okänd</p>
-      <p class="date"> {{date}}</p>
+      <p class="author">{{ author }}</p>
+      <p class="date"> {{ date }}</p>
     </v-flex>
     <v-flex xs12 class="pa-3 content">
       <h3 primary>{{ data.title }}</h3>
@@ -29,11 +24,11 @@
     </v-flex>
     <v-flex xs4 text-xs-right class="pa-3" @click="showAttachments = !showAttachments">
       <v-icon class="show-button"
-        v-if="data.materials.length > 0">attachment keyboard_arrow_down
+        v-if="anyMaterials">attachment keyboard_arrow_down
       </v-icon>
     </v-flex>
     <v-slide-y-transition>
-      <v-flex xs12 class="pa-3" v-if="showAttachments && data.materials.length > 0">
+      <v-flex xs12 class="pa-3" v-if="showAttachments && anyMaterials">
         <div v-if="data.materials.length > 0"
           v-for="material in data.materials">
           <a class="material-link"
@@ -65,11 +60,24 @@ export default {
       return moment(this.data.createdAt).format('D MMM YYYY');
     },
     color() {
-      const subject = this.data.subjects[0];
-      if (this.data.subjects.length > 0) {
+      const subject = (( _.has(this.data, 'subjects') && this.data.subjects.length > 0 ) ? this.data.subjects[0] : null);
+      if (subject) {
         return subject.color;
       }
       return 'grey';
+    },
+    anyMaterials() {
+      if (this.data.materials.length > 0) {
+        return true;
+      }
+      return false;
+    },
+    author() {
+      const author = (( _.has(this.data, 'authors') && this.data.authors.length > 0 ) ? this.data.authors[0] : null);
+      if (author) {
+        return author.fullName;
+      }
+      return 'Okänd författare';
     },
   },
   data() {

@@ -3,9 +3,11 @@
     <v-card-title class="headline">Lägg till länk</v-card-title>
     <v-card-text>
       <v-text-field
+        autofocus
         name="linkUrl"
         label="Länk"
         id="linkUrl"
+        @keyup.enter="addLink"
         v-model="linkUrl">
       </v-text-field>
     </v-card-text>
@@ -29,9 +31,17 @@ export default {
       linkUrl: '',
     };
   },
+  computed: {
+    formattedLinkUrl() {
+      if (this.linkUrl.indexOf('http://') == 0 || this.linkUrl.indexOf('https://') == 0 ) {
+        return this.linkUrl;
+      }
+      return `https://${this.linkUrl}`;
+    },
+  },
   methods: {
     addLink() {
-      this.$emit('attachLink', this.linkUrl);
+      this.$emit('attachLink', this.formattedLinkUrl);
       this.linkUrl = '';
     },
     close() {

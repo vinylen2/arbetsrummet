@@ -5,6 +5,10 @@
       <v-text-field
         light
         solo
+        prepend-icon="search"
+        clearable
+        @cleared="console.log('cleard')"
+        hide-details
         v-model="searchString"
         placeholder="Search"
         style="max-width: 500px; min-width: 128px border-radius: 25%">
@@ -93,6 +97,12 @@ export default {
       }
       return false;
     },
+    hasSearchString() {
+      if (this.searchString || this.searchString.length > 0) {
+        return true;
+      }
+      return false;
+    },
     searchQuery() {
       return {
         string: this.searchString,
@@ -106,15 +116,17 @@ export default {
       this.selectedSubjects = _.without(this.selectedSubjects, item);
     },
     searchAssignments() {
-        if (this.searchQuery.grades || this.searchQuery.subjects || this.searchString.length > 0) {
+      console.log(this.hasSearchString);
+      if (this.searchQuery.grades || this.searchQuery.subjects || this.hasSearchString) {
+        console.log('searching');
         Assignments.search(this.searchQuery).then((result) => {
           this.$store.commit('initiatedLoading');
-          this.$emit('dataFromSearch', result.data);
+          this.$emit('addResult', result.data);
         });
       } else {
+        console.log('getting all');
         Assignments.getAll().then((result) => {
-          this.$store.commit('initiatedLoading');
-          this.$emit('dataFromSearch', result.data);
+          this.$emit('addResult', result.data);
         });
       }
     },

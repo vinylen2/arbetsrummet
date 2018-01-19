@@ -53,14 +53,18 @@
               </v-card-text>
               <v-card-text>
                 <h2>Bifogade dokument</h2>
-                  <v-expansion-panel>
+                <!-- <v-layout row wrap text-xs-left class="header">
+                  <v-flex xs12 v-for="material in data.materials"></v-flex>
+                </v-layout> -->
+
+                  <!-- <v-expansion-panel>
                     <v-expansion-panel-content v-for="(item,i) in 3" :key="i">
                       <div slot="header">Bifogat dokument foreach</div>
                       <v-card>
                         <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
                       </v-card>
                     </v-expansion-panel-content>
-                  </v-expansion-panel>
+                  </v-expansion-panel> -->
               </v-card-text>
             </v-card>
           </v-flex>
@@ -87,16 +91,20 @@
 
 <script>
 import Assignments from '@/api/services/assignments';
+import Material from '@/components/Material';
 import moment from 'moment';
 
 export default {
   name: 'assignment',
+  components: {
+    Material,
+  },
   data() {
     return {
       show: false,
       id: this.$route.params.id,
       isLoading: true,
-      data: [],
+      data: {},
     };
   },
   created() {

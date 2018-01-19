@@ -4,12 +4,18 @@
   <v-toolbar-title class="white--text hover"
     @click="$router.push('/')">{{ appTitle }}
   </v-toolbar-title>
-  <v-btn icon v-if="isFrontpage" class="ml-4"
+  <v-toolbar-title class="ml-4 hover"
+    v-if="isFrontpage"
     @click="$store.commit('toggleSearch')">
     <v-icon>search</v-icon>
     <v-icon v-if="!$store.state.showSearch">keyboard_arrow_down</v-icon>
     <v-icon v-if="$store.state.showSearch">keyboard_arrow_up</v-icon>
-  </v-btn>
+  </v-toolbar-title>
+  <!-- <v-btn icon v-if="isFrontpage" class="ml-4"
+    <v-icon>search</v-icon>
+    <v-icon v-if="!$store.state.showSearch">keyboard_arrow_down</v-icon>
+    <v-icon v-if="$store.state.showSearch">keyboard_arrow_up</v-icon>
+  </v-btn> -->
   <v-spacer></v-spacer>
   <v-btn icon>
     <v-icon>refresh</v-icon>

@@ -9,7 +9,7 @@
       <v-slide-y-transition>
         <div class="light-green lighten-2 search-bar"
           v-show="$store.state.showSearch">
-            <search @dataFromSearch="dataFromSearch"></search>
+            <search @addResult="addSearchResults"></search>
         </div>
       </v-slide-y-transition>
       <v-container grid-list-md text-xs-center class="wrapper">
@@ -17,7 +17,7 @@
           <v-flex xs12 sm6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
             <assignment-card :data="assignment"></assignment-card>
           </v-flex>
-          <v-flex xs12 v-if="this.assignments.length === 0">
+          <v-flex xs12 v-if="assignments.length === 0">
             <h2>Inga uppgifter...</h2>
           </v-flex>
         </v-layout>
@@ -37,6 +37,7 @@
         height="auto"
         persistent>
           <add-assignment
+            @assignmentPosted="assignmentPosted"
             @close="addAssignmentDialog = false">
           </add-assignment>
       </v-dialog>
@@ -61,27 +62,9 @@ export default {
   },
   data() {
     return {
+      assignments: [],
       subject: '',
       addAssignmentDialog: false,
-      assignments: [
-        {
-          id: 0,
-          title: "Uppgift",
-          description: "Här är beskrivningen för en uppgift",
-          courseWorkType: "ASSIGNMENT",
-          createdAt: "2017-12-19",
-          authors: [{
-              id: 0,
-              firstname: "John",
-              lastname: "Doe",
-              email: "john.doe@domain.com",
-              createdAt: "2017-12-19T07:25:11Z",
-              updatedAt: "2017-12-19T07:25:11Z"
-          }],
-          materials: [],
-          subjects: [],
-        },
-      ],
     };
   },
   created() {
@@ -103,9 +86,13 @@ export default {
     },
   },
   methods: {
-    dataFromSearch(data) {
+    addSearchResults(data) {
       this.assignments = data;
       this.$store.commit('finishedLoading');
+    },
+    assignmentPosted(data) {
+      this.assignments.push(data);
+      this.addAssignmentDialog = false;
     },
     getAllAssignments() {
       Assignments.getAll().then((result) => {

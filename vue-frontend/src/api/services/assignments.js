@@ -11,6 +11,6 @@ export default {
     return api.get(`assignments/${id}`).then(response => response.data);
   },
   search(queryObject) {
-    return api.get('assignments/search').then(response => response.data);
+    return api.get('assignments/search', { params: queryObject }).then(response => response.data);
   },
 };

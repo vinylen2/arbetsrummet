@@ -21,11 +21,16 @@ export default new Vuex.Store({
     courses: [],
     grades: [],
     subjects: [],
+    assignments: [],
   },
   getters: {
     isSignedIn: state => state.isSignedIn,
   },
   mutations: {
+    setAssignments: (state, data) => {
+      state.assignments = data;
+      state.isLoading = false;
+    },
     setOauthToken: (state, data) => {
       state.profile.oauthToken = data;
     },
