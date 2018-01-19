@@ -15,7 +15,6 @@ module.exports = function modelExport(db, DataTypes) {
     },
   });
 
-
   Model.associate = function (models) {
     this.belongsToMany(models.Assignment, { through: 'AssignmentAuthor' });
   };

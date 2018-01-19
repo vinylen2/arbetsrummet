@@ -7,7 +7,6 @@ module.exports = function modelExport(db, DataTypes) {
       grade: DataTypes.STRING,
   });
 
-
   Model.associate = function (models) {
     this.belongsToMany(models.Assignment, { through: 'AssignmentGrade' });
   };

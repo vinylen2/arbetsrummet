@@ -1,14 +1,12 @@
 const router = require('koa-router')({ prefix: '/assignments' });
 const _ = require('lodash');
 const Promise = require('bluebird');
+const CircularJSON = require('circular-json');
 
-const { Assignment, Material, Author, Subject } = require('../models');
+const { Assignment, Material, Author, Subject, Grade } = require('../models');
 
 async function getAllAssignments(ctx) {
   const assignments = await Assignment.findAll({
-    // attributes: {
-    //   exclude: ['updatedAt'],
-    // },
     include: [
       {
         model: Material,
@@ -16,10 +14,15 @@ async function getAllAssignments(ctx) {
       },
       {
         model: Author,
+        as: 'authors',
       },
       {
         model: Subject,
         as: 'subjects',
+      },
+      {
+        model: Grade,
+        as: 'grades',
       },
     ],
   });
@@ -45,6 +48,9 @@ async function getAssignment(ctx) {
         model: Subject,
         as: 'subjects',
       },
+      {
+        model: Grade,
+      },
     ],
   });
 
@@ -54,7 +60,7 @@ async function getAssignment(ctx) {
 }
 
 async function postAssignment(ctx) {
-  const { title, description, courseWorkType, grades, author, materials, subjects } = ctx.request.body;
+  const { title, description, courseWorkType, grades, author, materials, subject } = ctx.request.body;
 
   const assignment = await Assignment.create({
     title,
@@ -63,31 +69,36 @@ async function postAssignment(ctx) {
   });
 
   if (grades) {
-    const gradeArray = JSON.parse(grades);
-    const associatedGrades = await Promise.all(gradeArray.map(async (grade) => assignment.setGrades(grade)));
+    const associatedGrades = await Promise.all(grades.map(async (grade) => {
+      const sequelizeGrade = await Grade.findById(grade.id);
+      assignment.setGrades(sequelizeGrade);
+      return sequelizeGrade;
+    }));
+
     assignment.dataValues.grades = _.flattenDeep(associatedGrades);
   }
 
-  if (subjects) {
-    const subjectArray = JSON.parse(subjects);
-    const associatedSubjects = await Promise.all(subjectArray.map(async (subject) => assignment.setSubjects(subject)));
-    assignment.dataValues.subjects = _.flattenDeep(associatedSubjects);
+  if (subject) {
+    const sequelizeSubject = await Subject.findById(subject.id);
+    assignment.setSubjects(sequelizeSubject);
+    
+    assignment.dataValues.subjects = [sequelizeSubject];
   }
 
   if (materials) {
-    const materialArray = JSON.parse(materials);
-    const associatedMaterials = await Promise.all(materialArray.map(async (material) => {
-      const newMaterial = Material.create({
+    const associatedMaterials = await Promise.all(materials.map(async (material) => {
+      const newMaterial = await Material.create({
         unionField: material.unionField,
         title: material.title,
         alternateLink: material.alternateLink,
         thumbnailUrl: material.thumbnailUrl,
         formUrl: material.formUrl,
         shareMode: material.shareMode,
+        assignmentId: assignment.dataValues.id,
       });
       return newMaterial;
     }));
-    assignment.dataValues.materials = _.flattenDeep(associatedMaterials);
+    assignment.dataValues.materials = associatedMaterials;
   }
 
   ctx.body = {
@@ -96,7 +107,34 @@ async function postAssignment(ctx) {
 
 }
 
+async function searchAssignments(ctx) {
+  const rawString = ctx.request.query.string;
+  const string = (_.isEmpty(rawString) ? null : rawString);
+  const grades = ctx.request.query['grades[]'];
+  const subjects = ctx.request.query['subjects[]'];
+  const modelInjector = {
+    Material: Material,
+    Author: Author,
+    Subject: Subject,
+    Grade: Grade
+  }
+  
+  const query = _.flatten([subjects, grades, string]);
+
+  const stringQueryAssignments = await Assignment.findByTitle(string, modelInjector);
+  // const authorQueryAssignments = await Assignment.findByAuthor(string, modelInjector);
+
+  // const assignments = _.uniqBy(_.flattenDeep([stringQueryAssignments, authorQueryAssignments], 'id'));
+  const assignments = stringQueryAssignments;
+
+  ctx.body = {
+    data: assignments,
+  };
+
+}
+
 router.get('/', getAllAssignments);
+router.get('/search', searchAssignments);
 router.get('/:id', getAssignment);
 router.post('/', postAssignment);
 
