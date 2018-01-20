@@ -2,6 +2,53 @@ const path = require('path');
 
 const tableName = path.basename(__filename, '.js');
 
+const whereClauseFromQuery = function(db, string, subjects, grades) {
+  if (string) {
+    return {
+      [db.Op.or]: [
+        { title: { [db.Op.like]: `%${string}%` } },
+        { '$authors.firstname$': { [db.Op.like] :`%${string}%` } },
+        { '$authors.lastname$': { [db.Op.like] :`%${string}%` } },
+      ],
+    }
+  } else if (string && subjects) {
+    return {
+      [db.Op.or]: [
+        { title: { [db.Op.like]: `%${string}%` } },
+        { '$authors.firstname$': { [db.Op.like] :`%${string}%` } },
+        { '$authors.lastname$': { [db.Op.like] :`%${string}%` } },
+        { '$subjects.id$': { [db.Op.in] : subjects } },
+      ],
+    }
+  } else if (string && grades) {
+    return {
+      [db.Op.or]: [
+        { title: { [db.Op.like]: `%${string}%` } },
+        { '$authors.firstname$': { [db.Op.like] :`%${string}%` } },
+        { '$authors.lastname$': { [db.Op.like] :`%${string}%` } },
+        { '$grades.id$': { [db.Op.in] : grades } },
+      ],
+    };
+  } else if (subjects && grades) {
+    return {
+      [db.Op.or]: [
+        { '$subjects.id$': { [db.Op.in] : subjects } },
+        { '$grades.id$': { [db.Op.in] : grades } },
+      ],
+    }
+  } else if (string && subjects && grades) {
+    return {
+      [db.Op.or]: [
+        { title: { [db.Op.like]: `%${string}%` } },
+        { '$authors.firstname$': { [db.Op.like] :`%${string}%` } },
+        { '$authors.lastname$': { [db.Op.like] :`%${string}%` } },
+        { '$subjects.id$': { [db.Op.in] : subjects } },
+        { '$grades.id$': { [db.Op.in] : grades } },
+      ],
+    }
+  }
+};
+
 module.exports = function modelExport(db, DataTypes) {
   const Model = db.define(tableName, {
     title: DataTypes.STRING,
@@ -9,214 +56,22 @@ module.exports = function modelExport(db, DataTypes) {
     courseWorkType: DataTypes.STRING,
   });
 
-  Model.findByAuthor = function (string, model) {
+  Model.search = function (string, subjects, grades, models) {
+    const whereParams = whereClauseFromQuery(db, string, subjects, grades);
     return Model.findAll({
+      where: whereParams,
       include: [
         {
-          model: model.Author,
-          where: {
-            [db.Op.or]: [
-              {
-                firstname: {
-                  [db.Op.like]: `%${string}%`,
-                },
-              },
-              {
-                lastname: {
-                  [db.Op.like]: `%${string}%`,
-                },
-              },
-            ],
-          },
+          model: models.Author,
+          as: 'authors',
         },
         {
-          model: model.Material,
-          as: 'materials',
-        },
-        {
-          model: model.Subject,
+          model: models.Subject,
           as: 'subjects',
         },
         {
-          model: model.Grade,
+          model: models.Grade,
         },
-      ],
-    });
-  };
-
-  Model.findByTitle = function (string, model) {
-    return Model.findAll({
-      where: {
-        title: {
-          [db.Op.like]: `%${string}%`,
-        },
-      },
-      include: [
-        {
-          model: model.Material,
-          as: 'materials',
-        },
-        {
-          model: model.Author,
-        },
-        {
-          model: model.Subject,
-          as: 'subjects',
-        },
-        {
-          model: model.Grade,
-        },
-      ],
-    });
-  };
-
-  Model.findByGrade = function (query, model) {
-    return Model.findAll({
-      include: [
-        {
-          model: model.Grade,
-          where: {
-            [db.Op.or]: [
-              {
-                id: {
-                  [db.Op.or]: query,
-                },
-              },
-              {
-                grade: {
-                  [db.Op.or]: query,
-                },
-              },
-            ],
-          },
-        },
-        {
-          model: model.Subject,
-        },
-        {
-          model: model.Author,
-        },
-      ],
-    })
-  };
-
-  Model.findByAuthorGradeSubject = function (query, model) {
-    return Model.findAll({
-      include: [
-        {
-          model: model.Subject,
-          where: {
-            [db.Op.or]: [
-              {
-                id: {
-                  [db.Op.or]: query,
-                },
-              },
-              {
-                slug: {
-                  [db.Op.or]: query,
-                },
-              },
-            ],
-          },
-        },
-        {
-          model: model.Author,
-          where: {
-            [db.Op.or]: [
-              {
-                firstname: {
-                  [db.Op.or]: query,
-                },
-              },
-              {
-                lastname: {
-                  [db.Op.or]: query,
-                },
-              },
-            ],
-          },
-        },
-        {
-          model: model.Grade,
-          where: {
-            [db.Op.or]: [
-              {
-                id: {
-                  [db.Op.or]: query,
-                },
-              },
-              {
-                grade: {
-                  [db.Op.or]: query,
-                },
-              },
-            ],
-          },
-        }
-      ],
-    });
-  };
-
-  Model.findByAuthorGradeStringSubject = function (query, string, model) {
-    return Model.findAll({
-      // where: {
-      //   title: {
-      //     [db.Op.like]: `%${string}%`,
-      //   },
-      // },
-      include: [
-        {
-          model: model.Subject,
-          where: {
-            [db.Op.or]: [
-              {
-                id: {
-                  [db.Op.or]: query,
-                },
-              },
-              {
-                slug: {
-                  [db.Op.or]: query,
-                },
-              },
-            ],
-          },
-        },
-        {
-          model: model.Author,
-          where: {
-            [db.Op.or]: [
-              {
-                firstname: {
-                  [db.Op.or]: query,
-                },
-              },
-              {
-                lastname: {
-                  [db.Op.or]: query,
-                },
-              },
-            ],
-          },
-        },
-        {
-          model: model.Grade,
-          where: {
-            [db.Op.or]: [
-              {
-                id: {
-                  [db.Op.or]: query,
-                },
-              },
-              {
-                grade: {
-                  [db.Op.or]: query,
-                },
-              },
-            ],
-          },
-        }
       ],
     });
   };

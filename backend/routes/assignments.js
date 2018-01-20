@@ -110,23 +110,17 @@ async function postAssignment(ctx) {
 async function searchAssignments(ctx) {
   const rawString = ctx.request.query.string;
   const string = (_.isEmpty(rawString) ? null : rawString);
-  const grades = ctx.request.query['grades[]'];
-  const subjects = ctx.request.query['subjects[]'];
+  const grades = (ctx.request.query['grades[]'] ? ctx.request.query['grades[]'] : []);
+  const subjects= (ctx.request.query['subjects[]'] ? ctx.request.query['subjects[]'] : []);
   const modelInjector = {
     Material: Material,
     Author: Author,
     Subject: Subject,
-    Grade: Grade
+    Grade: Grade,
   }
+
+  const assignments = await Assignment.search(string, subjects, grades, modelInjector);
   
-  const query = _.flatten([subjects, grades, string]);
-
-  const stringQueryAssignments = await Assignment.findByTitle(string, modelInjector);
-  // const authorQueryAssignments = await Assignment.findByAuthor(string, modelInjector);
-
-  // const assignments = _.uniqBy(_.flattenDeep([stringQueryAssignments, authorQueryAssignments], 'id'));
-  const assignments = stringQueryAssignments;
-
   ctx.body = {
     data: assignments,
   };
