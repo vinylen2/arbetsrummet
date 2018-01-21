@@ -109,9 +109,9 @@ async function postAssignment(ctx) {
 
 async function searchAssignments(ctx) {
   const rawString = ctx.request.query.string;
-  const string = (_.isEmpty(rawString) ? null : rawString);
-  const grades = (ctx.request.query['grades[]'] ? ctx.request.query['grades[]'] : []);
-  const subjects= (ctx.request.query['subjects[]'] ? ctx.request.query['subjects[]'] : []);
+  const string = (_.isEmpty(rawString[0]) ? null : rawString);
+  const grades = (ctx.request.query['grades[]'] ? ctx.request.query['grades[]'] : null);
+  const subjects= (ctx.request.query['subjects[]'] ? ctx.request.query['subjects[]'] : null);
   const modelInjector = {
     Material: Material,
     Author: Author,

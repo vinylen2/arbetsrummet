@@ -3,47 +3,53 @@ const path = require('path');
 const tableName = path.basename(__filename, '.js');
 
 const whereClauseFromQuery = function(db, string, subjects, grades) {
-  if (string) {
+  if (string && !subjects && !grades) {
     return {
       [db.Op.or]: [
         { title: { [db.Op.like]: `%${string}%` } },
         { '$authors.firstname$': { [db.Op.like] :`%${string}%` } },
         { '$authors.lastname$': { [db.Op.like] :`%${string}%` } },
-      ],
-    }
-  } else if (string && subjects) {
-    return {
-      [db.Op.or]: [
-        { title: { [db.Op.like]: `%${string}%` } },
-        { '$authors.firstname$': { [db.Op.like] :`%${string}%` } },
-        { '$authors.lastname$': { [db.Op.like] :`%${string}%` } },
-        { '$subjects.id$': { [db.Op.in] : subjects } },
-      ],
-    }
-  } else if (string && grades) {
-    return {
-      [db.Op.or]: [
-        { title: { [db.Op.like]: `%${string}%` } },
-        { '$authors.firstname$': { [db.Op.like] :`%${string}%` } },
-        { '$authors.lastname$': { [db.Op.like] :`%${string}%` } },
-        { '$grades.id$': { [db.Op.in] : grades } },
       ],
     };
-  } else if (subjects && grades) {
+  } else if (string && subjects && !grades) {
     return {
+      '$subjects.id$': { [db.Op.in] : subjects },
       [db.Op.or]: [
-        { '$subjects.id$': { [db.Op.in] : subjects } },
-        { '$grades.id$': { [db.Op.in] : grades } },
+        { title: { [db.Op.like]: `%${string}%` } },
+        { '$authors.firstname$': { [db.Op.like] :`%${string}%` } },
+        { '$authors.lastname$': { [db.Op.like] :`%${string}%` } },
       ],
+    }
+  } else if (string && !subjects && grades) {
+    return {
+      '$grades.id$': { [db.Op.in] : grades },
+      [db.Op.or]: [
+        { title: { [db.Op.like]: `%${string}%` } },
+        { '$authors.firstname$': { [db.Op.like] :`%${string}%` } },
+        { '$authors.lastname$': { [db.Op.like] :`%${string}%` } },
+      ],
+    };
+  } else if (!string && subjects && grades) {
+    return {
+      '$subjects.id$': { [db.Op.in] : subjects },
+      '$grades.id$': { [db.Op.in] : grades },
+    }
+  } else if (!string && subjects && !grades) {
+    return {
+      '$subjects.id$': { [db.Op.in] : subjects },
+    }
+  } else if (!string && !subjects && grades) {
+    return {
+      '$grades.id$': { [db.Op.in] : grades },
     }
   } else if (string && subjects && grades) {
     return {
+      '$subjects.id$': { [db.Op.in] : subjects },
+      '$grades.id$': { [db.Op.in] : grades },
       [db.Op.or]: [
         { title: { [db.Op.like]: `%${string}%` } },
         { '$authors.firstname$': { [db.Op.like] :`%${string}%` } },
         { '$authors.lastname$': { [db.Op.like] :`%${string}%` } },
-        { '$subjects.id$': { [db.Op.in] : subjects } },
-        { '$grades.id$': { [db.Op.in] : grades } },
       ],
     }
   }
@@ -68,6 +74,10 @@ module.exports = function modelExport(db, DataTypes) {
         {
           model: models.Subject,
           as: 'subjects',
+        },
+        {
+          model: models.Material,
+          as: 'materials',
         },
         {
           model: models.Grade,
