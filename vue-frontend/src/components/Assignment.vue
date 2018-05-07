@@ -33,11 +33,6 @@
               <h3>Beskrivning av uppgiften för lärare här</h3>
               </v-card-text>
               <v-card-text>
-
-
-
-              </v-card-text>
-              <v-card-text>
                 <v-card-actions>
                 Uppgiftsbeskrivning som går att öppna neråt för mer info, med typ knappen ->
                   <v-spacer></v-spacer>
