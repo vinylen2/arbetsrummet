@@ -32,6 +32,20 @@
           <v-icon dark>add</v-icon>
         </v-btn>
       </div>
+      <div>
+        <v-btn flat icon
+          bottom
+          left
+          @click="$store.commit('showSnackbar', {
+            status: true,
+            value: 'Den här hjälpknappen fungerar inte.',
+            color: 'error',
+            timeout: 5000,
+          })"
+          fixed>
+          <v-icon dark>help</v-icon>
+        </v-btn>
+      </div>
       <v-dialog v-model="addAssignmentDialog"
         max-width="600px"
         height="auto"
@@ -42,6 +56,12 @@
           </add-assignment>
       </v-dialog>
     </div>
+    <v-snackbar
+      :timeout="snackbar.timeout"
+      :color="snackbar.color"
+      v-model="snackbar.status">{{ snackbar.value }}
+      <v-btn dark flat @click.native="$store.commit('hideSnackbar')">Stäng</v-btn>
+    </v-snackbar>
 </div>
 </template>
 
@@ -73,17 +93,18 @@ export default {
   computed: {
     ...mapGetters([
       'isSignedIn',
+      'snackbar',
     ]),
   },
   watch: {
-    isSignedIn() {
-      if(this.isSignedIn) {
-        gapi.client.classroom.courses.list()
-          .then((result) => {
-            this.$store.commit('addCourses', result.body);
-          });
-      }
-    },
+    // isSignedIn() {
+    //   if(this.isSignedIn) {
+    //     gapi.client.classroom.courses.list()
+    //       .then((result) => {
+    //         this.$store.commit('addCourses', result.body);
+    //       });
+    //   }
+    // },
   },
   methods: {
     addSearchResults(data) {

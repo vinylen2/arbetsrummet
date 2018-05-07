@@ -87,20 +87,6 @@
       </v-flex>
     </v-layout>
   </v-container>
-  <v-alert class="alert"
-    color="success"
-    icon="check_circle"
-    v-model="successAlert"
-    transition="slide-y-reverse-transition"
-    value="true">Uppgift publicerad!
-  </v-alert>
-  <v-alert class="alert"
-    color="success"
-    icon="check_circle"
-    v-model="errorAlert"
-    transition="slide-y-reverse-transition"
-    value="true">Hoppsan, det gick inte att publicera uppgiften!
-  </v-alert>
 </v-card>
 </template>
 
@@ -124,8 +110,6 @@
     },
     data() {
       return {
-        successAlert: false,
-        errorAlert: false,
         showLinkModal: false,
         showDrivePickerModal: false,
         showYoutubePickerModal: false,
@@ -177,6 +161,7 @@
         title: pickedItem.name,
         alternateLink: pickedItem.url,
         serviceId: pickedItem.serviceId,
+        iconUrl: pickedItem.iconUrl,
       });
       this.showDrivePickerModal = false;
     },
@@ -192,9 +177,13 @@
     postAssignment() {
       Assignments.post(this.publishData).then((result) => {
         // graphic for successful post or failed post
-        this.successAlert = true;
+        this.$store.commit('showSnackbar', {
+          status: true,
+          value: 'Uppgift publicerad',
+          color: 'success',
+          timeout: 5000,
+        });
         setTimeout(() => {
-          this.successAlert = false
           this.$emit('assignmentPosted', result.data);
         }, 1000);
       });

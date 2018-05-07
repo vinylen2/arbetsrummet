@@ -39,6 +39,7 @@ export default {
     pickerCallback(data) {
       if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
         const pickedItem = data[google.picker.Response.DOCUMENTS][0];
+        console.log(pickedItem);
         this.$emit('itemPicked', pickedItem);
       }
       if (data[google.picker.Response.ACTION] == google.picker.Action.CANCEL) {

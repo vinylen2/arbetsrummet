@@ -98,6 +98,9 @@ export default {
       return false;
     },
     hasSearchString() {
+      if (!this.searchString) {
+        return false;
+      }
       if (this.searchString || this.searchString.length > 0) {
         return true;
       }
@@ -116,15 +119,12 @@ export default {
       this.selectedSubjects = _.without(this.selectedSubjects, item);
     },
     searchAssignments() {
-      console.log(this.hasSearchString);
       if (this.searchQuery.grades || this.searchQuery.subjects || this.hasSearchString) {
-        console.log('searching');
         Assignments.search(this.searchQuery).then((result) => {
           this.$store.commit('initiatedLoading');
           this.$emit('addResult', result.data);
         });
       } else {
-        console.log('getting all');
         Assignments.getAll().then((result) => {
           this.$emit('addResult', result.data);
         });

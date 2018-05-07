@@ -8,6 +8,12 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isLoading: true,
+    snackbar: {
+      status: false,
+      value: 'Felmeddelandetext',
+      color: 'success',
+      timeout: 5000,
+    },
     showSearch: false,
     isSignedIn: false,
     profile: {
@@ -25,8 +31,15 @@ export default new Vuex.Store({
   },
   getters: {
     isSignedIn: state => state.isSignedIn,
+    snackbar: state => state.snackbar,
   },
   mutations: {
+    hideSnackbar: (state) => {
+      state.snackbar.status = false;
+    },
+    showSnackbar: (state, data) => {
+      state.snackbar = data;
+    },
     setAssignments: (state, data) => {
       state.assignments = data;
       state.isLoading = false;
