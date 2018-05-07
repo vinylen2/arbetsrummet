@@ -19,7 +19,7 @@
             <h4 v-else>Okänd författare {{ date }}</h4>
           </v-flex>
         </v-layout>
-      </v-container grid-list-md text-xs-left>
+      </v-container>
   </div>
   <!-- Här slutar headern -->
   <v-container grid-list-md text-xs-left v-if="!isLoading">
@@ -83,8 +83,6 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-flex>
-  </v-layout>
 </v-container>
 </div>
 </template>

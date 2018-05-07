@@ -23,9 +23,8 @@
       </v-btn>
     </v-flex>
     <v-flex xs4 text-xs-right class="pa-3" @click="showAttachments = !showAttachments">
-      <v-icon class="show-button"
-        v-if="anyMaterials">attachment keyboard_arrow_down
-      </v-icon>
+      <v-icon class="show-button" v-if="anyMaterials && !showAttachments">attachment keyboard_arrow_down </v-icon>
+      <v-icon class="show-button" v-if="anyMaterials && showAttachments">attachment keyboard_arrow_up </v-icon>
     </v-flex>
     <v-slide-y-transition>
       <v-flex xs12 class="pa-3" v-if="showAttachments && anyMaterials">
