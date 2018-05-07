@@ -10,8 +10,9 @@
             <a :href="alternateLink"
               target="_blank">
               <div>
-                <p class="title">{{ title }}</p>
-                <p> typ av dokument </p>
+                <div class="title" style="padding: 10px 0 5px 0">{{ title }}</div>
+                <p v-if="!this.driveFile"> {{ alternateLink }} </p>
+                <p v-if="this.driveFile"> typ av dokument </p>
               </div>
             </a>
           </v-flex>
