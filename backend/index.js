@@ -26,6 +26,7 @@ app.use(cors({
 const assignments = require('./routes/assignments.js');
 const grades = require('./routes/grades.js');
 const subjects = require('./routes/subjects.js');
+const index = require('./routes/index.js');
 
 app.listen(config.port);
 
@@ -34,5 +35,6 @@ models.connection.sync().then(() => {
   console.log('Sequelize synchronized');
   app.use(assignments.routes());
   app.use(grades.routes());
+  app.use(index.routes());
   app.use(subjects.routes());
 });
