@@ -46,7 +46,8 @@ import Navbar from '@/components/Navbar';
 import Info from '@/stores/info';
 
 import Vuetify from 'vuetify';
-import('vuetify/dist/vuetify.min.css')
+import('vuetify/dist/vuetify.min.css');
+import('mdi/css/materialdesignicons.min.css');
 Vue.use(Vuetify);
 
 export default {

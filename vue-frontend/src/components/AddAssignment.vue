@@ -58,7 +58,7 @@
         <v-layout row wrap class="buttons">
           <!-- <v-flex xs4 @click="showDrivePickerModal = true"> -->
           <v-flex xs4 @click="attachDrive">
-            <v-icon class="attach-button">folder</v-icon>
+            <v-icon class="attach-button">mdi-google-drive</v-icon>
           </v-flex>
           <v-dialog v-model="showDrivePickerModal"
             :lazy="false">
@@ -68,9 +68,17 @@
               @close="showDrivePickerModal = false">
             </picker>
           </v-dialog>
-          <v-flex xs4 @click="showYoutubePickerModal = true">
-            <v-icon class="attach-button">subscriptions</v-icon>
+          <v-flex xs4 @click="attachYoutube">
+            <v-icon class="attach-button">mdi-youtube-play</v-icon>
           </v-flex>
+          <v-dialog v-model="showYoutubePickerModal"
+            :lazy="false">
+            <picker ref="youtubepicker"
+              :ViewId="'VIDEO_SEARCH'"
+              @itemPicked="attachPickedClip"
+              @close="showYoutubePickerModal = false">
+            </picker>
+          </v-dialog>
           <v-flex xs4 @click="showLinkModal = true">
             <v-icon class="attach-button">link</v-icon>
           </v-flex>
@@ -145,7 +153,10 @@
       });
     },
     attachYoutube() {
-
+      this.showYoutubePickerModal = true;
+      this.$nextTick(() => {
+        this.$refs.youtubepicker.onApiLoad();
+      });
     },
     attachLink(linkUrl) {
       this.publishData.materials.push({
@@ -185,6 +196,7 @@
         });
         setTimeout(() => {
           this.$emit('assignmentPosted', result.data);
+          this.publishData = '';
         }, 1000);
       });
     },
