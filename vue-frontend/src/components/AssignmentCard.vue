@@ -18,9 +18,13 @@
       Läs mer</v-btn>
     </v-flex>
     <v-flex xs4>
-      <v-btn>
+      <v-btn @click="shareToClassroomModal = true">
         <img src="/static/classroom_icon.png" width="20px">
       </v-btn>
+      <v-dialog v-model="shareToClassroomModal"
+        :lazy="false">
+        <share-to-classroom></share-to-classroom>
+      </v-dialog>
     </v-flex>
     <v-flex xs4 text-xs-right class="pa-3" @click="showAttachments = !showAttachments">
       <v-icon class="show-button" v-if="anyMaterials && !showAttachments">attachment keyboard_arrow_down </v-icon>
@@ -48,12 +52,22 @@
 
 <script>
 import Assignments from "@/api/services/assignments";
+import ShareToClassroom from '@/components/ShareToClassroom';
 import moment from 'moment';
 moment.locale('sv');
 
 export default {
   name: "assignment-card",
   props: ['data'],
+  components: {
+    ShareToClassroom,
+  },
+  data() {
+    return {
+      shareToClassroomModal: false,
+      showAttachments: false,
+    };
+  },
   computed: {
     date() {
       return moment(this.data.createdAt).format('D MMM YYYY');
@@ -78,11 +92,6 @@ export default {
       }
       return 'Okänd författare';
     },
-  },
-  data() {
-    return {
-      showAttachments: false,
-    };
   },
 };
 </script>
