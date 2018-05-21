@@ -15,11 +15,11 @@
     <v-flex xs4>
       <v-btn light
         :to="{ name: 'assignment', params: { id: data.id }}">
-      Öppna</v-btn>
+      Läs mer</v-btn>
     </v-flex>
     <v-flex xs4>
       <v-btn>
-        <v-icon>share</v-icon>
+        <img src="/static/classroom_icon.png" width="20px">
       </v-btn>
     </v-flex>
     <v-flex xs4 text-xs-right class="pa-3" @click="showAttachments = !showAttachments">

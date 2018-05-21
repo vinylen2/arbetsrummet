@@ -24,16 +24,39 @@ export default {
       this.pickerApiLoaded = true;
       this.createPicker();
     },
-    createPicker() {
+    createVideoPicker() {
       if (this.pickerApiLoaded && this.$store.state.profile.oauthToken) {
         this.picker = new google.picker.PickerBuilder().
-          addView(google.picker.ViewId[this.ViewId]).
+          addView(google.picker.ViewId.VIDEO_SEARCH).
           setOAuthToken(this.$store.state.profile.oauthToken).
           setLocale('sv').
           setDeveloperKey(gapiData.apiKey).
           setCallback(this.pickerCallback).
           build();
         this.picker.setVisible(true);
+      }
+    },
+    createDocsPicker() {
+      if (this.pickerApiLoaded && this.$store.state.profile.oauthToken) {
+        this.picker = new google.picker.PickerBuilder().
+          addView(google.picker.ViewId.DOCS).
+          setOAuthToken(this.$store.state.profile.oauthToken).
+          setLocale('sv').
+          setDeveloperKey(gapiData.apiKey).
+          setCallback(this.pickerCallback).
+          build();
+        this.picker.setVisible(true);
+      }
+    },
+    createPicker() {
+      switch (this.ViewId) {
+        case 'DOCS':
+          this.createDocsPicker();
+          break;
+        case 'VIDEO_SEARCH':
+          this.createVideoPicker();
+          break;
+        default:
       }
     },
     pickerCallback(data) {

@@ -38,7 +38,7 @@
           left
           @click="$store.commit('showSnackbar', {
             status: true,
-            value: 'Den här hjälpknappen fungerar inte.',
+            value: 'Den här hjälpknappen är inte aktiv.',
             color: 'error',
             timeout: 5000,
           })"

@@ -2,17 +2,26 @@
   <div class="material">
     <v-container grid-list-md text-xs-left class="pa-0">
         <v-layout row wrap>
-          <v-flex xs2 class="thumbnail pa-0">
-              <v-icon v-if="driveFile">description</v-icon>
-              <v-icon v-else>language</v-icon>
+          <v-flex xs2 class="thumbnail pa-0"
+            v-if="unionField ==='driveFile'">
+                <v-icon v-if="serviceId === 'pres'" color="yellow darken-2">mdi-file-presentation-box</v-icon>
+                <v-icon v-else-if="serviceId === 'doc'" color="blue darken-2">mdi-file-document-box</v-icon>
+                <v-icon v-else-if="serviceId === 'spread'" color="green darken-2">mdi-file-document-box</v-icon>
+                <v-icon v-else>attach_file</v-icon>
+          </v-flex>
+          <v-flex xs2 class="thumbnail pa-0"
+            v-else>
+              <v-icon v-if="serviceId === 'web'" color="red darken-2">mdi-youtube-play</v-icon>
+              <v-icon v-else>link</v-icon>
           </v-flex>
           <v-flex xs6 class="pa-1">
             <a :href="alternateLink"
               target="_blank">
               <div>
                 <div class="title" style="padding: 10px 0 5px 0">{{ title }}</div>
-                <p v-if="!this.driveFile"> {{ alternateLink }} </p>
-                <p v-if="this.driveFile"> typ av dokument </p>
+                <p v-if="unionField === 'driveFile'">{{ swedishType }}</p>
+                <p v-else-if="unionField === 'video'">Youtube-klipp</p>
+                <p v-else-if="unionField === 'link'"> {{ alternateLink }} </p>
               </div>
             </a>
           </v-flex>
@@ -25,7 +34,7 @@
               item-value="enum">
             </v-select>
           </v-flex>
-          <v-flex xs1 class="text-xs-right">
+          <v-flex xs1 class="thumbnail text-xs-right">
             <v-icon class="attach-button"
               @click="removeMaterial">clear</v-icon>
           </v-flex>
@@ -43,12 +52,23 @@ export default {
       'materialData',
   ],
   computed: {
-    driveFile() {
-      if (this.unionField === 'link') {
-        return false;
+    swedishType() {
+      switch (this.serviceId) {
+        case 'docs':
+          return 'Dokument';
+          break;
+        case 'pres':
+          return 'Presentation';
+          break;
+        case 'spread':
+          return 'Kalkylark';
+          break;
+        default:
+          return 'Övrigt';
       }
-      return true;
     },
+  },
+  created() {
   },
   data() {
     return {
@@ -62,6 +82,7 @@ export default {
       updatedAt: this.materialData.updatedAt,
       shareMode: '',
       shareModes: gapiData.shareModes,
+      serviceId: this.materialData.serviceId,
     };
   },
   methods: {
@@ -92,7 +113,6 @@ export default {
   justify-content: center;
   margin: 4px 0 4px 0;
   margin-bottom: 0;
-  background: lightgrey;
   height: 68px;
 }
 

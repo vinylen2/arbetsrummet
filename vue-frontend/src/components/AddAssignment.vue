@@ -56,7 +56,6 @@
       </v-flex>
       <v-flex xs3 class="buttons">
         <v-layout row wrap class="buttons">
-          <!-- <v-flex xs4 @click="showDrivePickerModal = true"> -->
           <v-flex xs4 @click="attachDrive">
             <v-icon class="attach-button">mdi-google-drive</v-icon>
           </v-flex>
@@ -176,14 +175,14 @@
       });
       this.showDrivePickerModal = false;
     },
-    attachPickedClip(pickedClip) {
-      // this.publishData.materials.push({
-      //   unionField: 'driveFile',
-      //   title: pickedItem.name,
-      //   alternateLink: pickedItem.url,
-      //   serviceId: pickedItem.serviceId,
-      // });
-      this.$modal.hide('drivePicker');
+    attachPickedClip(pickedItem) {
+      this.publishData.materials.push({
+        unionField: 'video',
+        title: pickedItem.name,
+        alternateLink: pickedItem.url,
+        serviceId: pickedItem.serviceId,
+      });
+      this.showYoutubePickerModal = false;
     },
     postAssignment() {
       Assignments.post(this.publishData).then((result) => {
