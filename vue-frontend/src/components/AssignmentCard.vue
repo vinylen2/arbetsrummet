@@ -18,12 +18,21 @@
       Läs mer</v-btn>
     </v-flex>
     <v-flex xs4>
-      <v-btn @click="shareToClassroomModal = true">
+      <v-btn v-if="$store.state.isSignedIn"
+        @click="shareToClassroomModal = true">
         <img src="/static/classroom_icon.png" width="20px">
       </v-btn>
+      <v-tooltip top v-if="!$store.state.isSignedIn">
+        <v-btn class="disabled"
+          slot="activator">
+          <img src="/static/classroom_icon.png" width="20px">
+        </v-btn>
+        <span>Logga in för att dela</span>
+      </v-tooltip>
       <v-dialog v-model="shareToClassroomModal"
         :lazy="true">
-        <share-to-classroom :data="data"></share-to-classroom>
+        <share-to-classroom :data="data"
+          @close="shareToClassroomModal = false"></share-to-classroom>
       </v-dialog>
     </v-flex>
     <v-flex xs4 text-xs-right class="pa-3" @click="showAttachments = !showAttachments">
@@ -150,5 +159,13 @@ a {
 .material-link {
   text-decoration: none;
   cursor: pointer;
+}
+
+.disabled {
+  -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+        -o-filter: grayscale(100%);
+      -ms-filter: grayscale(100%);
+          filter: grayscale(100%);
 }
 </style>

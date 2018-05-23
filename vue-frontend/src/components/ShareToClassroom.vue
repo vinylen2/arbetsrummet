@@ -9,7 +9,9 @@
           append-icon="search"
           label="Sök..."
       ></v-text-field>
-      <v-icon :color="'white'" class="cursor">clear</v-icon>
+      <v-icon @click="close"
+        :color="'white'"
+        class="cursor">clear</v-icon>
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -125,6 +127,9 @@ export default {
     },
   },
   methods: {
+    close() {
+      this.$emit('close');
+    },
     formatDate(date) {
       return moment(date).format('D MMM YYYY');
     },
