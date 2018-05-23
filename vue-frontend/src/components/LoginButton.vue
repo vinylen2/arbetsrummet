@@ -18,6 +18,7 @@ export default {
   },
   methods: {
     handleAuthResult(authResult) {
+      console.log(authResult);
       if (authResult && !authResult.error) {
         this.$store.commit('setOauthToken', authResult.access_token);
       }
@@ -33,9 +34,9 @@ export default {
     logIn() {
       window.gapi.load('client:auth2', this.initClient);
       window.gapi.load('auth', {'callback': this.onAuthApiLoad});
-      // gapi.auth2.getAuthInstance().signIn().then((result) => {
-      //   this.$store.commit('setProfile', result.w3);
-      // });
+      gapi.auth2.getAuthInstance().signIn().then((result) => {
+        this.$store.commit('setProfile', result.w3);
+      });
     },
     updateSigninStatus(state) {
       this.$store.commit('toggleLogin', state);
@@ -51,9 +52,12 @@ export default {
         apiKey: gapiData.apiKey,
         discoveryDocs: gapiData.classroom,
         scope: gapiData.scopes.classroom,
-      }).then(() => {
+      }).then((result) => {
           gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);
           this.updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+          gapi.auth2.getAuthInstance().signIn().then((result) => {
+            this.$store.commit('setProfile', result.w3);
+          });
         });
       },
     },
