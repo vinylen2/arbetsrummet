@@ -16,9 +16,12 @@ export default {
       picked: [],
     };
   },
+  // created() {
+  //   this.loadPickerApi();
+  // },
   methods: {
-    onApiLoad() {
-      window.gapi.load('picker', {'callback': this.onPickerApiLoad});
+    loadPickerApi() {
+      gapi.load('picker', {'callback': this.onPickerApiLoad});
     },
     onPickerApiLoad() {
       this.pickerApiLoaded = true;

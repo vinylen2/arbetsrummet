@@ -57,7 +57,7 @@ const apiConfig = {
   apiKey: gapiData.apiKey,
   clientId: gapiData.clientId,
   discoveryDocs: gapiData.discoveryDocs.classroom,
-  scope: gapiData.scopes.classroom,
+  scope: gapiData.scope,
 };
 
 Vue.use(VueGAPI, apiConfig);

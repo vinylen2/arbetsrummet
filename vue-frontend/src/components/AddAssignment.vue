@@ -57,10 +57,11 @@
       <v-flex xs3 class="buttons">
         <v-layout row wrap class="buttons">
           <v-flex xs4 @click="attachDrive">
+          <!-- <v-flex xs4 @click="showDrivePickerModal = true"> -->
             <v-icon class="attach-button">mdi-google-drive</v-icon>
           </v-flex>
           <v-dialog v-model="showDrivePickerModal"
-            :lazy="false">
+            :lazy="true">
             <picker ref="drivepicker"
               :ViewId="'DOCS'"
               @itemPicked="attachPickedItem"
@@ -71,7 +72,7 @@
             <v-icon class="attach-button">mdi-youtube-play</v-icon>
           </v-flex>
           <v-dialog v-model="showYoutubePickerModal"
-            :lazy="false">
+            :lazy="true">
             <picker ref="youtubepicker"
               :ViewId="'VIDEO_SEARCH'"
               @itemPicked="attachPickedClip"
@@ -148,13 +149,13 @@
     attachDrive() {
       this.showDrivePickerModal = true;
       this.$nextTick(() => {
-        this.$refs.drivepicker.onApiLoad();
+        this.$refs.drivepicker.loadPickerApi();
       });
     },
     attachYoutube() {
       this.showYoutubePickerModal = true;
       this.$nextTick(() => {
-        this.$refs.youtubepicker.onApiLoad();
+        this.$refs.youtubepicker.loadPickerApi();
       });
     },
     attachLink(linkUrl) {

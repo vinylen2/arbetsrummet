@@ -21,6 +21,7 @@ export default {
       this.$getGapiClient().then(gapi => {
         gapi.auth2.getAuthInstance().signIn().then((result) => {
           this.$store.commit('setProfile', result.w3);
+          this.$store.commit('setOauthToken', result.Zi.access_token);
           this.$store.commit('toggleLogin', true);
         });
       });

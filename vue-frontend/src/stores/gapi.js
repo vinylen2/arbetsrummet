@@ -4,10 +4,7 @@ export default {
   discoveryDocs: {
     classroom: ['https://www.googleapis.com/discovery/v1/apis/classroom/v1/rest'],
   },
-  scopes: {
-    classroom: 'https://www.googleapis.com/auth/classroom.courses.readonly',
-    drive: 'https://www.googleapis.com/auth/drive.readonly',
-  },
+  scope: 'https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/drive.readonly',
   shareModes: [
     {
       enum: 'VIEW',
