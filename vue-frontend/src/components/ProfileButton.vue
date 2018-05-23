@@ -40,7 +40,9 @@ export default {
   },
   methods: {
     logOut() {
-      gapi.auth2.getAuthInstance().signOut();
+      gapi.auth2.getAuthInstance().signOut().then(() => {
+        this.$store.commit('toggleLogin', false);
+      });
     },
   }
 }

@@ -67,7 +67,8 @@ export default new Vuex.Store({
       state.profile.picture = data.Paa;
     },
     addCourses: (state, data) => {
-      state.courses = JSON.parse(data).courses;
+      //add timestamp here
+      state.courses = data;
     },
     addGrades: (state, data) => {
       state.grades = data;

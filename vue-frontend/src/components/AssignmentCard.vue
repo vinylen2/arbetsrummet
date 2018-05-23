@@ -18,12 +18,12 @@
       Läs mer</v-btn>
     </v-flex>
     <v-flex xs4>
-      <v-btn @click="openShareToClassroomModal">
+      <v-btn @click="shareToClassroomModal = true">
         <img src="/static/classroom_icon.png" width="20px">
       </v-btn>
       <v-dialog v-model="shareToClassroomModal"
         :lazy="true">
-        <share-to-classroom ref="sharetoclassroom"></share-to-classroom>
+        <share-to-classroom :data="data"></share-to-classroom>
       </v-dialog>
     </v-flex>
     <v-flex xs4 text-xs-right class="pa-3" @click="showAttachments = !showAttachments">
@@ -93,12 +93,6 @@ export default {
       return 'Okänd författare';
     },
     methods: {
-      openShareToClassroomModal() {
-        this.shareToClassroomModal = true;
-        this.$nextTick(() => {
-          // this.$refs.sharetoclassroom.onApiLoad();
-        });
-      },
     },
   },
 };

@@ -13,48 +13,49 @@
     </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="fakeItems"
+      :items="$store.state.courses"
       :search="search"
+      :no-data-text="noDataText"
+      :loading="isLoading"
       v-model="selected"
-      hide-actions
       item-key="name"
       class="elevation-1"
       >
-      <v-progress-linear slot="progress" color="red" indeterminate></v-progress-linear>
+      <v-progress-linear slot="progress" color="light-green" indeterminate>Hämtar dina klassrum...</v-progress-linear>
       <template slot="items" slot-scope="props">
         <td>
           <v-checkbox
             v-model="props.selected"
             primary
             hide-details
+            clear
           ></v-checkbox>
         </td>
         <td>{{ props.item.name }}</td>
-        <td>{{ props.item.description }} </td>
-        <td>{{ formatDate(props.item.createdAt) }} </td>
+        <td>{{ props.item.section }} </td>
+        <td>{{ formatDate(props.item.creationTime) }} </td>
       </template>
       <v-alert slot="no-results" :value="true" color="error" icon="warning">
         Din sökning gav inga träffar.
       </v-alert>
-      <template slot="footer" v-if="this.selected.length === 1">
+      <template slot="footer" v-if="selected.length === 1">
         <td colspan="100%">
           <v-layout row wrap text-xs-left class="padding">
             <v-flex xs2>
-              Något
             </v-flex>
-            <v-flex xs8>
-              Något
+            <v-flex xs6>
             </v-flex>
-            <v-flex xs2 text-xs-right>
-              <v-icon class="cursor" @click="shareSelected">arrow_forward</v-icon>
+            <v-flex xs4 text-xs-right>
+              <v-btn @click="shareSelected">
+                <img src="/static/classroom_icon.png" width="20px">Dela till {{ selectedName }}
+              </v-btn>
             </v-flex>
           </v-layout>
         </td>
       </template>
-      <template slot="footer" v-else>
-        <td colspan="100%">
-        </td>
-      </template>
+      <!-- <template slot="footer" v-else>
+        <td colspan="100%"></td>
+      </template> -->
     </v-data-table>
   </v-card>
 </template>
@@ -66,22 +67,13 @@ moment.locale('sv');
 
 export default {
   name: 'share-to-classroom',
+  props: ['data'],
   data() {
     return {
       search: '',
       selected: [],
-      fakeItems: [
-        {
-          name: 'testklass',
-          section: 'HT17',
-          description: 'En testkurs',
-        },
-        {
-          name: 'Hej',
-          section: 'HT17',
-          description: 'En testkurs',
-        },
-      ],
+      isLoading: true,
+      noDataText: 'Hämtar dina klassrum...',
       headers: [
         {
           text: 'Välj',
@@ -118,16 +110,21 @@ export default {
     },
   },
   created() {
-    this.listCourses();
+    if (this.$store.state.courses.length > 0) {
+      this.isLoading = false;
+    } else {
+      this.listCourses();
+    }
+  },
+  computed: {
+    selectedName() {
+      if (this.selected[0].name.length > 10) {
+        return this.selected[0].name.slice(0, 10) + '..';
+      }
+      return this.selected[0].name;
+    },
   },
   methods: {
-    onApiLoad() {
-      console.log('loading');
-      // window.gapi.load('client:auth2', this.initClient);
-    },
-    initClient() {
-
-    },
     formatDate(date) {
       return moment(date).format('D MMM YYYY');
     },
@@ -136,7 +133,8 @@ export default {
     },
     listCourses() {
       gapi.client.classroom.courses.list().then((response) => {
-        console.log(response);
+        this.$store.commit('addCourses', response.result.courses);
+        this.isLoading = false;
       });
     },
   },

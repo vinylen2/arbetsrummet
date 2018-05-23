@@ -50,6 +50,18 @@ import('vuetify/dist/vuetify.min.css');
 import('mdi/css/materialdesignicons.min.css');
 Vue.use(Vuetify);
 
+import VueGAPI from 'vue-gapi';
+import gapiData from '@/stores/gapi';
+
+const apiConfig = {
+  apiKey: gapiData.apiKey,
+  clientId: gapiData.clientId,
+  discoveryDocs: gapiData.discoveryDocs.classroom,
+  scope: gapiData.scopes.classroom,
+};
+
+Vue.use(VueGAPI, apiConfig);
+
 export default {
   components: {
     Navbar,

@@ -17,51 +17,16 @@ export default {
     };
   },
   methods: {
-    handleAuthResult(authResult) {
-      console.log(authResult);
-      if (authResult && !authResult.error) {
-        this.$store.commit('setOauthToken', authResult.access_token);
-      }
-    },
-    onAuthApiLoad() {
-      window.gapi.auth.authorize({
-        client_id: gapiData.clientId,
-        scope: gapiData.scopes.drive,
-        immediate: false,
-      },
-      this.handleAuthResult);
-    },
     logIn() {
-      window.gapi.load('client:auth2', this.initClient);
-      window.gapi.load('auth', {'callback': this.onAuthApiLoad});
-      gapi.auth2.getAuthInstance().signIn().then((result) => {
-        this.$store.commit('setProfile', result.w3);
+      this.$getGapiClient().then(gapi => {
+        gapi.auth2.getAuthInstance().signIn().then((result) => {
+          this.$store.commit('setProfile', result.w3);
+          this.$store.commit('toggleLogin', true);
+        });
       });
     },
-    updateSigninStatus(state) {
-      this.$store.commit('toggleLogin', state);
-      if (state) {
-        gapi.auth2.getAuthInstance().then((result) => {
-          this.$store.commit('setProfile', result.currentUser.Ab.w3);
-        });
-      }
-    },
-    initClient() {
-      gapi.client.init({
-        clientId: gapiData.clientId,
-        apiKey: gapiData.apiKey,
-        discoveryDocs: gapiData.classroom,
-        scope: gapiData.scopes.classroom,
-      }).then((result) => {
-          gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);
-          this.updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-          gapi.auth2.getAuthInstance().signIn().then((result) => {
-            this.$store.commit('setProfile', result.w3);
-          });
-        });
-      },
-    },
-  }
+  },
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
