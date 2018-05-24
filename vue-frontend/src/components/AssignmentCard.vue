@@ -81,6 +81,7 @@ export default {
       coursePickerOptions: {
         title: 'Dela uppgift',
         action: 'share-assignment',
+        table: 'courses',
       },
     };
   },

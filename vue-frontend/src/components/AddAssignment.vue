@@ -1,6 +1,6 @@
 <template>
 <v-card>
-  <div class="header">
+  <v-card-title :class="headerColor">
     <v-container grid-list-md>
       <v-layout row wrap>
         <v-flex xs1>
@@ -16,7 +16,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-  </div>
+  </v-card-title>
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap>
       <v-flex xs12 class="form">
@@ -99,44 +99,53 @@
 </v-card>
 </template>
 
-  <script>
-  import Assignments from '@/api/services/assignments';
-  import Grades from '@/api/services/grades';
-  import Subjects from '@/api/services/subjects';
+<script>
+import Assignments from '@/api/services/assignments';
+import Grades from '@/api/services/grades';
+import Subjects from '@/api/services/subjects';
 
-  import AddLink from '@/components/AddLink';
-  import Picker from '@/components/Picker';
-  import Material from '@/components/Material';
+import AddLink from '@/components/AddLink';
+import Picker from '@/components/Picker';
+import Material from '@/components/Material';
 
-  import _ from 'lodash';
+import _ from 'lodash';
 
-  export default {
-    name: 'add-assignment',
-    components: {
-      AddLink,
-      Picker,
-      Material,
+export default {
+  name: 'add-assignment',
+  components: {
+    AddLink,
+    Picker,
+    Material,
+  },
+  data() {
+    return {
+      showLinkModal: false,
+      showDrivePickerModal: false,
+      showYoutubePickerModal: false,
+      testArray: [],
+      publishData: {
+        title: '',
+        description: '',
+        subject: '',
+        grades: [],
+        materials: [],
+      },
+    };
+  },
+  created() {
+    this.getGrades();
+    this.getSubjects();
+  },
+  computed: {
+    headerColor() {
+      const subjectColor = this.publishData.subject.color;
+      if (subjectColor) {
+        return subjectColor;
+      }
+      return 'grey';
     },
-    data() {
-      return {
-        showLinkModal: false,
-        showDrivePickerModal: false,
-        showYoutubePickerModal: false,
-        testArray: [],
-        publishData: {
-          title: '',
-          description: '',
-          subject: '',
-          grades: [],
-          materials: [],
-        },
-      };
-    },
-    created() {
-      this.getGrades();
-      this.getSubjects();
-    },
-    methods: {
+  },
+  methods: {
     close() {
       this.$emit('close');
     },
@@ -244,7 +253,6 @@
 .header {
   height: 50px;
   padding: 5px;
-  background-color: grey;
 }
 
 .content {

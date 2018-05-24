@@ -126,6 +126,7 @@ export default {
       coursePickerOptions: {
         title: 'Hämta uppgift från kurs',
         action: 'reuse-coursework',
+        table: 'courseworks',
       },
     };
   },
