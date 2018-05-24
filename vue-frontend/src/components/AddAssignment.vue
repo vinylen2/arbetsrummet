@@ -46,7 +46,8 @@
           hint="Välj årskurs">
         </v-select>
       </v-flex>
-      <v-flex xs12 class="materials">
+      <v-flex xs12 class="materials"
+        v-if="publishData.materials.length > 0">
         <material v-for="material in publishData.materials"
           :key="material.id"
           :materialData="material"
@@ -178,7 +179,7 @@
     },
     attachPickedClip(pickedItem) {
       this.publishData.materials.push({
-        unionField: 'video',
+        unionField: 'youtubeVideo',
         title: pickedItem.name,
         alternateLink: pickedItem.url,
         serviceId: pickedItem.serviceId,
@@ -268,5 +269,9 @@
 
 .alert {
   margin-bottom: 0px;
+}
+
+.materials {
+  margin-bottom: 10px;
 }
 </style>

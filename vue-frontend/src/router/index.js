@@ -17,6 +17,9 @@ export default new Router({
       path: '/assignment/:id',
       name: 'assignment',
       component: Assignment,
+      meta: {
+        breadcrumb: 'Uppgift',
+      },
     },
   ]
 })

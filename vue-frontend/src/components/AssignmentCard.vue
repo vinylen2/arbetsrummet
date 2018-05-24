@@ -49,7 +49,7 @@
             <v-icon v-if="material.unionField === 'driveFile'">description</v-icon>
             <v-icon v-if="material.unionField === 'link'">link</v-icon>
             <v-icon v-if="material.unionField === 'form'">list</v-icon>
-            <v-icon v-if="material.unionField === 'youtubeVideo'">subscriptions</v-icon>
+            <v-icon v-if="material.unionField === 'youtubeVideo'">mdi-youtube-play</v-icon>
             {{material.title}}
           </a>
         </div>

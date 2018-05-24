@@ -52,15 +52,8 @@ Vue.use(Vuetify);
 
 import VueGAPI from 'vue-gapi';
 import gapiData from '@/stores/gapi';
+Vue.use(VueGAPI, gapiData.apiConfig);
 
-const apiConfig = {
-  apiKey: gapiData.apiKey,
-  clientId: gapiData.clientId,
-  discoveryDocs: gapiData.discoveryDocs.classroom,
-  scope: gapiData.scope,
-};
-
-Vue.use(VueGAPI, apiConfig);
 
 export default {
   components: {

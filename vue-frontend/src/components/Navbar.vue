@@ -11,6 +11,11 @@
     <v-icon v-if="!$store.state.showSearch">keyboard_arrow_down</v-icon>
     <v-icon v-if="$store.state.showSearch">keyboard_arrow_up</v-icon>
   </v-toolbar-title>
+  <v-toolbar-title class="ml-4 hover crumb"
+    v-else>
+    <v-icon slot="divider">chevron_right</v-icon>
+  </v-toolbar-title>
+
   <!-- <v-btn icon v-if="isFrontpage" class="ml-4"
     <v-icon>search</v-icon>
     <v-icon v-if="!$store.state.showSearch">keyboard_arrow_down</v-icon>
@@ -62,4 +67,6 @@ export default {
 .hover {
   cursor: pointer;
 }
+
+
 </style>

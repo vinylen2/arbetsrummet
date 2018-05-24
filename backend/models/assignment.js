@@ -59,6 +59,7 @@ module.exports = function modelExport(db, DataTypes) {
   const Model = db.define(tableName, {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
+    instructions: DataTypes.STRING,
     courseWorkType: DataTypes.STRING,
   });
 

@@ -18,7 +18,7 @@
             <a :href="alternateLink"
               target="_blank">
               <div>
-                <div class="title" style="padding: 10px 0 5px 0">{{ title }}</div>
+                <div class="title" style="padding: 10px 0 5px 0">{{ formattedTitle }}</div>
                 <p v-if="unionField === 'driveFile'">{{ swedishType }}</p>
                 <p v-else-if="unionField === 'video'">Youtube-klipp</p>
                 <p v-else-if="unionField === 'link'"> {{ alternateLink }} </p>
@@ -27,7 +27,7 @@
           </v-flex>
           <v-flex xs3>
             <v-select v-model="shareMode"
-              v-if="driveFile"
+              v-if="unionField === 'driveFile'"
               :items="shareModes"
               item-text="name"
               :auto="true"
@@ -54,7 +54,7 @@ export default {
   computed: {
     swedishType() {
       switch (this.serviceId) {
-        case 'docs':
+        case 'doc':
           return 'Dokument';
           break;
         case 'pres':
@@ -67,8 +67,15 @@ export default {
           return 'Övrigt';
       }
     },
+    formattedTitle() {
+      if (this.title.length > 20) {
+        return this.title.slice(0, 20) + '..';
+      }
+      return this.title;
+    },
   },
   created() {
+    console.log(this.materialData);
   },
   data() {
     return {

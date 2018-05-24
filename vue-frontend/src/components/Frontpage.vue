@@ -1,67 +1,85 @@
 <template>
 <div>
-    <v-progress-linear class="ma-0" :color="'light-green lighten-2'"
-      :indeterminate="true"
-      v-if="$store.state.isLoading">
-    </v-progress-linear>
-    <div class="frontpage"
-      v-else>
-      <v-slide-y-transition>
-        <div class="light-green lighten-2 search-bar"
-          v-show="$store.state.showSearch">
-            <search @addResult="addSearchResults"></search>
-        </div>
-      </v-slide-y-transition>
-      <v-container grid-list-md text-xs-center class="wrapper">
-        <v-layout row wrap>
-          <v-flex xs12 sm6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
-            <assignment-card :data="assignment"></assignment-card>
-          </v-flex>
-          <v-flex xs12 v-if="assignments.length === 0">
-            <h2>Inga uppgifter...</h2>
-          </v-flex>
-        </v-layout>
-      </v-container>
-      <div class="button"
-        v-if="$store.state.isSignedIn">
-        <v-btn color="primary" dark fab raised
-          bottom
-          right
-          fixed
-          @click.stop="addAssignmentDialog = true">
-          <v-icon dark>add</v-icon>
-        </v-btn>
+  <v-progress-linear class="ma-0" :color="'light-green lighten-2'"
+    :indeterminate="true"
+    v-if="$store.state.isLoading">
+  </v-progress-linear>
+  <div class="frontpage"
+    v-else>
+    <v-slide-y-transition>
+      <div class="light-green lighten-2 search-bar"
+        v-show="$store.state.showSearch">
+          <search @addResult="addSearchResults"></search>
       </div>
-      <div>
-        <v-btn flat icon
-          bottom
-          left
-          @click="$store.commit('showSnackbar', {
-            status: true,
-            value: 'Den här hjälpknappen är inte aktiv.',
-            color: 'error',
-            timeout: 5000,
-          })"
-          fixed>
-          <v-icon dark>help</v-icon>
-        </v-btn>
-      </div>
-      <v-dialog v-model="addAssignmentDialog"
-        max-width="600px"
-        height="auto"
-        persistent>
-          <add-assignment
-            @assignmentPosted="assignmentPosted"
-            @close="addAssignmentDialog = false">
-          </add-assignment>
-      </v-dialog>
+    </v-slide-y-transition>
+    <v-container grid-list-md text-xs-center class="wrapper">
+      <v-layout row wrap>
+        <v-flex xs12 sm6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
+          <assignment-card :data="assignment"></assignment-card>
+        </v-flex>
+        <v-flex xs12 v-if="assignments.length === 0">
+          <h2>Inga uppgifter...</h2>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <div>
+  <v-fab-transition>
+    <v-speed-dial
+      v-if="$store.state.isSignedIn"
+      v-model="fab"
+      :direction="'top'"
+      bottom
+      right
+      fixed
+      open-on-hover
+      :transition="'slide-y-reverse-transition'">
+      <v-btn color="primary"
+        fab
+        slot="activator"
+        v-model="fab">
+        <v-icon dark>add</v-icon>
+      </v-btn>
+      <v-btn color="primary"
+        dark
+        fab
+        @click.stop="addAssignmentDialog = true">
+        <v-icon dark>assignment</v-icon>
+      </v-btn>
+      <v-btn color="primary"
+        dark
+        fab
+        @click.stop="addAssignmentDialog = true">
+        <v-icon dark>autorenew</v-icon>
+      </v-btn>
+    </v-speed-dial>
+  </v-fab-transition>
+      <v-btn flat icon
+        @click="$store.commit('showSnackbar', {
+          status: true,
+          value: 'Den här hjälpknappen är inte aktiv.',
+          color: 'error',
+          timeout: 5000,
+        })"
+        fixed>
+        <v-icon dark>help</v-icon>
+      </v-btn>
     </div>
-    <v-snackbar
-      :timeout="snackbar.timeout"
-      :color="snackbar.color"
-      v-model="snackbar.status">{{ snackbar.value }}
-      <v-btn dark flat @click.native="$store.commit('hideSnackbar')">Stäng</v-btn>
-    </v-snackbar>
+    <v-dialog v-model="addAssignmentDialog"
+      max-width="600px"
+      height="auto"
+      persistent>
+        <add-assignment
+          @assignmentPosted="assignmentPosted"
+          @close="addAssignmentDialog = false">
+        </add-assignment>
+    </v-dialog>
+  </div>
+  <v-snackbar
+    :timeout="snackbar.timeout"
+    :color="snackbar.color"
+    v-model="snackbar.status">{{ snackbar.value }}
+    <v-btn dark flat @click.native="$store.commit('hideSnackbar')">Stäng</v-btn>
+  </v-snackbar>
 </div>
 </template>
 
@@ -82,6 +100,7 @@ export default {
   },
   data() {
     return {
+      fab: false,
       assignments: [],
       subject: '',
       addAssignmentDialog: false,
@@ -149,7 +168,12 @@ a {
 .wrapper {
   margin-top: 20px;
 }
-.button-bar {
-  width: 100%;
+
+#create .speed-dial {
+  position: absolute;
+}
+
+#create .btn--floating {
+  position: relative;
 }
 </style>

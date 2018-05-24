@@ -138,8 +138,15 @@ export default {
     },
     listCourses() {
       gapi.client.classroom.courses.list().then((response) => {
-        this.$store.commit('addCourses', response.result.courses);
-        this.isLoading = false;
+        const hasCourses = response.result.courses ? true : false;
+        if (hasCourses) {
+          this.$store.commit('addCourses', response.result.courses);
+          this.isLoading = false;
+        } else {
+          this.noDataText = 'Hittade inga klassrum.';
+          this.$store.commit('addCourses', []);
+          this.isLoading = false;
+        }
       });
     },
   },
