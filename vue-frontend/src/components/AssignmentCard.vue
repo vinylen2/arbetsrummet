@@ -31,8 +31,11 @@
       </v-tooltip>
       <v-dialog v-model="shareToClassroomModal"
         :lazy="true">
-        <share-to-classroom :data="data"
-          @close="shareToClassroomModal = false"></share-to-classroom>
+        <course-picker
+          :data="data"
+          :options="coursePickerOptions"
+          @close="shareToClassroomModal = false">
+        </course-picker>
       </v-dialog>
     </v-flex>
     <v-flex xs4 text-xs-right class="pa-3" @click="showAttachments = !showAttachments">
@@ -61,7 +64,7 @@
 
 <script>
 import Assignments from "@/api/services/assignments";
-import ShareToClassroom from '@/components/ShareToClassroom';
+import CoursePicker from '@/components/CoursePicker';
 import moment from 'moment';
 moment.locale('sv');
 
@@ -69,12 +72,16 @@ export default {
   name: "assignment-card",
   props: ['data'],
   components: {
-    ShareToClassroom,
+    CoursePicker,
   },
   data() {
     return {
       shareToClassroomModal: false,
       showAttachments: false,
+      coursePickerOptions: {
+        title: 'Dela uppgift',
+        action: 'share-assignment',
+      },
     };
   },
   computed: {
@@ -100,8 +107,6 @@ export default {
         return author.fullName;
       }
       return 'Okänd författare';
-    },
-    methods: {
     },
   },
 };

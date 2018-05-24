@@ -25,19 +25,20 @@
     <div>
   <v-fab-transition>
     <v-speed-dial
+      :open-on-hover="true"
       v-if="$store.state.isSignedIn"
       v-model="fab"
       :direction="'top'"
       bottom
       right
       fixed
-      open-on-hover
       :transition="'slide-y-reverse-transition'">
       <v-btn color="primary"
         fab
         slot="activator"
         v-model="fab">
         <v-icon dark>add</v-icon>
+        <v-icon dark>close</v-icon>
       </v-btn>
       <v-btn color="primary"
         dark
@@ -48,23 +49,28 @@
       <v-btn color="primary"
         dark
         fab
-        @click.stop="addAssignmentDialog = true">
+        @click.stop="reuseCourseworkDialog = true">
         <v-icon dark>autorenew</v-icon>
       </v-btn>
     </v-speed-dial>
   </v-fab-transition>
-      <v-btn flat icon
+      <v-btn
+        flat
+        icon
+        bottom
+        left
+        fixed
         @click="$store.commit('showSnackbar', {
           status: true,
           value: 'Den här hjälpknappen är inte aktiv.',
           color: 'error',
           timeout: 5000,
-        })"
-        fixed>
+        });">
         <v-icon dark>help</v-icon>
       </v-btn>
     </div>
     <v-dialog v-model="addAssignmentDialog"
+      :lazy="true"
       max-width="600px"
       height="auto"
       persistent>
@@ -72,6 +78,16 @@
           @assignmentPosted="assignmentPosted"
           @close="addAssignmentDialog = false">
         </add-assignment>
+    </v-dialog>
+    <v-dialog v-model="reuseCourseworkDialog"
+      :lazy="true"
+      height="auto"
+      persistent>
+        <course-picker
+          @assignmentPosted="assignmentPosted"
+          :options="coursePickerOptions"
+          @close="reuseCourseworkDialog = false">
+        </course-picker>
     </v-dialog>
   </div>
   <v-snackbar
@@ -86,6 +102,7 @@
 <script>
 import Assignments from '@/api/services/assignments';
 import AddAssignment from '@/components/AddAssignment';
+import CoursePicker from '@/components/CoursePicker';
 import Search from '@/components/Search';
 import AssignmentCard from '@/components/AssignmentCard';
 import { mapGetters } from 'vuex';
@@ -95,6 +112,7 @@ export default {
   name: 'frontpage',
   components: {
     AssignmentCard,
+    CoursePicker,
     AddAssignment,
     Search,
   },
@@ -104,6 +122,11 @@ export default {
       assignments: [],
       subject: '',
       addAssignmentDialog: false,
+      reuseCourseworkDialog: false,
+      coursePickerOptions: {
+        title: 'Hämta uppgift från kurs',
+        action: 'reuse-coursework',
+      },
     };
   },
   created() {
@@ -114,16 +137,6 @@ export default {
       'isSignedIn',
       'snackbar',
     ]),
-  },
-  watch: {
-    // isSignedIn() {
-    //   if(this.isSignedIn) {
-    //     gapi.client.classroom.courses.list()
-    //       .then((result) => {
-    //         this.$store.commit('addCourses', result.body);
-    //       });
-    //   }
-    // },
   },
   methods: {
     addSearchResults(data) {

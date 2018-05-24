@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="header white--text">
-      Dela uppgift till Classroom
+      {{ this.title }}
       <v-spacer></v-spacer>
         <v-text-field
           color="white"
@@ -42,17 +42,12 @@
       </v-alert>
       <template slot="footer" v-if="selected.length === 1">
         <td colspan="100%">
-          <v-layout row wrap text-xs-left class="padding">
-            <v-flex xs2>
-            </v-flex>
-            <v-flex xs6>
-            </v-flex>
-            <v-flex xs4 text-xs-right>
-              <v-btn @click="shareSelected">
-                <img src="/static/classroom_icon.png" width="20px">Dela till {{ selectedName }}
-              </v-btn>
-            </v-flex>
-          </v-layout>
+          <div v-if="action === 'share-assignment'">
+            <share-assignment></share-assignment>
+          </div>
+          <div v-if="action === 'reuse-coursework'">
+            <reuse-coursework></reuse-coursework>
+          </div>
         </td>
       </template>
       <!-- <template slot="footer" v-else>
@@ -64,14 +59,25 @@
 
 <script>
 import gapiData from '@/stores/gapi';
+import ShareAssignment from '@/components/ShareAssignment';
+import ReuseCoursework from '@/components/ReuseCoursework';
 import moment from 'moment';
 moment.locale('sv');
 
 export default {
-  name: 'share-to-classroom',
-  props: ['data'],
+  name: 'course-picker',
+  components: {
+    ShareAssignment,
+    ReuseCoursework,
+  },
+  props: [
+    'data',
+    'options',
+  ],
   data() {
     return {
+      title: this.options.title,
+      action: this.options.action,
       search: '',
       selected: [],
       isLoading: true,
@@ -132,9 +138,6 @@ export default {
     },
     formatDate(date) {
       return moment(date).format('D MMM YYYY');
-    },
-    shareSelected() {
-      console.log('this should share');
     },
     listCourses() {
       gapi.client.classroom.courses.list().then((response) => {
