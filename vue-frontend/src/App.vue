@@ -66,10 +66,12 @@ export default {
       appTitle: Info.appTitle,
     };
   },
+  created() {
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+      this.$store.commit('isMobile', true);
+    }
+  },
   methods: {
-    hideSearch() {
-      console.log('hej');
-    },
   },
 }
 </script>

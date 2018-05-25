@@ -78,6 +78,7 @@ export default {
       if (this.selected.length > 1) {
         this.selected.shift();
       }
+      this.$emit('selected', this.selected);
     },
   },
   created() {

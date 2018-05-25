@@ -14,11 +14,18 @@
         class="cursor">clear</v-icon>
     </v-card-title>
     <course-table
-      v-if="table === 'courses'">
+      v-if="table === 'courses'"
+      @selected="coursePicked">
     </course-table>
-    <course-work-table
-      v-if="table === 'courseworks'">
-    </course-work-table>
+    <div v-if="table === 'courseworks'">
+      <course-table
+        v-if="!pickingCourseWorks"
+        @selected="coursePicked">
+      </course-table>
+      <course-work-table
+        v-else>
+      </course-work-table>
+    </div>
   </v-card>
 </template>
 
@@ -48,10 +55,17 @@ export default {
       title: this.options.title,
       action: this.options.action,
       table: this.options.table,
+      pickingCourseWorks: false,
       selected: [],
     };
   },
   methods: {
+    coursePicked(selected) {
+      this.selected.push(selected);
+      if (this.table === 'courseworks') {
+        this.pickingCourseWorks = true;
+      }
+    },
     close() {
       this.$emit('close');
     },

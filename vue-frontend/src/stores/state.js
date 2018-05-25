@@ -8,6 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     isLoading: true,
+    isMobile: false,
     snackbar: {
       status: false,
       value: 'Felmeddelandetext',
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     snackbar: state => state.snackbar,
   },
   mutations: {
+    isMobile: (state, data) => {
+      state.isMobile = data;
+    },
     hideSnackbar: (state) => {
       state.snackbar.status = false;
     },

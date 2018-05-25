@@ -25,7 +25,7 @@
     <div>
   <v-fab-transition>
     <v-speed-dial
-      :open-on-hover="true"
+      class="hidden-xs-only"
       v-if="$store.state.isSignedIn"
       v-model="fab"
       :direction="'top'"
@@ -34,6 +34,7 @@
       fixed
       :transition="'slide-y-reverse-transition'">
       <v-btn color="primary"
+        v-if="!$store.state.isMobile"
         fab
         slot="activator"
         v-model="fab">
@@ -54,6 +55,18 @@
       </v-btn>
     </v-speed-dial>
   </v-fab-transition>
+      <v-tooltip v-if="$store.state.isMobile" left>
+        <v-btn class="grey"
+          slot="activator"
+          on-hover
+          bottom
+          right
+          fixed
+          fab>
+          <v-icon>add</v-icon>
+        </v-btn>
+        <span>Tyvärr kan du skapa uppgifter från en mobil ännu.</span>
+      </v-tooltip>
       <v-btn
         flat
         icon
@@ -118,13 +131,13 @@ export default {
   },
   data() {
     return {
-      fab: false,
       assignments: [],
+      fab: false,
       subject: '',
       addAssignmentDialog: false,
       reuseCourseworkDialog: false,
       coursePickerOptions: {
-        title: 'Hämta uppgift från kurs',
+        title: 'Välj kurs',
         action: 'reuse-coursework',
         table: 'courseworks',
       },

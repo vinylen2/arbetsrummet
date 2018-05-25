@@ -25,7 +25,8 @@
   <v-btn icon>
     <v-icon>refresh</v-icon>
   </v-btn>
-  <login-button v-if="!$store.state.isSignedIn"></login-button>
+  <login-button v-if="!$store.state.isSignedIn">
+  </login-button>
   <profile-button v-else></profile-button>
 </v-toolbar>
 </template>
