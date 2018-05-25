@@ -120,6 +120,9 @@ import Search from '@/components/Search';
 import AssignmentCard from '@/components/AssignmentCard';
 import { mapGetters } from 'vuex';
 
+import Grades from '@/api/services/grades';
+import Subjects from '@/api/services/subjects';
+
 
 export default {
   name: 'frontpage',
@@ -145,6 +148,8 @@ export default {
   },
   created() {
     this.getAllAssignments();
+    this.getGrades();
+    this.getSubjects();
   },
   computed: {
     ...mapGetters([
@@ -165,6 +170,16 @@ export default {
       Assignments.getAll().then((result) => {
         this.assignments = result.data;
         this.$store.commit('finishedLoading');
+      });
+    },
+    getGrades() {
+      Grades.getAll().then((result) => {
+        this.$store.commit('addGrades', result.data);
+      });
+    },
+    getSubjects() {
+      Subjects.getAll().then((result) => {
+        this.$store.commit('addSubjects', result.data);
       });
     },
   },

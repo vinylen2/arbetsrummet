@@ -21,11 +21,15 @@ export default {
   // },
   methods: {
     loadPickerApi() {
-      gapi.load('picker', {'callback': this.onPickerApiLoad});
+      gapi.load('picker', {
+        'callback': this.onPickerApiLoad,
+        'onerror': this.error,
+        });
     },
     onPickerApiLoad() {
       this.pickerApiLoaded = true;
       this.createPicker();
+
     },
     createVideoPicker() {
       if (this.pickerApiLoaded && this.$store.state.profile.oauthToken) {
@@ -33,7 +37,8 @@ export default {
           addView(google.picker.ViewId.VIDEO_SEARCH).
           setOAuthToken(this.$store.state.profile.oauthToken).
           setLocale('sv').
-          setDeveloperKey(gapiData.apiKey).
+          setAppId(gapiData.apiConfig.appId).
+          // setDeveloperKey(gapiData.apiKey).
           setCallback(this.pickerCallback).
           build();
         this.picker.setVisible(true);
@@ -45,7 +50,8 @@ export default {
           addView(google.picker.ViewId.DOCS).
           setOAuthToken(this.$store.state.profile.oauthToken).
           setLocale('sv').
-          setDeveloperKey(gapiData.apiKey).
+          setAppId(gapiData.apiConfig.appId).
+          // setDeveloperKey(gapiData.apiKey).
           setCallback(this.pickerCallback).
           build();
         this.picker.setVisible(true);

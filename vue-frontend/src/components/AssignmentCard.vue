@@ -13,17 +13,21 @@
       <p>{{ data.description }}</p>
     </v-flex>
     <v-flex xs4>
-      <v-btn light
-        :to="{ name: 'assignment', params: { id: data.id }}">
-      Läs mer</v-btn>
+      <v-btn
+        light
+        depressed
+        :to="{ name: 'assignment', params: { id: data.id }}">Läs mer
+      </v-btn>
     </v-flex>
     <v-flex xs4>
       <v-btn v-if="$store.state.isSignedIn"
+        depressed
         @click="shareToClassroomModal = true">
         <img src="/static/classroom_icon.png" width="20px">
       </v-btn>
       <v-tooltip top v-if="!$store.state.isSignedIn">
         <v-btn class="disabled"
+          depressed
           slot="activator">
           <img src="/static/classroom_icon.png" width="20px">
         </v-btn>

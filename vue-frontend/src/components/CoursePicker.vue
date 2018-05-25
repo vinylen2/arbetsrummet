@@ -1,7 +1,12 @@
 <template>
   <v-card>
-    <v-card-title class="header white--text">
-      {{ this.title }}
+    <v-card-title class="header white--text px-4">
+      <v-icon v-if="pickingCourseWorks"
+        @click="pickingCourseWorks = false"
+        :color="'white'"
+        class="cursor pr-3">arrow_back
+      </v-icon>
+      <h2> {{ this.title }} </h2>
       <v-spacer></v-spacer>
         <v-text-field
           color="white"
@@ -11,14 +16,17 @@
       ></v-text-field>
       <v-icon @click="close"
         :color="'white'"
-        class="cursor">clear</v-icon>
+        class="cursor pl-4">clear</v-icon>
     </v-card-title>
     <course-table
+      :data="data"
       v-if="table === 'courses'"
+      :action="'share-assignment'"
       @selected="coursePicked">
     </course-table>
     <div v-if="table === 'courseworks'">
       <course-table
+        :action="action"
         v-if="!pickingCourseWorks"
         @selected="coursePicked">
       </course-table>
@@ -33,8 +41,6 @@
 import gapiData from '@/stores/gapi';
 import CourseTable from '@/components/CourseTable';
 import CourseWorkTable from '@/components/CourseWorkTable';
-import ShareAssignment from '@/components/ShareAssignment';
-import ReuseCoursework from '@/components/ReuseCoursework';
 import moment from 'moment';
 moment.locale('sv');
 
@@ -43,8 +49,6 @@ export default {
   components: {
     CourseTable,
     CourseWorkTable,
-    ShareAssignment,
-    ReuseCoursework,
   },
   props: [
     'data',
@@ -52,6 +56,7 @@ export default {
   ],
   data() {
     return {
+      search: '',
       title: this.options.title,
       action: this.options.action,
       table: this.options.table,
@@ -80,5 +85,14 @@ export default {
 <style scoped>
 .header {
   background-color: #aed581;
+  padding: 0;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.cursor:hover {
+  color: lightgrey;
 }
 </style>

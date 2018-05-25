@@ -56,39 +56,7 @@
         </material>
       </v-flex>
       <v-flex xs3 class="buttons">
-        <v-layout row wrap class="buttons">
-          <v-flex xs4 @click="attachDrive">
-          <!-- <v-flex xs4 @click="showDrivePickerModal = true"> -->
-            <v-icon class="attach-button">mdi-google-drive</v-icon>
-          </v-flex>
-          <v-dialog v-model="showDrivePickerModal"
-            :lazy="true">
-            <picker ref="drivepicker"
-              :ViewId="'DOCS'"
-              @itemPicked="attachPickedItem"
-              @close="showDrivePickerModal = false">
-            </picker>
-          </v-dialog>
-          <v-flex xs4 @click="attachYoutube">
-            <v-icon class="attach-button">mdi-youtube-play</v-icon>
-          </v-flex>
-          <v-dialog v-model="showYoutubePickerModal"
-            :lazy="true">
-            <picker ref="youtubepicker"
-              :ViewId="'VIDEO_SEARCH'"
-              @itemPicked="attachPickedClip"
-              @close="showYoutubePickerModal = false">
-            </picker>
-          </v-dialog>
-          <v-flex xs4 @click="showLinkModal = true">
-            <v-icon class="attach-button">link</v-icon>
-          </v-flex>
-          <v-dialog v-model="showLinkModal"
-            width="250px">
-            <add-link @attachLink="attachLink"
-              @close="showLinkModal = false"></add-link>
-          </v-dialog>
-        </v-layout>
+        <attachments @attach="addMaterial"></attachments>
       </v-flex>
       <v-flex xs9 class="text-xs-right buttons-2">
         <v-btn color="primary"
@@ -100,29 +68,20 @@
 </template>
 
 <script>
-import Assignments from '@/api/services/assignments';
-import Grades from '@/api/services/grades';
-import Subjects from '@/api/services/subjects';
-
-import AddLink from '@/components/AddLink';
-import Picker from '@/components/Picker';
+import Attachments from '@/components/Attachments';
 import Material from '@/components/Material';
 
+import Assignments from '@/api/services/assignments';
 import _ from 'lodash';
 
 export default {
   name: 'add-assignment',
   components: {
-    AddLink,
-    Picker,
+    Attachments,
     Material,
   },
   data() {
     return {
-      showLinkModal: false,
-      showDrivePickerModal: false,
-      showYoutubePickerModal: false,
-      testArray: [],
       publishData: {
         title: '',
         description: '',
@@ -131,10 +90,6 @@ export default {
         materials: [],
       },
     };
-  },
-  created() {
-    this.getGrades();
-    this.getSubjects();
   },
   computed: {
     headerColor() {
@@ -146,6 +101,9 @@ export default {
     },
   },
   methods: {
+    addMaterial(item) {
+      this.publishData.materials.push(item);
+    },
     close() {
       this.$emit('close');
     },
@@ -156,48 +114,9 @@ export default {
         }
       });
     },
-    attachDrive() {
-      this.showDrivePickerModal = true;
-      this.$nextTick(() => {
-        this.$refs.drivepicker.loadPickerApi();
-      });
-    },
-    attachYoutube() {
-      this.showYoutubePickerModal = true;
-      this.$nextTick(() => {
-        this.$refs.youtubepicker.loadPickerApi();
-      });
-    },
-    attachLink(linkUrl) {
-      this.publishData.materials.push({
-        unionField: 'link',
-        title: 'Länk',
-        alternateLink: linkUrl,
-      });
-      this.showLinkModal = false;
-    },
-    attachPickedItem(pickedItem) {
-      this.publishData.materials.push({
-        unionField: 'driveFile',
-        title: pickedItem.name,
-        alternateLink: pickedItem.url,
-        serviceId: pickedItem.serviceId,
-        iconUrl: pickedItem.iconUrl,
-      });
-      this.showDrivePickerModal = false;
-    },
-    attachPickedClip(pickedItem) {
-      this.publishData.materials.push({
-        unionField: 'youtubeVideo',
-        title: pickedItem.name,
-        alternateLink: pickedItem.url,
-        serviceId: pickedItem.serviceId,
-      });
-      this.showYoutubePickerModal = false;
-    },
     postAssignment() {
       Assignments.post(this.publishData).then((result) => {
-        // graphic for successful post or failed post
+        // graphic for successful or failed post
         this.$store.commit('showSnackbar', {
           status: true,
           value: 'Uppgift publicerad',
@@ -210,27 +129,11 @@ export default {
         }, 1000);
       });
     },
-    getGrades() {
-      Grades.getAll().then((result) => {
-        this.$store.commit('addGrades', result.data);
-      });
-    },
-    getSubjects() {
-      Subjects.getAll().then((result) => {
-        this.$store.commit('addSubjects', result.data);
-      });
-    },
   },
 }
 </script>
 
 <style scoped>
-.attach-button {
-  cursor: pointer;
-}
-.attach-button:hover {
-  color: darkgrey;
-}
 
 .buttons {
   align-items: center;

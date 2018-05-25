@@ -23,6 +23,13 @@
       <td>{{ props.item.section }} </td>
       <td>{{ formatDate(props.item.creationTime) }} </td>
     </template>
+    <template slot="footer" v-if="this.selected.length > 0">
+      <td colspan="100%">
+        <share-assignment v-if="action === 'share-assignment'"
+          :data="data">
+        </share-assignment>
+      </td>
+    </template>
     <v-alert slot="no-results" :value="true" color="error" icon="warning">
       Din sökning gav inga träffar.
     </v-alert>
@@ -31,13 +38,18 @@
 
 <script>
 import gapiData from '@/stores/gapi';
+import ShareAssignment from '@/components/ShareAssignment';
 import moment from 'moment';
 moment.locale('sv');
 
 export default {
   name: 'course-table',
+  components: {
+    ShareAssignment,
+  },
   props: [
     'data',
+    'action',
   ],
   data() {
     return {
@@ -78,7 +90,9 @@ export default {
       if (this.selected.length > 1) {
         this.selected.shift();
       }
-      this.$emit('selected', this.selected);
+      if (this.action === 'reuse-coursework') {
+        this.$emit('selected', this.selected);
+      }
     },
   },
   created() {
@@ -97,6 +111,9 @@ export default {
     },
   },
   methods: {
+    assignmentSelected() {
+
+    },
     close() {
       this.$emit('close');
     },
