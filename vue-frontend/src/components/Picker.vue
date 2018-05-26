@@ -4,8 +4,6 @@
 </template>
 
 <script>
-import gapiData from '@/stores/gapi';
-
 export default {
   name: 'picker',
   props: ['ViewId'],
@@ -33,8 +31,8 @@ export default {
           addView(google.picker.ViewId.VIDEO_SEARCH).
           setOAuthToken(this.$store.state.profile.oauthToken).
           setLocale('sv').
-          setAppId(gapiData.apiConfig.appId).
-          // setDeveloperKey(gapiData.apiKey).
+          setAppId(this.$store.state.gapiConfig.appId).
+          // setDeveloperKey(this.$store.state.gapiConfig.apiKey).
           setCallback(this.pickerCallback).
           build();
         this.picker.setVisible(true);
@@ -46,8 +44,8 @@ export default {
           addView(google.picker.ViewId.DOCS).
           setOAuthToken(this.$store.state.profile.oauthToken).
           setLocale('sv').
-          setAppId(gapiData.apiConfig.appId).
-          // setDeveloperKey(gapiData.apiKey).
+          setAppId(this.$store.state.gapiConfig.appId).
+          // setDeveloperKey(this.$store.state.gapiConfig.apiKey).
           setCallback(this.pickerCallback).
           build();
         this.picker.setVisible(true);

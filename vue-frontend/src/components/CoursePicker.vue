@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import gapiData from '@/stores/gapi';
 import CourseTable from '@/components/CourseTable';
 import CourseWorkTable from '@/components/CourseWorkTable';
 import moment from 'moment';

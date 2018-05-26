@@ -51,9 +51,8 @@ import('mdi/css/materialdesignicons.min.css');
 Vue.use(Vuetify);
 
 import VueGAPI from 'vue-gapi';
-import gapiData from '@/stores/gapi';
-Vue.use(VueGAPI, gapiData.apiConfig);
-
+import gapiConfig from '@/stores/gapiConfig.js';
+Vue.use(VueGAPI, gapiConfig);
 
 export default {
   components: {
@@ -77,6 +76,11 @@ export default {
 </script>
 
 <style>
+
+.cursor {
+  cursor: pointer;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

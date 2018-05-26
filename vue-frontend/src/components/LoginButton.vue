@@ -8,8 +8,6 @@
 </template>
 
 <script>
-import gapiData from '@/stores/gapi';
-
 export default {
   name: 'login-button',
   methods: {

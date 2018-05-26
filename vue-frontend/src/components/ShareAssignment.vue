@@ -22,7 +22,6 @@
 
 <script>
 import ProgressDialog from '@/components/ProgressDialog';
-import gapiData from '@/stores/gapi';
 
 export default {
   name:'share-assignment',
@@ -51,7 +50,7 @@ export default {
     },
     onClientApiLoad() {
       gapi.client.init({
-        apiKey: gapiData.apiConfig.apiKey,
+        apiKey: this.$store.state.apiConfig.apiKey,
         discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest', 'https://classroom.googleapis.com/$discovery/rest?version=v1'],
       }).then(() => {
         this.copyDriveFiles();

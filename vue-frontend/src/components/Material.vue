@@ -74,9 +74,6 @@ export default {
       return this.title;
     },
   },
-  created() {
-    console.log(this.materialData);
-  },
   data() {
     return {
       id: this.materialData.id,

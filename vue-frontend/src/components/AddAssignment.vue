@@ -11,7 +11,7 @@
         </v-flex>
         <v-flex xs10 class="text-xs-right">
           <v-icon :style="{color: 'white'}"
-            class="attach-button"
+            class="cursor"
             @click="close">clear</v-icon>
         </v-flex>
       </v-layout>
@@ -115,6 +115,16 @@ export default {
     },
   },
   methods: {
+    resetPublishData() {
+      this.publishData = {
+        title: '',
+        description: '',
+        subject: '',
+        fileId: '',
+        grades: [],
+        materials: [],
+      };
+    },
     cancel() {
       // remove sharing here
       this.isProgressing = false;
@@ -124,7 +134,7 @@ export default {
     },
     close() {
       this.$emit('close');
-      this.publishData = '';
+      this.resetPublishData();
     },
     removeMaterial(link) {
       this.publishData.materials = _.filter(this.publishData.materials, (item) => {
@@ -178,9 +188,7 @@ export default {
         });
         setTimeout(() => {
           this.$emit('assignmentPosted', result.data);
-          this.publishData = {
-            materials: [],
-          };
+          this.resetPublishData();
         }, 1000);
       });
     },

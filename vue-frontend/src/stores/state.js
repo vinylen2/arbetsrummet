@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import gapiConfig from '@/stores/gapiConfig.js';
 
 Vue.use(Vuex);
 // split this into two stores
@@ -7,6 +8,7 @@ Vue.use(Vuex);
 /* eslint no-param-reassign: ["error", { "props": false }]*/
 export default new Vuex.Store({
   state: {
+    gapiConfig,
     isLoading: true,
     isMobile: false,
     snackbar: {

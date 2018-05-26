@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import gapiData from '@/stores/gapi';
 import ShareAssignment from '@/components/ShareAssignment';
 import moment from 'moment';
 moment.locale('sv');
