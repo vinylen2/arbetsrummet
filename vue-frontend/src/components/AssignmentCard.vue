@@ -6,7 +6,7 @@
     </v-flex>
     <v-flex xs8>
       <p class="author">{{ data.title }}</p>
-      <p class="date" v-if="hasSubject"> {{ data.subjects[0].subject }}, {{ date }}</p>
+      <p class="date" v-if="hasSubject"> {{ data.subjects[0].subject }}, åk {{ data.grades[0].grade }}</p>
       <p class="date" v-else> {{ date }}</p>
     </v-flex>
     <v-flex xs12 class="pa-3 content">
