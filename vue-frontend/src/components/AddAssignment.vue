@@ -123,6 +123,11 @@ export default {
         fileId: '',
         grades: [],
         materials: [],
+        author: {
+          firstName: this.$store.state.profile.firstName,
+          lastName: this.$store.state.profile.firstName,
+          email: this.$store.state.profile.email,
+        }
       };
     },
     cancel() {
@@ -145,8 +150,12 @@ export default {
     },
     initiatePosting() {
       this.isProgressing = true;
-      this.progressMessage = 'Ansluter till din Drive';
-      this.shareDriveFiles();
+      if (_.some(this.publishData.materials, {unionField: 'driveFile'})) {
+        this.progressMessage = 'Ansluter till din Drive';
+        this.shareDriveFiles();
+      } else {
+        this.postAssignment();
+      }
     },
     shareDriveFiles() {
       this.progressMessage = 'Delar bifogade dokument';

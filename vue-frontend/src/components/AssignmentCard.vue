@@ -5,11 +5,11 @@
       <v-icon :color="'white'">assignment</v-icon>
     </v-flex>
     <v-flex xs8>
-      <p class="author">{{ author }}</p>
-      <p class="date"> {{ date }}</p>
+      <p class="author">{{ data.title }}</p>
+      <p class="date" v-if="hasSubject"> {{ data.subjects[0].subject }}, {{ date }}</p>
+      <p class="date" v-else> {{ date }}</p>
     </v-flex>
     <v-flex xs12 class="pa-3 content">
-      <h3 primary>{{ data.title }}</h3>
       <p>{{ data.description }}</p>
     </v-flex>
     <v-flex xs4>
@@ -93,10 +93,12 @@ export default {
     date() {
       return moment(this.data.createdAt).format('D MMM YYYY');
     },
+    hasSubject() {
+      return (( _.has(this.data, 'subjects') && this.data.subjects.length > 0 ) ? this.data.subjects[0] : null);
+    },
     color() {
-      const subject = (( _.has(this.data, 'subjects') && this.data.subjects.length > 0 ) ? this.data.subjects[0] : null);
-      if (subject) {
-        return subject.color;
+      if (this.hasSubject) {
+        return this.data.subjects[0].color;
       }
       return 'grey';
     },
@@ -111,7 +113,7 @@ export default {
       if (author) {
         return author.fullName;
       }
-      return 'Okänd författare';
+      return 'Anonym';
     },
   },
 };
