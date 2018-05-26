@@ -60,8 +60,17 @@
       </v-flex>
       <v-flex xs9 class="text-xs-right buttons-2">
         <v-btn color="primary"
-          @click="postAssignment">Publicera</v-btn>
+          @click="initiatePosting">Publicera</v-btn>
       </v-flex>
+      <v-dialog
+        v-model="isProgressing"
+        persistent
+        max-width="250px">
+        <progress-dialog
+          :message="progressMessage"
+          @cancel="cancel">
+        </progress-dialog>
+      </v-dialog>
     </v-layout>
   </v-container>
 </v-card>
@@ -69,6 +78,7 @@
 
 <script>
 import Attachments from '@/components/Attachments';
+import ProgressDialog from '@/components/ProgressDialog';
 import Material from '@/components/Material';
 
 import Assignments from '@/api/services/assignments';
@@ -79,13 +89,17 @@ export default {
   components: {
     Attachments,
     Material,
+    ProgressDialog,
   },
   data() {
     return {
+      progressMessage: '',
+      isProgressing: false,
       publishData: {
         title: '',
         description: '',
         subject: '',
+        fileId: '',
         grades: [],
         materials: [],
       },
@@ -101,11 +115,16 @@ export default {
     },
   },
   methods: {
+    cancel() {
+      // remove sharing here
+      this.isProgressing = false;
+    },
     addMaterial(item) {
       this.publishData.materials.push(item);
     },
     close() {
       this.$emit('close');
+      this.publishData = '';
     },
     removeMaterial(link) {
       this.publishData.materials = _.filter(this.publishData.materials, (item) => {
@@ -114,9 +133,43 @@ export default {
         }
       });
     },
+    initiatePosting() {
+      this.isProgressing = true;
+      this.progressMessage = 'Ansluter till din Drive';
+      this.shareDriveFiles();
+    },
+    shareDriveFiles() {
+      this.progressMessage = 'Delar bifogade dokument';
+      const batch = gapi.client.newBatch();
+      const permissionResource = {
+        role: 'reader',
+        type: 'anyone',
+      };
+
+      function shareFileRequest(fileId) {
+        return gapi.client.request({
+          path: `drive/v3/files/${fileId}/permissions`,
+          method: 'POST',
+          body: permissionResource,
+        });
+      }
+
+      this.publishData.materials.forEach((material) => {
+        if (material.unionField === 'driveFile') {
+          batch.add(shareFileRequest(material.fileId));
+        }
+      });
+
+      batch.execute((res) => {
+        this.postAssignment();
+      });
+    },
     postAssignment() {
+      this.progressMessage = 'Publicerar uppgift till lärarrummet';
       Assignments.post(this.publishData).then((result) => {
         // graphic for successful or failed post
+        this.isProgressing = false;
+        this.progressMessage = '';
         this.$store.commit('showSnackbar', {
           status: true,
           value: 'Uppgift publicerad',
@@ -125,7 +178,9 @@ export default {
         });
         setTimeout(() => {
           this.$emit('assignmentPosted', result.data);
-          this.publishData = '';
+          this.publishData = {
+            materials: [],
+          };
         }, 1000);
       });
     },

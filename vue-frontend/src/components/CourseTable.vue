@@ -26,7 +26,8 @@
     <template slot="footer" v-if="this.selected.length > 0">
       <td colspan="100%">
         <share-assignment v-if="action === 'share-assignment'"
-          :data="data">
+          :data="data"
+          :courseId="this.selected[0].id">
         </share-assignment>
       </td>
     </template>

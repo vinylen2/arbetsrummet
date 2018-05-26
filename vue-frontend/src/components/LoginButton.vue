@@ -12,10 +12,6 @@ import gapiData from '@/stores/gapi';
 
 export default {
   name: 'login-button',
-  data() {
-    return {
-    };
-  },
   methods: {
     logIn() {
       this.$getGapiClient().then(gapi => {

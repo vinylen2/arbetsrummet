@@ -22,25 +22,78 @@
 
 <script>
 import ProgressDialog from '@/components/ProgressDialog';
+import gapiData from '@/stores/gapi';
 
 export default {
   name:'share-assignment',
   components: {
     ProgressDialog,
   },
-  props: ['data'],
+  props: [
+    'data',
+    'courseId',
+  ],
   data() {
     return {
       isProgressing: false,
       progressMessage: '',
       assignmentData: this.data,
+      copiedFiles: [],
     };
+  },
+  created() {
   },
   methods: {
     shareAssignment() {
       this.isProgressing = true;
-      this.progressMessage = 'Kopierar dokument';
-      console.log(this.data);
+      this.progressMessage = 'Ansluter till din Drive';
+      gapi.load('client', this.onClientApiLoad);
+    },
+    onClientApiLoad() {
+      gapi.client.init({
+        apiKey: gapiData.apiConfig.apiKey,
+        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest', 'https://classroom.googleapis.com/$discovery/rest?version=v1'],
+      }).then(() => {
+        this.copyDriveFiles();
+      });
+    },
+    copyDriveFiles() {
+      this.progressMessage = 'Kopierar filer';
+      const batch = gapi.client.newBatch();
+
+      function copyRequest(material) {
+        const resource = { title: material.title }
+        return gapi.client.request({
+          path: `drive/v3/files/${material.fileId}/copy`,
+          method: 'POST',
+          body: resource,
+        });
+      }
+
+      this.data.materials.forEach((material) => {
+        if (material.unionField === 'driveFile') {
+          batch.add(copyRequest(material));
+        }
+      });
+
+      batch.execute((res) => {
+        this.copedFiles = res;
+        this.progressMessage = 'Skapar uppgift';
+        this.createAssignment();
+      });
+    },
+    createAssignment() {
+      const body = {
+        title: this.data.title,
+        workType: 'ASSIGNMENT',
+        state: 'DRAFT',
+      };
+      gapi.client.classroom.courses.courseWork.create({
+        courseId: this.courseId,
+        body,
+      }).then((result) => {
+        console.log(result);
+      });
     },
     editAssignment() {
 

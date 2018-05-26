@@ -16,9 +16,6 @@ export default {
       picked: [],
     };
   },
-  // created() {
-  //   this.loadPickerApi();
-  // },
   methods: {
     loadPickerApi() {
       gapi.load('picker', {
@@ -29,7 +26,6 @@ export default {
     onPickerApiLoad() {
       this.pickerApiLoaded = true;
       this.createPicker();
-
     },
     createVideoPicker() {
       if (this.pickerApiLoaded && this.$store.state.profile.oauthToken) {

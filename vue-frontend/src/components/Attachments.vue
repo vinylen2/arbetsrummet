@@ -78,7 +78,7 @@ export default {
         alternateLink: pickedItem.url,
         serviceId: pickedItem.serviceId,
         iconUrl: pickedItem.iconUrl,
-        fileId: pickedItem.fileId,
+        fileId: pickedItem.id,
       });
       this.showDrivePickerModal = false;
     },
