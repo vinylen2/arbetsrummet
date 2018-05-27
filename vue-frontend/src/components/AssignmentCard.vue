@@ -15,10 +15,11 @@
     <v-flex xs12>
       <v-chip class="cursor"
         :color="color"
+        text-color="white"
         @click="chipPressed('subject', data.subjects[0])">{{ data.subjects[0].subject }}
       </v-chip>
       <v-chip class="cursor"
-        @click="chipPressed('grade', data.grades[0])">åk {{ data.grades[0].grade }}
+        @click="chipPressed('grade', data.grades[0])">{{ data.grades[0].grade }}
       </v-chip>
     </v-flex>
     <v-flex xs4>

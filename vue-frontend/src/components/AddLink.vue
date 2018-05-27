@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import getTitleAtUrl from 'get-title-at-url';
 
 export default {
   name: 'add-link',
@@ -41,8 +42,13 @@ export default {
   },
   methods: {
     addLink() {
-      this.$emit('attachLink', this.formattedLinkUrl);
-      this.linkUrl = '';
+      getTitleAtUrl(this.formattedLinkUrl, (title) => {
+        this.$emit('attachLink', {
+          linkUrl: this.formattedLinkUrl,
+          title: title,
+        });
+        this.linkUrl = '';
+      });
     },
     close() {
       this.$emit('close');

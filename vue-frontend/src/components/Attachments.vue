@@ -63,11 +63,11 @@ export default {
         this.$refs.youtubepicker.loadPickerApi();
       });
     },
-    attachLink(linkUrl) {
+    attachLink(data) {
       this.$emit('attach', {
         unionField: 'link',
-        title: 'Länk',
-        alternateLink: linkUrl,
+        title: data.title,
+        alternateLink: data.linkUrl,
       });
       this.showLinkModal = false;
     },
