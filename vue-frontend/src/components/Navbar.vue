@@ -15,16 +15,10 @@
     v-else>
     <v-icon slot="divider">chevron_right</v-icon>
   </v-toolbar-title>
-
-  <!-- <v-btn icon v-if="isFrontpage" class="ml-4"
-    <v-icon>search</v-icon>
-    <v-icon v-if="!$store.state.showSearch">keyboard_arrow_down</v-icon>
-    <v-icon v-if="$store.state.showSearch">keyboard_arrow_up</v-icon>
-  </v-btn> -->
   <v-spacer></v-spacer>
-  <v-btn icon>
+  <!-- <v-btn icon>
     <v-icon>refresh</v-icon>
-  </v-btn>
+  </v-btn> -->
   <login-button v-if="!$store.state.isSignedIn">
   </login-button>
   <profile-button v-else></profile-button>

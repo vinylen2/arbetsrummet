@@ -9,13 +9,15 @@
     <v-slide-y-transition>
       <div class="light-green lighten-2 search-bar"
         v-show="$store.state.showSearch">
-          <search @addResult="addSearchResults"></search>
+          <search @addResult="addSearchResults"
+            :chipPressValue="chipPressValue"></search>
       </div>
     </v-slide-y-transition>
     <v-container grid-list-md text-xs-center class="wrapper">
       <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
-          <assignment-card :data="assignment"></assignment-card>
+          <assignment-card :data="assignment"
+            @chipPressed="chipPressed"></assignment-card>
         </v-flex>
         <v-flex xs12 v-if="assignments.length === 0">
           <h2>Inga uppgifter...</h2>
@@ -139,6 +141,7 @@ export default {
       subject: '',
       addAssignmentDialog: false,
       reuseCourseworkDialog: false,
+      chipPressValue: '',
       coursePickerOptions: {
         title: 'Välj kurs',
         action: 'reuse-coursework',
@@ -158,6 +161,9 @@ export default {
     ]),
   },
   methods: {
+    chipPressed(data) {
+      this.chipPressValue = data;
+    },
     addSearchResults(data) {
       this.assignments = data;
       this.$store.commit('finishedLoading');

@@ -50,10 +50,10 @@ export default {
   props: [
     'data',
     'action',
+    'search',
   ],
   data() {
     return {
-      search: '',
       selected: [],
       isLoading: true,
       noDataText: 'Hämtar dina klassrum...',

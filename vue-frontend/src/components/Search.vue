@@ -21,6 +21,7 @@
         :items="$store.state.subjects"
         item-text="subject"
         multiple
+        ref="subjects"
         chips
         autocomplete
         deletable-chips
@@ -40,9 +41,9 @@
         label="Årskurser"
         v-model="selectedGrades"
         :items="$store.state.grades"
-        :key=""
         item-text="grade"
         multiple
+        ref="grades"
         chips
         deletable-chips
         max-height="400"
@@ -60,6 +61,7 @@ import _ from 'lodash';
 
 export default {
   name: 'search',
+  props: ['chipPressValue'],
   data() {
     return {
       selectedGrades: [],
@@ -76,6 +78,22 @@ export default {
     },
     selectedSubjects() {
       this.searchAssignments();
+    },
+    chipPressValue() {
+      if (!this.$store.state.showSearch) {
+        this.$store.commit('toggleSearch');
+      }
+      switch (this.chipPressValue.type) {
+        case 'subject':
+          this.$refs.subjects.selectItem(_.find(this.$refs.subjects.items, { id: this.chipPressValue.data.id}));
+          this.selectedSubjects.push(this.chipPressValue.data);
+          break;
+        case 'grade':
+          this.$refs.grades.selectItem(_.find(this.$refs.grades.items, { id: this.chipPressValue.data.id}));
+          this.selectedGrades.push(this.chipPressValue.data);
+          break;
+        default:
+      }
     },
   },
   computed: {

@@ -19,9 +19,10 @@
         class="cursor pl-4">clear</v-icon>
     </v-card-title>
     <course-table
-      :data="data"
       v-if="table === 'courses'"
+      :data="data"
       :action="'share-assignment'"
+      :search="search"
       @selected="coursePicked">
     </course-table>
     <div v-if="table === 'courseworks'">

@@ -6,11 +6,20 @@
     </v-flex>
     <v-flex xs8>
       <p class="author">{{ data.title }}</p>
-      <p class="date" v-if="hasSubject"> {{ data.subjects[0].subject }}, åk {{ data.grades[0].grade }}</p>
-      <p class="date" v-else> {{ date }}</p>
+      <!-- <p class="date" v-if="hasSubject"> {{ data.subjects[0].subject }}, åk {{ data.grades[0].grade }}</p> -->
+      <p class="date"> {{ date }}</p>
     </v-flex>
     <v-flex xs12 class="pa-3 content">
       <p>{{ data.description }}</p>
+    </v-flex>
+    <v-flex xs12>
+      <v-chip class="cursor"
+        :color="color"
+        @click="chipPressed('subject', data.subjects[0])">{{ data.subjects[0].subject }}
+      </v-chip>
+      <v-chip class="cursor"
+        @click="chipPressed('grade', data.grades[0])">åk {{ data.grades[0].grade }}
+      </v-chip>
     </v-flex>
     <v-flex xs4>
       <v-btn
@@ -88,6 +97,14 @@ export default {
         table: 'courses',
       },
     };
+  },
+  methods: {
+    chipPressed(type, data) {
+      this.$emit('chipPressed', {
+        data: data,
+        type: type,
+      });
+    },
   },
   computed: {
     date() {

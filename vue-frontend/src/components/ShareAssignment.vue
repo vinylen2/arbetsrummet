@@ -77,22 +77,22 @@ export default {
 
       batch.execute((res) => {
         this.copedFiles = res;
-        this.progressMessage = 'Skapar uppgift';
         this.createAssignment();
       });
     },
     createAssignment() {
+      this.progressMessage = 'Skapar uppgift';
       const body = {
         title: this.data.title,
         workType: 'ASSIGNMENT',
         state: 'DRAFT',
       };
-      gapi.client.classroom.courses.courseWork.create({
-        courseId: this.courseId,
-        body,
-      }).then((result) => {
-        console.log(result);
-      });
+      // gapi.client.classroom.courses.courseWork.create({
+      //   courseId: this.courseId,
+      //   body,
+      // }).then((result) => {
+      //   console.log(result);
+      // });
     },
     editAssignment() {
 
