@@ -13,6 +13,18 @@
             :chipPressValue="chipPressValue"></search>
       </div>
     </v-slide-y-transition>
+    <v-layout row wrap v-if="!$store.state.showSearch" transition="fade-transition">
+      <v-flex xs12 sm6>
+        <assignment-list :title="'Nyligen publicerade'"
+          :assignments="assignments">
+        </assignment-list>
+      </v-flex>
+      <v-flex xs12 sm6>
+        <assignment-list :title="'Populära uppgifter'"
+          :assignments="assignments">
+        </assignment-list>
+      </v-flex>
+    </v-layout>
     <v-container grid-list-md text-xs-center class="wrapper">
       <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
@@ -67,7 +79,7 @@
           fab>
           <v-icon>add</v-icon>
         </v-btn>
-        <span>Tyvärr kan du skapa uppgifter från en mobil ännu.</span>
+        <span>Tyvärr kan du inte skapa uppgifter från en mobil ännu.</span>
       </v-tooltip>
       <v-btn
         flat
@@ -116,6 +128,7 @@
 
 <script>
 import Assignments from '@/api/services/assignments';
+import AssignmentList from '@/components/AssignmentList';
 import AddAssignment from '@/components/AddAssignment';
 import CoursePicker from '@/components/CoursePicker';
 import Search from '@/components/Search';
@@ -130,6 +143,7 @@ export default {
   name: 'frontpage',
   components: {
     AssignmentCard,
+    AssignmentList,
     CoursePicker,
     AddAssignment,
     Search,
