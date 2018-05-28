@@ -1,6 +1,6 @@
 <template>
 <v-card>
-  <v-card-title :class="headerColor">
+  <v-card-title ripple :class="headerColor">
     <v-container grid-list-md>
       <v-layout row wrap>
         <v-flex xs1>

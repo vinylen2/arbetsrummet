@@ -37,7 +37,6 @@
       </v-btn>
       <v-tooltip top v-if="!$store.state.isSignedIn">
         <v-btn class="disabled"
-          depressed
           slot="activator">
           <img src="/static/classroom_icon.png" width="20px">
         </v-btn>

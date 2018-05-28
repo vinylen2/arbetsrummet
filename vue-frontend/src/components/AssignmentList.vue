@@ -1,14 +1,19 @@
 <template>
   <v-list two-line subheader>
     <v-subheader inset>{{ title }}</v-subheader>
-    <v-list-tile v-for="assignment in assignments"
+    <v-divider inset></v-divider>
+    <v-list-tile v-for="(assignment, index) in assignments"
       :key="assignment.title"
       avatar
-      :to="{ name: 'assignment', params: { id: assignment.id }}">
+      @click="routerDirect(assignment.id)">
       <v-list-tile-avatar>
         <v-icon :class="hasColor(assignment)" :color="'white'">assignment</v-icon>
       </v-list-tile-avatar>
-      <v-list-tile-content>
+      <v-list-tile slot="activator">
+
+      </v-list-tile>
+      <v-list-tile-content
+        @click="routerDirect(assignment.id)">
         <v-list-tile-title>{{ assignment.title }}</v-list-tile-title>
         <v-list-tile-sub-title>{{ date(assignment.createdAt) }}</v-list-tile-sub-title>
       </v-list-tile-content>
@@ -18,9 +23,13 @@
           {{ assignment.grades[0].grade }}
         </v-btn>
       </v-list-tile-action>
+      <v-list-tile-action>
+        <v-btn round icon ripple>
+          <v-icon>keyboard_arrow_right</v-icon>
+        </v-btn>
+      </v-list-tile-action>
     </v-list-tile>
   </v-list>
-
 </template>
 
 <script>
@@ -56,8 +65,8 @@ export default {
       }
       return 'grey';
     },
-    routerDirect() {
-
+    routerDirect(id) {
+      this.$router.push(`/assignment/${id}`);
     },
   },
 };

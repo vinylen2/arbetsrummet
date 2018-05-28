@@ -1,30 +1,46 @@
 <template>
   <div>
-    <v-avatar class="avatar-button"
-      :size="'36px'">
-      <img :src="$store.state.profile.picture"
-        :alt="$store.state.profile.firstName"
-        @click="showProfile = !showProfile">
-    </v-avatar>
-    <v-tooltip v-model="showProfile" bottom
-      class="profile">
-      <v-layout row wrap>
-        <v-flex xs5>
-          <v-avatar
-            :size="'90px'">
-            <img :src="$store.state.profile.picture"
-              :alt="$store.state.profile.firstName">
-          </v-avatar>
-        </v-flex>
-        <v-flex xs7>
-          <p>{{ $store.state.profile.fullName }}</p>
-          <p>{{ $store.state.profile.email }}</p>
-          <v-btn class="text-xs-right"
-            @click="logOut">Logga ut
-          </v-btn>
-        </v-flex>
-      </v-layout>
-    </v-tooltip>
+    <v-menu v-model="menu"
+      :close-on-content-click="false"
+      :nudge-width="200"
+      nudge-left
+      left
+      offset-x>
+      <div slot="activator">
+        <v-avatar class="avatar-button"
+          :size="'36px'">
+          <img :src="$store.state.profile.picture"
+            :alt="$store.state.profile.firstName">
+        </v-avatar>
+
+      </div>
+      <v-card>
+        <v-list>
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <v-avatar
+                :size="'56px'">
+                <img :src="$store.state.profile.picture"
+                  :alt="$store.state.profile.firstName">
+              </v-avatar>
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ $store.state.profile.fullName }}</v-list-tile-title>
+              <v-list-tile-sub-title>{{ $store.state.profile.email }}</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+        <v-list>
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-btn class="text-xs-right"
+                @click="logOut">Logga ut
+              </v-btn>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </v-card>
+    </v-menu>
   </div>
 </template>
 
@@ -36,6 +52,7 @@ export default {
   data() {
     return {
       showProfile: false,
+      menu: false,
     };
   },
   methods: {
