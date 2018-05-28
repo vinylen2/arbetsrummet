@@ -8,6 +8,7 @@ module.exports = function modelExport(db, DataTypes) {
       title: DataTypes.STRING,
       alternateLink: DataTypes.STRING,
       thumbnailUrl: DataTypes.STRING,
+      fileId: DataTypes.STRING,
       formUrl: DataTypes.STRING,
       shareMode: {
         type: DataTypes.ENUM('VIEW', 'EDIT', 'STUDENT_COPY'),

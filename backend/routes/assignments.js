@@ -68,6 +68,10 @@ async function postAssignment(ctx) {
     courseWorkType,
   });
 
+  if (author) {
+    // findOrCreate Author here
+  }
+
   if (grades) {
     const associatedGrades = await Promise.all(grades.map(async (grade) => {
       const sequelizeGrade = await Grade.findById(grade.id);
@@ -93,6 +97,7 @@ async function postAssignment(ctx) {
         alternateLink: material.alternateLink,
         thumbnailUrl: material.thumbnailUrl,
         formUrl: material.formUrl,
+        fileId: material.fileId,
         shareMode: material.shareMode,
         assignmentId: assignment.dataValues.id,
       });
@@ -104,6 +109,7 @@ async function postAssignment(ctx) {
   ctx.body = {
     data: assignment,
   };
+
 
 }
 
@@ -126,8 +132,37 @@ async function searchAssignments(ctx) {
   };
 
 }
+async function getRecentlyPublishedAssignments(ctx) {
+  const assignments = await Assignment.findAll({
+    limit: 9,
+    order: [['createdAt', 'DESC']],
+    include: [
+      {
+        model: Material,
+        as: 'materials',
+      },
+      {
+        model: Author,
+        as: 'authors',
+      },
+      {
+        model: Subject,
+        as: 'subjects',
+      },
+      {
+        model: Grade,
+        as: 'grades',
+      },
+    ],
+  });
+
+  ctx.body = {
+    data: assignments,
+  };
+}
 
 router.get('/', getAllAssignments);
+router.get('/recent', getRecentlyPublishedAssignments);
 router.get('/search', searchAssignments);
 router.get('/:id', getAssignment);
 router.post('/', postAssignment);
