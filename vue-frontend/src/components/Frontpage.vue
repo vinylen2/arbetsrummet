@@ -16,11 +16,13 @@
     <v-layout row wrap v-if="!$store.state.showSearch" transition="fade-transition">
       <v-flex xs12 sm6>
         <assignment-list :title="'Nyligen publicerade'"
+          @chipPressed="chipPressed"
           :assignments="assignments">
         </assignment-list>
       </v-flex>
       <v-flex xs12 sm6>
         <assignment-list :title="'Populära uppgifter'"
+          @chipPressed="chipPressed"
           :assignments="assignments">
         </assignment-list>
       </v-flex>
