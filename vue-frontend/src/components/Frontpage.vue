@@ -1,11 +1,6 @@
 <template>
 <div>
-  <v-progress-linear class="ma-0" :color="'light-green lighten-2'"
-    :indeterminate="true"
-    v-if="$store.state.isLoading">
-  </v-progress-linear>
-  <div class="frontpage"
-    v-else>
+  <div class="frontpage" v-if="!$store.state.isLoading">
     <v-slide-y-transition>
       <div class="light-green lighten-2 search-bar"
         v-show="$store.state.showSearch">
@@ -23,7 +18,7 @@
       <v-flex hidden-xs-only sm6>
         <assignment-list :title="'Nyligen publicerade'"
           @chipPressed="chipPressed"
-          :assignments="assignments">
+          :assignments="recentAssignments">
         </assignment-list>
       </v-flex>
     </v-layout>
@@ -60,29 +55,36 @@
       <v-btn color="primary"
         dark
         fab
+        small
         @click.stop="addAssignmentDialog = true">
         <v-icon dark>assignment</v-icon>
       </v-btn>
       <v-btn color="primary"
         dark
         fab
+        small
         @click.stop="reuseCourseworkDialog = true">
         <v-icon dark>autorenew</v-icon>
       </v-btn>
     </v-speed-dial>
   </v-fab-transition>
-      <v-tooltip v-if="$store.state.isMobile" left>
-        <v-btn class="grey"
-          slot="activator"
-          on-hover
-          bottom
-          right
-          fixed
-          fab>
-          <v-icon>add</v-icon>
-        </v-btn>
-        <span>Tyvärr kan du inte skapa uppgifter från en mobil ännu.</span>
-      </v-tooltip>
+      <v-btn class="grey"
+        v-if="$store.state.isMobile"
+        slot="activator"
+        @click="$store.commit('showSnackbar', {
+          status: true,
+          value: 'Tyvärr går det inte att publicera uppgifter från mobilen än.',
+          color: 'info',
+          hasLink: false,
+          timeout: 5000,
+        });"
+        on-hover
+        bottom
+        right
+        fixed
+        fab>
+        <v-icon>add</v-icon>
+      </v-btn>
       <v-btn
         flat
         icon
@@ -119,12 +121,6 @@
         </course-picker>
     </v-dialog>
   </div>
-  <v-snackbar
-    :timeout="snackbar.timeout"
-    :color="snackbar.color"
-    v-model="snackbar.status">{{ snackbar.value }}
-    <v-btn dark flat @click.native="$store.commit('hideSnackbar')">Stäng</v-btn>
-  </v-snackbar>
 </div>
 </template>
 
@@ -135,7 +131,6 @@ import AddAssignment from '@/components/AddAssignment';
 import CoursePicker from '@/components/CoursePicker';
 import Search from '@/components/Search';
 import AssignmentCard from '@/components/AssignmentCard';
-import { mapGetters } from 'vuex';
 
 import Grades from '@/api/services/grades';
 import Subjects from '@/api/services/subjects';
@@ -153,6 +148,7 @@ export default {
   data() {
     return {
       assignments: [],
+      recentAssignments: [],
       fab: false,
       subject: '',
       addAssignmentDialog: false,
@@ -167,14 +163,9 @@ export default {
   },
   created() {
     this.getAllAssignments();
+    this.getRecentAssignments();
     this.getGrades();
     this.getSubjects();
-  },
-  computed: {
-    ...mapGetters([
-      'isSignedIn',
-      'snackbar',
-    ]),
   },
   methods: {
     chipPressed(data) {
@@ -187,6 +178,11 @@ export default {
     assignmentPosted(data) {
       this.assignments.push(data);
       this.addAssignmentDialog = false;
+    },
+    getRecentAssignments() {
+      Assignments.getRecent().then((result) => {
+        this.recentAssignments = result.data;
+      });
     },
     getAllAssignments() {
       Assignments.getAll().then((result) => {

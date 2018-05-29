@@ -83,9 +83,11 @@ export default {
       this.showDrivePickerModal = false;
     },
     attachPickedClip(pickedItem) {
+      console.log(pickedItem);
       this.$emit('attach', {
         unionField: 'youtubeVideo',
         title: pickedItem.name,
+        fileId: pickedItem.id,
         alternateLink: pickedItem.url,
         serviceId: pickedItem.serviceId,
       });

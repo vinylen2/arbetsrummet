@@ -5,11 +5,13 @@
       <v-icon :color="'white'">assignment</v-icon>
     </v-flex>
     <v-flex xs8>
-      <p class="author">{{ data.title }}</p>
+      <p class="author">Gabriel Wallén</p>
+      <!-- <p class="author">{{ data.title }}</p> -->
       <!-- <p class="date" v-if="hasSubject"> {{ data.subjects[0].subject }}, åk {{ data.grades[0].grade }}</p> -->
       <p class="date"> {{ date }}</p>
     </v-flex>
     <v-flex xs12 class="pa-3 content">
+      <p class="subheading bold mb-0"> {{data.title}}</p>
       <p>{{ data.description }}</p>
     </v-flex>
     <v-flex xs12>
@@ -37,6 +39,7 @@
       </v-btn>
       <v-tooltip top v-if="!$store.state.isSignedIn">
         <v-btn class="disabled"
+          depressed
           slot="activator">
           <img src="/static/classroom_icon.png" width="20px">
         </v-btn>
@@ -159,6 +162,9 @@ a {
 }
 .author {
   margin: 0 2px 0 4px;
+}
+
+.bold {
   font-weight: bold;
 }
 

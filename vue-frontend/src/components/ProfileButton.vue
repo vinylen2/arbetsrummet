@@ -2,8 +2,7 @@
   <div>
     <v-menu v-model="menu"
       :close-on-content-click="false"
-      :nudge-width="200"
-      nudge-left
+      :nudge-left="5"
       left
       offset-x>
       <div slot="activator">
@@ -12,7 +11,6 @@
           <img :src="$store.state.profile.picture"
             :alt="$store.state.profile.firstName">
         </v-avatar>
-
       </div>
       <v-card>
         <v-list>
@@ -33,7 +31,7 @@
         <v-list>
           <v-list-tile>
             <v-list-tile-action>
-              <v-btn class="text-xs-right"
+              <v-btn
                 @click="logOut">Logga ut
               </v-btn>
             </v-list-tile-action>

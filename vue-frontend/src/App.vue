@@ -35,7 +35,26 @@
       <navbar @drawer="drawer = !drawer"></navbar>
     </v-toolbar>
     <v-content>
+      <v-progress-linear class="ma-0" :color="'light-green lighten-2'"
+        :indeterminate="true"
+        v-if="$store.state.isLoading">
+      </v-progress-linear>
       <router-view></router-view>
+      <v-snackbar
+        :timeout="snackbar.timeout"
+        :color="snackbar.color"
+        v-model="snackbar.status">
+        <div v-if="!snackbar.hasLink">
+          {{snackbar.value}}
+        </div>
+        <div v-else>
+          <a target="_blank"
+            class="white--text"
+            :href="snackbar.linkUrl">{{snackbar.value}}
+          </a>
+        </div>
+        <v-btn dark flat @click.native="$store.commit('hideSnackbar')">Stäng</v-btn>
+      </v-snackbar>
     </v-content>
   </v-app>
 </template>
@@ -44,6 +63,7 @@
 import Vue from 'vue';
 import Navbar from '@/components/Navbar';
 import Info from '@/stores/info';
+import { mapGetters } from 'vuex';
 
 import Vuetify from 'vuetify';
 import('vuetify/dist/vuetify.min.css');
@@ -64,6 +84,11 @@ export default {
       drawer: false,
       appTitle: Info.appTitle,
     };
+  },
+  computed: {
+    ...mapGetters([
+      'snackbar',
+    ]),
   },
   created() {
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {

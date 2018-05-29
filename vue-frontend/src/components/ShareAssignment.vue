@@ -2,11 +2,11 @@
   <div>
     <v-btn
       @click="editAssignment">
-        <v-icon>edit</v-icon>Redigera
+        <v-icon>save_alt</v-icon>Spara uppgift
     </v-btn>
     <v-btn
       @click="shareAssignment">
-      <img src="/static/classroom_icon.png" width="20px"> Dela direkt
+      <img src="/static/classroom_icon.png" width="20px"> Tilldela direkt
     </v-btn>
     <v-dialog
       v-model="isProgressing"
@@ -31,30 +31,66 @@ export default {
   props: [
     'data',
     'courseId',
+    'courseUrl',
   ],
   data() {
     return {
       isProgressing: false,
       progressMessage: '',
       assignmentData: this.data,
-      copiedFiles: [],
+      courseWork: {
+        state: 'PUBLISHED',
+        publishedMessage: 'Uppgiften publicerad.',
+      },
     };
   },
-  created() {
+  computed: {
+    materials() {
+      if (this.assignmentData.materials.length > 0) {
+        return this.assignmentData.materials.map((material) => {
+          switch (material.unionField) {
+            case 'driveFile':
+              return {
+                driveFile: {
+                  driveFile: {
+                    id: material.fileId,
+                    title: material.title,
+                    alternateLink: material.alternateLink,
+                  },
+                  shareMode: material.shareMode,
+                },
+              };
+              break;
+            case 'link':
+              return {
+                link: {
+                  url: material.alternateLink,
+                  title: material.title,
+                },
+              };
+              break;
+            case 'youtubeVideo':
+              return {
+                youtubeVideo: {
+                  id: material.fileId,
+                  title: material.title,
+                  alternateLink: material.alternateLink,
+                }
+              };
+              break;
+            default:
+          }
+
+        })
+      }
+      return null;
+    },
   },
   methods: {
     shareAssignment() {
       this.isProgressing = true;
       this.progressMessage = 'Ansluter till din Drive';
-      gapi.load('client', this.onClientApiLoad);
-    },
-    onClientApiLoad() {
-      gapi.client.init({
-        apiKey: this.$store.state.apiConfig.apiKey,
-        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest', 'https://classroom.googleapis.com/$discovery/rest?version=v1'],
-      }).then(() => {
-        this.copyDriveFiles();
-      });
+      this.copyDriveFiles();
     },
     copyDriveFiles() {
       this.progressMessage = 'Kopierar filer';
@@ -71,35 +107,54 @@ export default {
 
       this.data.materials.forEach((material) => {
         if (material.unionField === 'driveFile') {
-          batch.add(copyRequest(material));
+          batch.add(copyRequest(material), {id: material.id});
         }
       });
 
-      batch.execute((res) => {
-        this.copedFiles = res;
+      batch.execute((result) => {
+        this.assignmentData.materials.forEach((material) => {
+          if (material.unionField === 'driveFile') {
+            material.fileId = result[material.id].result.id;
+          }
+        });
         this.createAssignment();
       });
     },
     createAssignment() {
       this.progressMessage = 'Skapar uppgift';
-      const body = {
+      gapi.client.classroom.courses.courseWork.create({
+        courseId: this.courseId,
         title: this.data.title,
+        description: this.data.description,
         workType: 'ASSIGNMENT',
-        state: 'DRAFT',
-      };
-      // gapi.client.classroom.courses.courseWork.create({
-      //   courseId: this.courseId,
-      //   body,
-      // }).then((result) => {
-      //   console.log(result);
-      // });
+        state: this.courseWork.state,
+        materials: this.materials,
+      }).then((result) => {
+        this.cancel();
+        this.close();
+        this.$store.commit('showSnackbar', {
+          status: true,
+          value: this.courseWork.publishedMessage,
+          color: 'success',
+          hasLink: true,
+          linkUrl: this.courseUrl,
+          timeout: 5000,
+        });
+      });
     },
     editAssignment() {
-
+      this.courseWork.state = 'DRAFT';
+      this.courseWork.publishedMessage = 'Uppgiften sparad.';
+      this.shareAssignment();
     },
     cancel() {
-      //stuff
-      this.isProgressing = false;
+      this.progressMessage = 'Avslutar...';
+      setTimeout(() => {
+        this.isProgressing = false;
+      }, 500);
+    },
+    close() {
+      this.$emit('close');
     },
   },
 };

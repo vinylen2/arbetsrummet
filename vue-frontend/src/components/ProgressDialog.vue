@@ -4,10 +4,11 @@
     <v-flex xs12 text-xs-center>
         <h1 class="headline pa-1">Ett ögonblick...</h1>
     </v-flex>
+    <v-flex xs1></v-flex>
     <v-flex xs4 class="pl-2">
       <v-progress-circular :size="70" indeterminate color="green"></v-progress-circular>
     </v-flex>
-    <v-flex xs8 class="pl-2">
+    <v-flex xs7 class="pl-2">
       <h2 class="subheading align">{{ message }}</h2>
     </v-flex>
     <v-flex xs12 text-xs-center>

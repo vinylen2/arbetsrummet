@@ -23,11 +23,13 @@
       :data="data"
       :action="'share-assignment'"
       :search="search"
+      @close="close"
       @selected="coursePicked">
     </course-table>
     <div v-if="table === 'courseworks'">
       <course-table
         :action="action"
+        @close="close"
         v-if="!pickingCourseWorks"
         @selected="coursePicked">
       </course-table>
