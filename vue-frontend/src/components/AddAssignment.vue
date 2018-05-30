@@ -52,7 +52,7 @@
           :key="material.id"
           :materialData="material"
           @removeMaterial="removeMaterial"
-          :type="'edit'">
+          :edit="true">
         </material>
       </v-flex>
       <v-flex xs3 class="buttons">

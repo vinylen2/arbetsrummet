@@ -22,7 +22,7 @@
         </assignment-list>
       </v-flex>
     </v-layout>
-    <v-container grid-list-md text-xs-center class="wrapper">
+    <v-container grid-list-md text-xs-center class="mt-3">
       <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
           <assignment-card :data="assignment"
@@ -223,10 +223,6 @@ a {
 .content {
   min-height: 800px;
   color: grey;
-}
-
-.wrapper {
-  margin-top: 20px;
 }
 
 #create .speed-dial {

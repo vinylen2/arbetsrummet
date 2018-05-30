@@ -25,7 +25,7 @@
               </div>
             </a>
           </v-flex>
-          <v-flex xs3>
+          <v-flex xs3 v-if="edit">
             <v-select v-model="shareMode"
               v-if="unionField === 'driveFile'"
               :items="shareModes"
@@ -34,9 +34,14 @@
               item-value="enum">
             </v-select>
           </v-flex>
-          <v-flex xs1 class="thumbnail text-xs-right">
+          <v-flex xs1 class="thumbnail text-xs-right"
+            v-if="edit">
             <v-icon class="attach-button"
               @click="removeMaterial">clear</v-icon>
+          </v-flex>
+          <v-flex xs1 v-else></v-flex>
+          <v-flex xs3 v-if="!edit && unionField === 'driveFile'">
+            {{materialData.shareMode}}
           </v-flex>
         </v-layout>
     </v-container>
@@ -50,6 +55,7 @@ export default {
   name: 'material',
   props: [
       'materialData',
+      'edit',
   ],
   computed: {
     swedishType() {
