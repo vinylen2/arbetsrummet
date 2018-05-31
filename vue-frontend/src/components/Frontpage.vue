@@ -25,7 +25,7 @@
     <v-container grid-list-md text-xs-center class="mt-3">
       <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="assignment in assignments" :key="assignment.id">
-          <assignment-card :data="assignment"
+          <assignment-card :assignment="assignment"
             @chipPressed="chipPressed"></assignment-card>
         </v-flex>
         <v-flex xs12 v-if="assignments.length === 0">

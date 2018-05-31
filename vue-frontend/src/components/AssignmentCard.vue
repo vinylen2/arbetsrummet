@@ -6,29 +6,32 @@
     </v-flex>
     <v-flex xs8>
       <p class="author">Gabriel Wallén</p>
-      <!-- <p class="author">{{ data.title }}</p> -->
-      <!-- <p class="date" v-if="hasSubject"> {{ data.subjects[0].subject }}, åk {{ data.grades[0].grade }}</p> -->
-      <p class="date"> {{ date }}</p>
+      <p class="date"> {{ date(assignment.createdAt) }}</p>
     </v-flex>
     <v-flex xs12 class="pa-3 content">
-      <p class="subheading bold mb-0"> {{data.title}}</p>
-      <p>{{ data.description }}</p>
+      <p class="subheading bold mb-0"> {{assignment.title}}</p>
+      <p>{{ assignment.description }}</p>
     </v-flex>
     <v-flex xs12>
       <v-chip class="cursor"
+        v-if="hasSubject"
         :color="color"
         text-color="white"
-        @click="chipPressed('subject', data.subjects[0])">{{ data.subjects[0].subject }}
+        @click="chipPressed('subject', assignment.subjects[0])">{{ assignment.subjects[0].subject }}
       </v-chip>
       <v-chip class="cursor"
-        @click="chipPressed('grade', data.grades[0])">{{ data.grades[0].grade }}
+        v-if="hasGrade"
+        @click="chipPressed('grade', assignment.grades[0])">{{ assignment.grades[0].grade }}
       </v-chip>
+      <div class="noChips"
+        v-else>
+      </div>
     </v-flex>
     <v-flex xs4>
       <v-btn
         light
         depressed
-        :to="{ name: 'assignment', params: { id: data.id }}">Läs mer
+        :to="{ name: 'assignment', params: { id: assignment.id }}">Läs mer
       </v-btn>
     </v-flex>
     <v-flex xs4>
@@ -48,7 +51,7 @@
       <v-dialog v-model="shareToClassroomModal"
         :lazy="true">
         <course-picker
-          :data="data"
+          :assignment="assignment"
           :options="coursePickerOptions"
           @close="shareToClassroomModal = false">
         </course-picker>
@@ -60,8 +63,8 @@
     </v-flex>
     <v-slide-y-transition>
       <v-flex xs12 class="pa-3" v-if="showAttachments && anyMaterials">
-        <div v-if="data.materials.length > 0"
-          v-for="material in data.materials">
+        <div v-if="assignment.materials.length > 0"
+          v-for="material in assignment.materials">
           <a class="material-link"
             :href="material.alternateLink"
             target="_blank">
@@ -81,12 +84,12 @@
 <script>
 import Assignments from "@/api/services/assignments";
 import CoursePicker from '@/components/CoursePicker';
-import moment from 'moment';
-moment.locale('sv');
+import assignmentHelpers from '@/assets/assignmentHelpers.js';
 
 export default {
   name: "assignment-card",
-  props: ['data'],
+  props: ['assignment'],
+  mixins: [assignmentHelpers],
   components: {
     CoursePicker,
   },
@@ -110,30 +113,11 @@ export default {
     },
   },
   computed: {
-    date() {
-      return moment(this.data.createdAt).format('D MMM YYYY');
-    },
-    hasSubject() {
-      return (( _.has(this.data, 'subjects') && this.data.subjects.length > 0 ) ? this.data.subjects[0] : null);
-    },
-    color() {
-      if (this.hasSubject) {
-        return this.data.subjects[0].color;
-      }
-      return 'grey';
-    },
     anyMaterials() {
-      if (this.data.materials.length > 0) {
+      if (this.assignment.materials.length > 0) {
         return true;
       }
       return false;
-    },
-    author() {
-      const author = (( _.has(this.data, 'authors') && this.data.authors.length > 0 ) ? this.data.authors[0] : null);
-      if (author) {
-        return author.fullName;
-      }
-      return 'Anonym';
     },
   },
 };
@@ -203,4 +187,10 @@ a {
       -ms-filter: grayscale(100%);
           filter: grayscale(100%);
 }
+
+.noChips {
+  height: 42px;
+}
+
+
 </style>

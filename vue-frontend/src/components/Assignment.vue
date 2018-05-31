@@ -7,7 +7,7 @@
       </div>
       <v-flex xs10 class="pl-3 test">
         <div class="body-2">Författare</div>
-        <div> {{ date }}</div>
+        <div> {{ date(assignment.createdAt) }}</div>
       </v-flex>
       <v-flex xs1 text-xs-right>
         <v-menu offset-y
@@ -81,10 +81,11 @@
 import Assignments from '@/api/services/assignments';
 import Material from '@/components/Material';
 import CoursePicker from '@/components/CoursePicker';
-import moment from 'moment';
+import assignmentHelpers from '@/assets/assignmentHelpers.js';
 
 export default {
   name: 'assignment',
+  mixins: [assignmentHelpers],
   components: {
     Material,
     CoursePicker,
@@ -112,18 +113,6 @@ export default {
       // }
       // return false;
       return true;
-    },
-    date() {
-      return moment(this.assignment.createdAt).format('D MMM YYYY');
-    },
-    hasSubject() {
-      return (( _.has(this.assignment, 'subjects') && this.assignment.subjects.length > 0 ) ? this.assignment.subjects[0] : null);
-    },
-    color() {
-      if (this.hasSubject) {
-        return this.assignment.subjects[0].color;
-      }
-      return 'grey';
     },
   },
   methods: {

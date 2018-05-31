@@ -20,7 +20,7 @@
     </v-card-title>
     <course-table
       v-if="table === 'courses'"
-      :data="data"
+      :assignment="assignment"
       :action="'share-assignment'"
       :search="search"
       @close="close"
@@ -53,7 +53,7 @@ export default {
     CourseWorkTable,
   },
   props: [
-    'data',
+    'assignment',
     'options',
   ],
   data() {

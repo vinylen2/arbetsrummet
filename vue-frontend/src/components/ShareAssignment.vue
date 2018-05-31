@@ -22,6 +22,7 @@
 
 <script>
 import ProgressDialog from '@/components/ProgressDialog';
+import _ from 'lodash';
 
 export default {
   name:'share-assignment',
@@ -29,7 +30,7 @@ export default {
     ProgressDialog,
   },
   props: [
-    'data',
+    'assignment',
     'courseId',
     'courseUrl',
   ],
@@ -37,7 +38,7 @@ export default {
     return {
       isProgressing: false,
       progressMessage: '',
-      assignmentData: this.data,
+      assignmentData: this.assignment,
       courseWork: {
         state: 'PUBLISHED',
         publishedMessage: 'Uppgiften publicerad.',
@@ -90,7 +91,11 @@ export default {
     shareAssignment() {
       this.isProgressing = true;
       this.progressMessage = 'Ansluter till din Drive';
-      this.copyDriveFiles();
+      if (_.some(this.assignment.materials, {unionField: 'driveFile'})) {
+        this.copyDriveFiles();
+      } else {
+        this.createAssignment();
+      }
     },
     copyDriveFiles() {
       this.progressMessage = 'Kopierar filer';
@@ -105,7 +110,7 @@ export default {
         });
       }
 
-      this.data.materials.forEach((material) => {
+      this.assignment.materials.forEach((material) => {
         if (material.unionField === 'driveFile') {
           batch.add(copyRequest(material), {id: material.id});
         }
@@ -124,8 +129,8 @@ export default {
       this.progressMessage = 'Skapar uppgift';
       gapi.client.classroom.courses.courseWork.create({
         courseId: this.courseId,
-        title: this.data.title,
-        description: this.data.description,
+        title: this.assignment.title,
+        description: this.assignment.description,
         workType: 'ASSIGNMENT',
         state: this.courseWork.state,
         materials: this.materials,
@@ -151,7 +156,7 @@ export default {
       this.progressMessage = 'Avslutar...';
       setTimeout(() => {
         this.isProgressing = false;
-      }, 500);
+      }, 200);
     },
     close() {
       this.$emit('close');

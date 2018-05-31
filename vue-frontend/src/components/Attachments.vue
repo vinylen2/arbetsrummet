@@ -83,13 +83,14 @@ export default {
       this.showDrivePickerModal = false;
     },
     attachPickedClip(pickedItem) {
-      console.log(pickedItem);
+      const id = pickedItem.url.split('=')[1];
       this.$emit('attach', {
         unionField: 'youtubeVideo',
         title: pickedItem.name,
-        fileId: pickedItem.id,
+        fileId: id,
         alternateLink: pickedItem.url,
         serviceId: pickedItem.serviceId,
+        // thumbnailUrl: pickedItem.thumbnails[0].url,
       });
       this.showYoutubePickerModal = false;
     },

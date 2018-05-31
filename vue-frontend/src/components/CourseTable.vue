@@ -27,7 +27,7 @@
       <td colspan="100%">
         <share-assignment v-if="action === 'share-assignment'"
           @close="close"
-          :data="data"
+          :assignment="assignment"
           :courseUrl="this.selected[0].alternateLink"
           :courseId="this.selected[0].id">
         </share-assignment>
@@ -50,7 +50,7 @@ export default {
     ShareAssignment,
   },
   props: [
-    'data',
+    'assignment',
     'action',
     'search',
   ],
