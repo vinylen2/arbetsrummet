@@ -6,19 +6,21 @@
         <v-icon :color="'white'">assignment</v-icon>
       </div>
       <v-flex xs10 class="pl-3 test">
-        <div class="body-2">Författare</div>
+        <div class="body-2">{{author}}</div>
         <div> {{ date(assignment.createdAt) }}</div>
       </v-flex>
       <v-flex xs1 text-xs-right>
-        <v-menu offset-y
-          v-if="editRights">
-          <v-btn icon slot="activator">
-            <v-icon class="cursor"
-              slot="activator">more_vert
-            </v-icon>
-          </v-btn>
+        <v-menu offset-y left>
+          <v-icon class="cursor mt-3"
+            v-if="editRights"
+            slot="activator">more_vert
+          </v-icon>
           <v-list>
-            <v-list-tile @click="edit">Redigera</v-list-tile>
+            <v-list-tile @click="edit">
+              <v-list-tile-title>
+                Redigera
+              </v-list-tile-title>
+            </v-list-tile>
           </v-list>
         </v-menu>
       </v-flex>
@@ -30,9 +32,9 @@
       </v-flex>
       <v-flex xs12 class="pa-3">
         <div class="subheading">Instruktion till eleven</div>
-        <div>Det som visas här är informationen som skrivs över till Classroom</div>
+        <div>{{ assignment.instruction }}</div>
       </v-flex>
-      <v-flex xs10 class="pl-3"
+      <v-flex xs8 class="pl-3"
         v-if="!$store.state.isLoading">
         <v-chip class="cursor"
           :color="color"
@@ -41,7 +43,7 @@
         <v-chip class="cursor">{{ assignment.grades[0].grade }}
         </v-chip>
       </v-flex>
-      <v-flex xs2 text-xs-right>
+      <v-flex xs4 text-xs-right>
         <v-btn v-if="$store.state.isSignedIn"
           depressed
           @click="shareToClassroomModal = true">
@@ -108,11 +110,12 @@ export default {
   },
   computed: {
     editRights() {
-      // if (this.$store.profile.email === this.assignment.authors[0].email) {
-      //   return true;
-      // }
-      // return false;
-      return true;
+      if (this.hasAuthor) {
+        if (this.$store.state.profile.email === this.assignment.authors[0].email) {
+          return true;
+        }
+      }
+      return false;
     },
   },
   methods: {
@@ -170,12 +173,12 @@ a {
   border: none;
 }
 
-.show-button {
+.cursor {
   cursor: pointer;
 }
 
-.show-button:hover {
-  color: lightgrey;
+.cursor:hover {
+  color: black;
 }
 
 .material-link {

@@ -118,6 +118,9 @@ export default {
       },
     };
   },
+  created() {
+    this.resetPublishData();
+  },
   computed: {
     headerColor() {
       const subjectColor = this.publishData.subject.color;
@@ -138,7 +141,7 @@ export default {
         materials: [],
         author: {
           firstName: this.$store.state.profile.firstName,
-          lastName: this.$store.state.profile.firstName,
+          lastName: this.$store.state.profile.lastName,
           email: this.$store.state.profile.email,
         }
       };

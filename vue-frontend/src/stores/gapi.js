@@ -17,4 +17,4 @@ export default {
       name: 'Dela inte vidare till classroom.',
     },
   ],
-}
+};

@@ -20,12 +20,19 @@ export default {
       }
       return 'grey';
     },
+    hasAuthor() {
+      const author = (( _.has(this.assignment, 'authors') && this.assignment.authors.length > 0 ) ? this.assignment.authors[0] : null);
+      if (author) {
+        return true;
+      }
+      return false;
+    },
     author() {
       const author = (( _.has(this.assignment, 'authors') && this.assignment.authors.length > 0 ) ? this.assignment.authors[0] : null);
       if (author) {
         return author.fullName;
       }
-      return 'Anonym';
+      return 'Ingen författare';
     },
     hasColor() {
       if (this.hasSubject) {

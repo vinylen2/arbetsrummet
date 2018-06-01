@@ -5,7 +5,7 @@
       <v-icon :color="'white'">assignment</v-icon>
     </v-flex>
     <v-flex xs8>
-      <p class="author">Gabriel Wallén</p>
+      <p class="author">{{ author }}</p>
       <p class="date"> {{ date(assignment.createdAt) }}</p>
     </v-flex>
     <v-flex xs12 class="pa-3 content">
