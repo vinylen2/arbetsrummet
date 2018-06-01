@@ -17,16 +17,28 @@
       </v-layout>
     </v-container>
   </v-card-title>
-  <v-container grid-list-md text-xs-center>
-    <v-layout row wrap>
+  <v-container grid-list-md text-xs-left>
+    <v-layout row wrap class="mx-2 mb-2">
       <v-flex xs12 class="form">
         <form>
           <v-text-field v-model="publishData.title"
+            required
             label="Titel">
           </v-text-field>
           <v-text-field v-model="publishData.description"
-            label="Beskrivning">
+            required
+            auto-grow
+            multi-line
+            rows="1"
+            label="Beskrivning (visas endast i Arbetsrummet)">
           </v-text-field>
+          <v-text-field v-model="publishData.instructions"
+            auto-grow
+            multi-line
+            rows="1"
+            label="Instruktioner (visas för elever i Classroom)">
+          </v-text-field>
+          <small>fält markerade med * är obligatoriska.</small>
         </form>
       </v-flex>
       <v-flex xs6 class="subjects">
@@ -98,6 +110,7 @@ export default {
       publishData: {
         title: '',
         description: '',
+        instructions: '',
         subject: '',
         fileId: '',
         grades: [],

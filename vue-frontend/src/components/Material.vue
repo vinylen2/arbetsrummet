@@ -9,28 +9,27 @@
                 <v-icon v-else-if="serviceId === 'spread'" color="green darken-2">mdi-file-document-box</v-icon>
                 <v-icon v-else>attach_file</v-icon>
           </v-flex>
-          <v-flex xs2 class="thumbnail pa-0"
+          <v-flex xs1 class="thumbnail pa-0"
             v-else>
               <v-icon v-if="serviceId === 'web'" color="red darken-2">mdi-youtube-play</v-icon>
               <v-icon v-else>link</v-icon>
           </v-flex>
-          <v-flex xs6 class="pa-1">
+          <v-flex xs5 class="pa-1">
             <a :href="alternateLink"
               target="_blank">
               <div>
-                <div class="title" style="padding: 10px 0 5px 0">{{ formattedTitle }}</div>
-                <p v-if="unionField === 'driveFile'">{{ swedishType }}</p>
-                <p v-else-if="unionField === 'video'">Youtube-klipp</p>
-                <p v-else-if="unionField === 'link'"> {{ alternateLink }} </p>
+                <div class="subheading" style="padding: 10px 0 5px 0">{{ formattedTitle }}</div>
+                <div v-if="unionField === 'driveFile'">{{ swedishType }}</div>
+                <div v-else-if="unionField === 'video'">Youtube-klipp</div>
+                <div v-else-if="unionField === 'link'"> {{ alternateLink }} </div>
               </div>
             </a>
           </v-flex>
-          <v-flex xs3 v-if="edit">
+          <v-flex xs4 v-if="edit">
             <v-select v-model="shareMode"
               v-if="unionField === 'driveFile'"
               :items="shareModes"
               item-text="name"
-              :auto="true"
               item-value="enum">
             </v-select>
           </v-flex>

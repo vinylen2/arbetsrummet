@@ -102,7 +102,7 @@
     </div>
     <v-dialog v-model="addAssignmentDialog"
       :lazy="true"
-      max-width="600px"
+      max-width="760px"
       height="auto"
       persistent>
         <add-assignment
