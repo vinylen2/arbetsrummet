@@ -69,7 +69,18 @@ async function postAssignment(ctx) {
   });
 
   if (author) {
-    // findOrCreate Author here
+    const sequelizeAuthor = await Author.findOrCreate({
+      where: {
+        email: author.email, 
+      },
+      defaults: {
+        firstname: author.firstName,
+        lastname: author.lastName,
+        email: author.email,
+      },
+    });
+    assignment.setAuthors(sequelizeAuthor);
+    assignment.dataValues.authors = _.flattenDeep(sequelizeAuthor);
   }
 
   if (grades) {
@@ -109,8 +120,7 @@ async function postAssignment(ctx) {
   ctx.body = {
     data: assignment,
   };
-
-
+  console.log(ctx.request.body);
 }
 
 async function searchAssignments(ctx) {
