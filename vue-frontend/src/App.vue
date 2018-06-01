@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" footer>
     <v-navigation-drawer
       fixed
       v-model="drawer"
@@ -31,11 +31,11 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed app color="light-green">
+    <v-toolbar fixed app color="green">
       <navbar @drawer="drawer = !drawer"></navbar>
     </v-toolbar>
     <v-content>
-      <v-progress-linear class="ma-0" :color="'light-green lighten-2'"
+      <v-progress-linear class="ma-0" :color="'green lighten-2'"
         :indeterminate="true"
         v-if="$store.state.isLoading">
       </v-progress-linear>
@@ -56,12 +56,16 @@
         <v-btn dark flat @click.native="$store.commit('hideSnackbar')">Stäng</v-btn>
       </v-snackbar>
     </v-content>
+    <v-footer height="auto" class="mt-4">
+      <footer-content></footer-content>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
 import Vue from 'vue';
 import Navbar from '@/components/Navbar';
+import FooterContent from '@/components/FooterContent';
 import Info from '@/stores/info';
 import { mapGetters } from 'vuex';
 
@@ -77,6 +81,7 @@ Vue.use(VueGAPI, gapiConfig);
 export default {
   components: {
     Navbar,
+    FooterContent,
   },
   name: 'app',
   data() {

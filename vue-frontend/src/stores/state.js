@@ -69,7 +69,6 @@ export default new Vuex.Store({
       state.isSignedIn = data;
     },
     setProfile: (state, data) => {
-      console.log('setting profile');
       state.profile.firstName = data.ofa;
       state.profile.lastName = data.wea;
       state.profile.fullName = data.ig;

@@ -7,6 +7,7 @@
     :loading="isLoading"
     v-model="selected"
     item-key="name"
+    hide-actions
     class="elevation-1"
     >
     <v-progress-linear slot="progress" color="light-green" indeterminate></v-progress-linear>
@@ -20,7 +21,7 @@
         ></v-checkbox>
       </td>
       <td>{{ props.item.name }}</td>
-      <td>{{ props.item.section }} </td>
+      <!-- <td>{{ props.item.section }} </td> -->
       <td>{{ formatDate(props.item.creationTime) }} </td>
     </template>
     <template slot="footer" v-if="this.selected.length > 0">
@@ -43,7 +44,6 @@
 import ShareAssignment from '@/components/ShareAssignment';
 import moment from 'moment';
 moment.locale('sv');
-
 export default {
   name: 'course-table',
   components: {
@@ -72,12 +72,12 @@ export default {
           sortable: true,
           value: 'name',
         },
-        {
-          text: 'Beskrivning',
-          align: 'left',
-          sortable: false,
-          value: 'description',
-        },
+        // {
+        //   text: 'Beskrivning',
+        //   align: 'left',
+        //   sortable: false,
+        //   value: 'description',
+        // },
         {
           text: 'Skapad den',
           align: 'left',
@@ -114,7 +114,6 @@ export default {
   },
   methods: {
     assignmentSelected() {
-
     },
     close() {
       this.$emit('close');
@@ -137,8 +136,6 @@ export default {
     },
   },
 };
-
-
 </script>
 
 
@@ -147,15 +144,12 @@ export default {
 .header {
   background-color: #aed581;
 }
-
 .cursor {
   cursor: pointer;
 }
-
 .cursor:hover {
   color: lightgrey;
 }
-
 .padding {
   padding: 0 25px 0 25px;
 }

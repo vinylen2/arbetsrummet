@@ -1,23 +1,44 @@
 <template>
   <v-card>
-    <v-card-title class="header white--text px-4">
+    <v-toolbar color="green lighten-2 hidden-xs-only py-3">
       <v-icon v-if="pickingCourseWorks"
         @click="pickingCourseWorks = false"
         :color="'white'"
         class="cursor pr-3">arrow_back
       </v-icon>
-      <h2> {{ this.title }} </h2>
+      <v-toolbar-title class="white--text">{{this.title}}</v-toolbar-title>
       <v-spacer></v-spacer>
-        <v-text-field
-          color="white"
-          v-model="search"
-          append-icon="search"
-          label="Sök..."
-      ></v-text-field>
+      <v-text-field
+        color="white"
+        v-model="search"
+        append-icon="search"
+        label="Sök...">
+      </v-text-field>
       <v-icon @click="close"
         :color="'white'"
-        class="cursor pl-4">clear</v-icon>
-    </v-card-title>
+        class="cursor pl-4">clear
+      </v-icon>
+    </v-toolbar>
+    <v-toolbar color="green lighten-2 hidden-sm-and-up">
+      <v-icon v-if="pickingCourseWorks"
+        @click="pickingCourseWorks = false"
+        :color="'white'"
+        class="cursor pr-3">arrow_back
+      </v-icon>
+      <v-toolbar-title class="white--text">{{this.title}}</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-text-field
+        slot="extension"
+        color="white"
+        v-model="search"
+        append-icon="search"
+        label="Sök...">
+      </v-text-field>
+      <v-icon @click="close"
+        :color="'white'"
+        class="cursor pl-4">clear
+      </v-icon>
+    </v-toolbar>
     <course-table
       v-if="table === 'courses'"
       :assignment="assignment"
@@ -85,11 +106,6 @@ export default {
 
 
 <style scoped>
-.header {
-  background-color: #aed581;
-  padding: 0;
-}
-
 .cursor {
   cursor: pointer;
 }

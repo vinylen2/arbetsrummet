@@ -1,8 +1,12 @@
 <template>
   <div>
-    <v-btn color="error"
+    <v-btn color="error hidden-xs-only"
       @click="logIn">
       Logga in
+    </v-btn>
+    <v-btn icon color="error hidden-sm-and-up" ripple
+      @click="logIn">
+      <v-icon>mdi-google</v-icon>
     </v-btn>
   </div>
 </template>

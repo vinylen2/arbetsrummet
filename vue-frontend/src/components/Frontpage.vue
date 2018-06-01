@@ -2,7 +2,7 @@
 <div>
   <div class="frontpage" v-if="!$store.state.isLoading">
     <v-slide-y-transition>
-      <div class="light-green lighten-2 search-bar"
+      <div class="green lighten-2 search-bar"
         v-show="$store.state.showSearch">
           <search @addResult="addSearchResults"
             :chipPressValue="chipPressValue"></search>
@@ -68,37 +68,38 @@
       </v-btn>
     </v-speed-dial>
   </v-fab-transition>
-      <v-btn class="grey"
-        v-if="$store.state.isMobile"
-        slot="activator"
-        @click="$store.commit('showSnackbar', {
-          status: true,
-          value: 'Tyvärr går det inte att publicera uppgifter från mobilen än.',
-          color: 'info',
-          hasLink: false,
-          timeout: 5000,
-        });"
-        on-hover
-        bottom
-        right
-        fixed
-        fab>
-        <v-icon>add</v-icon>
-      </v-btn>
-      <v-btn
-        flat
-        icon
-        bottom
-        left
-        fixed
-        @click="$store.commit('showSnackbar', {
-          status: true,
-          value: 'Den här hjälpknappen är inte aktiv.',
-          color: 'error',
-          timeout: 5000,
-        });">
-        <v-icon dark>help</v-icon>
-      </v-btn>
+  <v-btn class="grey"
+    v-if="$store.state.isMobile"
+    slot="activator"
+    @click="$store.commit('showSnackbar', {
+      status: true,
+      value: 'Tyvärr går det inte att publicera uppgifter från mobilen än.',
+      color: 'info',
+      hasLink: false,
+      timeout: 5000,
+    });"
+    on-hover
+    bottom
+    right
+    fixed
+    fab>
+    <v-icon>add</v-icon>
+  </v-btn>
+  <v-btn
+    flat
+    fab
+    icon
+    bottom
+    left
+    fixed
+    @click="$store.commit('showSnackbar', {
+      status: true,
+      value: 'Den här hjälpknappen är inte aktiv.',
+      color: 'error',
+      timeout: 5000,
+    });">
+    <v-icon dark>help</v-icon>
+  </v-btn>
     </div>
     <v-dialog v-model="addAssignmentDialog"
       :lazy="true"
@@ -131,11 +132,8 @@ import AddAssignment from '@/components/AddAssignment';
 import CoursePicker from '@/components/CoursePicker';
 import Search from '@/components/Search';
 import AssignmentCard from '@/components/AssignmentCard';
-
 import Grades from '@/api/services/grades';
 import Subjects from '@/api/services/subjects';
-
-
 export default {
   name: 'frontpage',
   components: {
@@ -219,16 +217,13 @@ li {
 a {
   color: #42b983;
 }
-
 .content {
   min-height: 800px;
   color: grey;
 }
-
 #create .speed-dial {
   position: absolute;
 }
-
 #create .btn--floating {
   position: relative;
 }

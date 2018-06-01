@@ -37,7 +37,7 @@
     <v-flex xs4>
       <v-btn v-if="$store.state.isSignedIn"
         depressed
-        @click="shareToClassroomModal = true">
+        @click="toggleSharingModal">
         <img src="/static/classroom_icon.png" width="20px">
       </v-btn>
       <v-tooltip top v-if="!$store.state.isSignedIn">
@@ -54,6 +54,18 @@
           :assignment="assignment"
           :options="coursePickerOptions"
           @close="shareToClassroomModal = false">
+        </course-picker>
+      </v-dialog>
+      <v-dialog v-model="shareToClassroomModalMobile"
+        hide-overlay
+        fullscreen
+        transition="dialog-bottom-transition"
+        scrollable
+        :lazy="true">
+        <course-picker
+          :assignment="assignment"
+          :options="coursePickerOptions"
+          @close="shareToClassroomModalMobile = false">
         </course-picker>
       </v-dialog>
     </v-flex>
@@ -96,6 +108,7 @@ export default {
   data() {
     return {
       shareToClassroomModal: false,
+      shareToClassroomModalMobile: false,
       showAttachments: false,
       coursePickerOptions: {
         title: 'Dela uppgift',
@@ -105,6 +118,13 @@ export default {
     };
   },
   methods: {
+    toggleSharingModal() {
+      if (this.$store.state.isMobile) {
+        this.shareToClassroomModalMobile = true;
+      } else {
+        this.shareToClassroomModal = true;
+      }
+    },
     chipPressed(type, data) {
       this.$emit('chipPressed', {
         data: data,

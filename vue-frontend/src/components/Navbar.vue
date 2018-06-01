@@ -1,5 +1,5 @@
 <template>
-<v-toolbar flat dark color="light-green">
+<v-toolbar flat dark color="green lighten-1 px-0-sm mx-0">
   <v-toolbar-side-icon @click="drawer"></v-toolbar-side-icon>
   <v-toolbar-title class="white--text hover"
     @click="$router.push('/')">{{ appTitle }}
@@ -16,9 +16,6 @@
     <v-icon slot="divider">chevron_right</v-icon>
   </v-toolbar-title>
   <v-spacer></v-spacer>
-  <!-- <v-btn icon>
-    <v-icon>refresh</v-icon>
-  </v-btn> -->
   <login-button v-if="!$store.state.isSignedIn">
   </login-button>
   <profile-button v-else></profile-button>

@@ -9,7 +9,7 @@
     item-key="name"
     class="elevation-1"
     >
-    <v-progress-linear slot="progress" color="light-green" indeterminate></v-progress-linear>
+    <v-progress-linear slot="progress" color="green" indeterminate></v-progress-linear>
     <template slot="items" slot-scope="props">
       <td>
         <v-checkbox
