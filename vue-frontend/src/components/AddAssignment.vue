@@ -221,10 +221,8 @@ export default {
           color: 'success',
           timeout: 5000,
         });
-        setTimeout(() => {
-          this.$emit('assignmentPosted', result.data);
-          this.resetPublishData();
-        }, 1000);
+        this.$emit('assignmentPosted', result.data);
+        this.resetPublishData();
       });
     },
   },

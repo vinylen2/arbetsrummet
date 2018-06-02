@@ -3,7 +3,7 @@
     <v-container grid-list-md text-xs-left class="pa-0">
         <v-layout row wrap>
           <div class="thumbnail pa-0"
-            v-if="unionField ==='driveFile'">
+            v-if="unionField === 'driveFile'">
                 <v-icon v-if="serviceId === 'pres'" color="yellow darken-2">mdi-file-presentation-box</v-icon>
                 <v-icon v-else-if="serviceId === 'doc'" color="blue darken-2">mdi-file-document-box</v-icon>
                 <v-icon v-else-if="serviceId === 'spread'" color="green darken-2">mdi-file-document-box</v-icon>

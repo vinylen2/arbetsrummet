@@ -32,7 +32,7 @@
       </v-flex>
       <v-flex xs12 class="pa-3">
         <div class="subheading">Instruktion till eleven</div>
-        <div>{{ assignment.instruction }}</div>
+        <div>{{ assignment.instructions }}</div>
       </v-flex>
       <v-flex xs8 class="pl-3"
         v-if="!$store.state.isLoading">

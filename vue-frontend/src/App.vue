@@ -2,7 +2,7 @@
   <v-app id="app" footer>
     <v-navigation-drawer
       fixed
-      disable-resize-watcher="true"
+      :disable-resize-watcher="true"
       v-model="drawer"
       app>
       <v-list dense>
@@ -56,10 +56,10 @@
         </div>
         <v-btn dark flat @click.native="$store.commit('hideSnackbar')">Stäng</v-btn>
       </v-snackbar>
+    </v-content>
     <v-footer height="auto" class="mt-4">
       <footer-content></footer-content>
     </v-footer>
-    </v-content>
   </v-app>
 </template>
 
