@@ -28,8 +28,7 @@ export default {
       return false;
     },
     author() {
-      const author = (( _.has(this.assignment, 'authors') && this.assignment.authors.length > 0 ) ? this.assignment.authors[0] : null);
-      if (author) {
+      if (this.hasAuthor) {
         return author.fullName;
       }
       return 'Ingen författare';

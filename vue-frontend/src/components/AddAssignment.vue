@@ -64,6 +64,7 @@
           :key="material.id"
           :materialData="material"
           @removeMaterial="removeMaterial"
+          @changeShareMode="changeShareMode"
           :edit="true">
         </material>
       </v-flex>
@@ -131,6 +132,10 @@ export default {
     },
   },
   methods: {
+    changeShareMode(data) {
+      const index = _.findIndex(this.publishData.materials, { fileId: data.fileId });
+      this.publishData.materials[index].shareMode = data.shareMode;
+    },
     resetPublishData() {
       this.publishData = {
         title: '',
@@ -201,6 +206,11 @@ export default {
     },
     postAssignment() {
       this.progressMessage = 'Publicerar uppgift till lärarrummet';
+      this.publishData.materials.forEach((material) => {
+        if (!material.shareMode) {
+          material.shareMode = 'VIEW';
+        }
+      });
       Assignments.post(this.publishData).then((result) => {
         // graphic for successful or failed post
         this.isProgressing = false;

@@ -36,18 +36,19 @@
     <div>
   <v-fab-transition>
     <v-speed-dial
-      class="hidden-xs-only"
+      class="hidden-xs-only z-index"
       v-if="$store.state.isSignedIn"
       v-model="fab"
       :direction="'top'"
       bottom
+      fab
       right
       fixed
       :transition="'slide-y-reverse-transition'">
       <v-btn color="primary"
         v-if="!$store.state.isMobile"
-        fab
         slot="activator"
+        fab
         v-model="fab">
         <v-icon dark>add</v-icon>
         <v-icon dark>close</v-icon>
@@ -226,5 +227,9 @@ a {
 }
 #create .btn--floating {
   position: relative;
+}
+
+.z-index {
+  z-index: 200;
 }
 </style>

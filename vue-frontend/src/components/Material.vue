@@ -30,7 +30,8 @@
               v-if="unionField === 'driveFile'"
               :items="shareModes"
               item-text="name"
-              item-value="enum">
+              item-value="enum"
+              value="'STUFF'">
             </v-select>
           </v-flex>
           <v-flex xs1 class="thumbnail text-xs-right"
@@ -57,10 +58,14 @@ export default {
       'materialData',
       'edit',
   ],
+  watch: {
+    shareMode() {
+      this.$emit('changeShareMode', { shareMode: this.shareMode, fileId: this.materialData.fileId });
+    },
+  },
   computed: {
     shareModeName() {
       const index = _.findIndex(gapiData.shareModes, {enum: this.shareMode});
-      // return this.materialData;
       return gapiData.shareModes[index].name;
     },
     swedishType() {
@@ -96,7 +101,7 @@ export default {
       createdAt: this.materialData.createdAt,
       updatedAt: this.materialData.updatedAt,
       shareMode: this.materialData.shareMode,
-      shareModes: gapiData.shareModeEnums,
+      shareModes: gapiData.shareModes,
       serviceId: this.materialData.serviceId,
     };
   },

@@ -27,14 +27,12 @@
         v-else>
       </div>
     </v-flex>
-    <v-flex xs4>
+    <v-flex xs12>
       <v-btn
         light
         depressed
         :to="{ name: 'assignment', params: { id: assignment.id }}">Läs mer
       </v-btn>
-    </v-flex>
-    <v-flex xs4>
       <v-btn v-if="$store.state.isSignedIn"
         depressed
         @click="toggleSharingModal">
@@ -48,6 +46,12 @@
         </v-btn>
         <span>Logga in för att dela</span>
       </v-tooltip>
+      <v-icon class="show-button"
+        v-if="anyMaterials && !showAttachments"
+        @click="showAttachments = !showAttachments">attachment keyboard_arrow_down </v-icon>
+      <v-icon class="show-button"
+        v-if="anyMaterials && showAttachments"
+        @click="showAttachments =!showAttachments">attachment keyboard_arrow_up </v-icon>
       <v-dialog v-model="shareToClassroomModal"
         :lazy="true">
         <course-picker
@@ -68,27 +72,24 @@
           @close="shareToClassroomModalMobile = false">
         </course-picker>
       </v-dialog>
+      </div>
+      <v-slide-y-transition>
+        <v-flex xs12 class="pa-3" v-if="showAttachments && anyMaterials">
+          <div v-if="assignment.materials.length > 0"
+            v-for="material in assignment.materials">
+            <a class="material-link"
+              :href="material.alternateLink"
+              target="_blank">
+              <v-icon v-if="material.unionField === 'driveFile'">description</v-icon>
+              <v-icon v-if="material.unionField === 'link'">link</v-icon>
+              <v-icon v-if="material.unionField === 'form'">list</v-icon>
+              <v-icon v-if="material.unionField === 'youtubeVideo'">mdi-youtube-play</v-icon>
+              {{material.title}}
+            </a>
+          </div>
+        </v-flex>
+      </v-slide-y-transition>
     </v-flex>
-    <v-flex xs4 text-xs-right class="pa-3" @click="showAttachments = !showAttachments">
-      <v-icon class="show-button" v-if="anyMaterials && !showAttachments">attachment keyboard_arrow_down </v-icon>
-      <v-icon class="show-button" v-if="anyMaterials && showAttachments">attachment keyboard_arrow_up </v-icon>
-    </v-flex>
-    <v-slide-y-transition>
-      <v-flex xs12 class="pa-3" v-if="showAttachments && anyMaterials">
-        <div v-if="assignment.materials.length > 0"
-          v-for="material in assignment.materials">
-          <a class="material-link"
-            :href="material.alternateLink"
-            target="_blank">
-            <v-icon v-if="material.unionField === 'driveFile'">description</v-icon>
-            <v-icon v-if="material.unionField === 'link'">link</v-icon>
-            <v-icon v-if="material.unionField === 'form'">list</v-icon>
-            <v-icon v-if="material.unionField === 'youtubeVideo'">mdi-youtube-play</v-icon>
-            {{material.title}}
-          </a>
-        </div>
-      </v-flex>
-    </v-slide-y-transition>
   </v-layout>
 </v-card>
 </template>

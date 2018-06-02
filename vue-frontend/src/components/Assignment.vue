@@ -37,10 +37,12 @@
       <v-flex xs8 class="pl-3"
         v-if="!$store.state.isLoading">
         <v-chip class="cursor"
+          v-if="hasSubject"
           :color="color"
           text-color="white">{{ assignment.subjects[0].subject }}
         </v-chip>
-        <v-chip class="cursor">{{ assignment.grades[0].grade }}
+        <v-chip class="cursor"
+          v-if="hasGrade">{{ assignment.grades[0].grade }}
         </v-chip>
       </v-flex>
       <v-flex xs4 text-xs-right>
@@ -67,7 +69,8 @@
         </v-dialog>
       </v-flex>
       <v-flex xs12 class="pa-3">
-        <material v-for="material in assignment.materials"
+        <material
+          v-for="material in assignment.materials"
           :key="material.id"
           :materialData="material"
           :edit="false">
