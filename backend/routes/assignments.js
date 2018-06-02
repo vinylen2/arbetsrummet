@@ -14,7 +14,6 @@ async function getAllAssignments(ctx) {
       },
       {
         model: Author,
-        as: 'authors',
       },
       {
         model: Subject,
@@ -60,11 +59,12 @@ async function getAssignment(ctx) {
 }
 
 async function postAssignment(ctx) {
-  const { title, description, courseWorkType, grades, author, materials, subject } = ctx.request.body;
+  const { title, instructions, description, courseWorkType, grades, author, materials, subject } = ctx.request.body;
 
   const assignment = await Assignment.create({
     title,
     description,
+    instructions,
     courseWorkType,
   });
 
@@ -79,7 +79,7 @@ async function postAssignment(ctx) {
         email: author.email,
       },
     });
-    assignment.setAuthors(sequelizeAuthor);
+    assignment.setAuthors(sequelizeAuthor[0]);
     assignment.dataValues.authors = _.flattenDeep(sequelizeAuthor);
   }
 
@@ -110,6 +110,7 @@ async function postAssignment(ctx) {
         formUrl: material.formUrl,
         fileId: material.fileId,
         shareMode: material.shareMode,
+        serviceId: material.serviceId,
         assignmentId: assignment.dataValues.id,
       });
       return newMaterial;
@@ -120,7 +121,6 @@ async function postAssignment(ctx) {
   ctx.body = {
     data: assignment,
   };
-  console.log(ctx.request.body);
 }
 
 async function searchAssignments(ctx) {
@@ -153,7 +153,6 @@ async function getRecentlyPublishedAssignments(ctx) {
       },
       {
         model: Author,
-        as: 'authors',
       },
       {
         model: Subject,

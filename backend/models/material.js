@@ -10,8 +10,9 @@ module.exports = function modelExport(db, DataTypes) {
       thumbnailUrl: DataTypes.STRING,
       fileId: DataTypes.STRING,
       formUrl: DataTypes.STRING,
+      serviceId: DataTypes.STRING,
       shareMode: {
-        type: DataTypes.ENUM('VIEW', 'EDIT', 'STUDENT_COPY'),
+        type: DataTypes.ENUM('VIEW', 'EDIT', 'STUDENT_COPY', 'DONT_SHARE'),
         defaultValue: null,
       },       
     });
